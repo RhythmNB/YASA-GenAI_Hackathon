@@ -7,3 +7,4 @@ ask.cmd
 benchmark/
 docs/
 benchmark.py
+data/

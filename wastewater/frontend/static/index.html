@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wastewater Visit Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="styles.css?v=10">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" data-tab="overview"><span class="brand-mark"><i data-lucide="droplets"></i></span><span>Visit planner</span></a>
+  <nav class="nav" aria-label="Sections">
+    <button class="nav-btn active" data-tab="overview"><i data-lucide="plane"></i> Plan</button>
+    <button class="nav-btn" data-tab="guidance"><i data-lucide="book-open"></i> Guidance</button>
+  </nav>
+  <div class="topbar-right">
+    <button class="icon-round" id="theme" title="Toggle theme"><i data-lucide="sun-moon"></i></button>
+  </div>
+</header>
+
+<main class="board">
+  <!-- PLAN -->
+  <div class="panel active" data-panel="overview">
+    <div class="col left">
+      <!-- Image card with the floating trip card and map -->
+      <section class="hero-card" id="hero">
+        <div class="float-card">
+          <h1 id="hero-title">Visiting Richmond</h1>
+          <div class="float-meta"><i data-lucide="calendar"></i> <span id="hero-dates">9 Nov – 16 Nov</span><span class="dot-sep"></span><i data-lucide="users"></i> <span id="hero-party">2 adults, 1 child</span></div>
+          <div class="map-wrap"><div id="map" aria-label="Map of the destination"></div></div>
+        </div>
+      </section>
+
+      <!-- Weather -->
+      <section class="card wx-card" id="weather-card">
+        <div class="card-head"><span class="tile-ic"><i data-lucide="cloud-sun"></i></span><h2>Weather</h2><span class="head-right" id="wx-where"></span></div>
+        <div class="wx-row" id="wx-to">
+          <div class="wx-icon" id="wx-to-icon"><i data-lucide="cloud-sun"></i></div>
+          <div class="wx-main">
+            <div class="big" id="wx-to-temp">—</div>
+            <div class="line" id="wx-to-sub"></div>
+          </div>
+          <div class="wx-strip" id="wx-to-strip"></div>
+        </div>
+        <div class="wx-row home" id="wx-from">
+          <div class="wx-icon small" id="wx-from-icon"><i data-lucide="house"></i></div>
+          <div class="wx-main">
+            <div class="wx-home-temp" id="wx-from-temp">—</div>
+            <div class="line" id="wx-from-sub"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col right">
+      <!-- Your trip -->
+      <section class="card trip-card" id="trip-card">
+        <h2 class="trip-title">Your trip</h2>
+        <form class="trip-controls" id="trip-form" aria-label="Your trip">
+          <span class="clause">
+            <span class="w">We're visiting</span>
+            <span class="place"><input type="text" id="trip-to" aria-label="Destination city" placeholder="city" autocomplete="off" spellcheck="false"><ul class="suggest hidden" id="sug-to" role="listbox"></ul></span>
+            <span class="w">from</span>
+            <span class="place"><input type="text" id="trip-from" aria-label="Home city" placeholder="city" autocomplete="off" spellcheck="false"><ul class="suggest hidden" id="sug-from" role="listbox"></ul></span><span class="w p">,</span>
+          </span>
+          <span class="clause">
+            <span class="w">arriving</span>
+            <input type="date" id="trip-start" aria-label="Arrival date">
+            <span class="w">and leaving</span>
+            <input type="date" id="trip-end" aria-label="Departure date"><span class="w p">,</span>
+          </span>
+          <span class="clause">
+            <span class="w">with</span>
+            <span class="count">
+              <button type="button" class="step" data-for="trip-adults" data-d="-1" aria-label="Fewer adults"><i data-lucide="minus"></i></button>
+              <input type="number" id="trip-adults" min="1" max="20" value="2" aria-label="Number of adults" readonly tabindex="-1">
+              <button type="button" class="step" data-for="trip-adults" data-d="1" aria-label="More adults"><i data-lucide="plus"></i></button>
+            </span>
+            <span class="w" id="w-adults">adults and</span>
+            <span class="count">
+              <button type="button" class="step" data-for="trip-children" data-d="-1" aria-label="Fewer children"><i data-lucide="minus"></i></button>
+              <input type="number" id="trip-children" min="0" max="20" value="1" aria-label="Number of children" readonly tabindex="-1">
+              <button type="button" class="step" data-for="trip-children" data-d="1" aria-label="More children"><i data-lucide="plus"></i></button>
+            </span>
+            <span class="w" id="w-children">children,</span>
+          </span>
+          <span class="clause">
+            <span class="w">we will be with</span>
+            <span class="who" role="group" aria-label="Who you will be with">
+              <button type="button" class="tog" id="who-elderly" aria-pressed="false"><i data-lucide="check"></i> older adults</button>
+              <button type="button" class="tog" id="who-kids" aria-pressed="false"><i data-lucide="check"></i> young children</button>
+            </span><span class="w p">.</span>
+          </span>
+        </form>
+        <div class="trip-actions">
+          <button type="button" class="btn-primary" id="visit-submit"><i data-lucide="droplets"></i> Check the water</button>
+          <button type="button" class="btn" id="cal-ics"><i data-lucide="calendar-plus"></i> Add to calendar</button>
+        </div>
+      </section>
+
+      <!-- Your plan (the agent's recommendation) -->
+      <section class="card plan-card" id="plan-card">
+        <div class="card-head"><span class="tile-ic"><i data-lucide="clipboard-list"></i></span><h2>Your plan</h2></div>
+        <p class="plan-empty" id="plan-empty">Check the water to get a plan for this trip.</p>
+        <div class="plan-block hidden" id="pb-sars-cov-2">
+          <div class="plan-block-head"><span class="virus"><i data-lucide="biohazard"></i> COVID-19</span><span class="badge hidden" data-role="coverage"></span></div>
+          <p class="plan-text" data-role="text"></p>
+          <ul class="plan-points" data-role="points"></ul>
+          <div class="plan-error hidden" data-role="error" role="alert"></div>
+        </div>
+        <div class="plan-block hidden" id="pb-flu-a">
+          <div class="plan-block-head"><span class="virus"><i data-lucide="thermometer"></i> Flu (influenza A)</span><span class="badge hidden" data-role="coverage"></span></div>
+          <p class="plan-text" data-role="text"></p>
+          <ul class="plan-points" data-role="points"></ul>
+          <div class="plan-error hidden" data-role="error" role="alert"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- GUIDANCE -->
+  <div class="panel page-shell" data-panel="guidance">
+    <section class="card">
+      <h2>How to read the plan</h2>
+      <dl class="guide">
+        <dt>Two viruses</dt><dd>Each check reads two CDC datasets held in Zetaris: SARS-CoV-2 (COVID-19) and influenza A. The plan shows a block for each, so a quiet COVID reading does not mean a quiet flu season or the other way round.</dd>
+        <dt>Share of samples with the virus</dt><dd>The fraction of wastewater samples in the period where the virus's RNA was detected. It says how widespread detection is across sampling sites, not how many people are infected.</dd>
+        <dt>Rising, falling or flat</dt><dd>The change in that share against the preceding period of the same length. Within five percentage points it is reported as flat.</dd>
+        <dt>Concentration</dt><dd>The average reported concentration. Sites report in different units, so the mean is indicative only when units are mixed.</dd>
+        <dt>How fresh the data is</dt><dd>Samples are collected, shipped, tested and published, so the newest data is usually about two weeks old.</dd>
+        <dt>Small numbers</dt><dd>A state with only a handful of samples can show 100% or 0% by chance. The plan always gives the sample count.</dd>
+      </dl>
+    </section>
+    <section class="card">
+      <h2>Sources</h2>
+      <ul class="plain">
+        <li><a href="https://www.cdc.gov/nwss/" target="_blank" rel="noopener">CDC National Wastewater Surveillance System</a></li>
+        <li><a href="https://data.cdc.gov/" target="_blank" rel="noopener">data.cdc.gov</a></li>
+        <li><a href="https://www.cdc.gov/covid/" target="_blank" rel="noopener">CDC COVID-19 pages</a></li>
+        <li><a href="https://www.cdc.gov/flu/" target="_blank" rel="noopener">CDC influenza pages</a></li>
+      </ul>
+      <p class="muted">Wastewater surveillance is a population-level signal. It is not medical or travel advice and does not describe any individual's risk.</p>
+    </section>
+  </div>
+</main>
+
+<div class="progress hidden" id="answer-progress">
+  <div class="spinner"></div>
+  <div><strong id="progress-title">Checking the water…</strong><div class="steps-line" id="progress-step">Planning the query</div></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin=""></script>
+<script>if (!window.lucide) document.write('<script src="vendor/lucide.min.js"><\/script>');</script>
+<script src="app.js?v=9"></script>
+</body>
+</html>
