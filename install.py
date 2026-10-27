@@ -375,7 +375,10 @@ def settings(m: dict, a) -> None:
         # The weather service finds the Windows token file itself; elsewhere it needs the key.
         "NIGHTSHIFT_API_KEY": None if WINDOWS or not m["token"] else m["token"],
     }, force=reset_or({"WEATHER_MODE", "WEATHER_REFRESH_POSTGRES", "SAMPLE_DB", "ZETARIS_NETWORK",
-                       "ZETARIS_USER", "ZETARIS_PASSWORD"}, a))
+                       "ZETARIS_USER", "ZETARIS_PASSWORD",
+                       # The jar is the one found in step 1; the example's relative path resolves
+                       # against agents/weather/ and would otherwise survive the install.
+                       "ZETARIS_JDBC_JAR"}, a))
     ok(f"{wx.relative_to(REPO)}  {'set ' + ', '.join(changed) if changed else 'unchanged'}")
 
 
