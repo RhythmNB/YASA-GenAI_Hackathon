@@ -1,0 +1,75 @@
+{
+  "description": "Benchmark question set for the wastewater agent. Each entry gives the question and the plan the agent must produce. Window specs: last_week, last_N_days, this_month, last_month, yesterday, month:YYYY-MM, an explicit {start,end}, or any (any valid past window).",
+  "questions": [
+    {
+      "id": "q01_detect_last_week",
+      "question": "is there sars-cov-2 detected last week?",
+      "expect": {"intent": "detect", "state": null, "window": "last_week"}
+    },
+    {
+      "id": "q02_trend_virginia",
+      "question": "is sars-cov-2 rising in virginia?",
+      "expect": {"intent": "trend", "state": "va", "window": "any"}
+    },
+    {
+      "id": "q03_detect_texas_september",
+      "question": "was sars-cov-2 detected in texas in september?",
+      "expect": {"intent": "detect", "state": "tx", "window": "month:2026-09"}
+    },
+    {
+      "id": "q04_trend_national_september",
+      "question": "is sars-cov-2 rising nationally in september?",
+      "expect": {"intent": "trend", "state": null, "window": "month:2026-09"}
+    },
+    {
+      "id": "q05_detect_new_york_14d",
+      "question": "was sars-cov-2 detected in New York in the last 14 days?",
+      "expect": {"intent": "detect", "state": "ny", "window": "last_14_days"}
+    },
+    {
+      "id": "q06_trend_california_this_month",
+      "question": "how is covid in wastewater trending in california this month?",
+      "expect": {"intent": "trend", "state": "ca", "window": "this_month"}
+    },
+    {
+      "id": "q07_conversational_visitor",
+      "question": "I want to visit someone in America in next month, and I'm a bit worried about SARs, can you tell me some recent trend of it?",
+      "expect": {"intent": "trend", "state": null, "window": "any"}
+    },
+    {
+      "id": "q08_unknown_state",
+      "question": "any sars-cov-2 in Narnia last week?",
+      "expect": {"intent": "detect", "state": null, "window": "last_week"}
+    },
+    {
+      "id": "q09_explicit_range_florida",
+      "question": "was it detected between 2026-08-01 and 2026-08-15 in florida?",
+      "expect": {"intent": "detect", "state": "fl", "window": {"start": "2026-08-01", "end": "2026-08-15"}}
+    },
+    {
+      "id": "q10_trend_washington_last_month",
+      "question": "did sars-cov-2 levels go down in washington last month?",
+      "expect": {"intent": "trend", "state": "wa", "window": "last_month"}
+    },
+    {
+      "id": "q11_detect_va_code_yesterday",
+      "question": "is there SARS-CoV-2 detected in VA yesterday?",
+      "expect": {"intent": "detect", "state": "va", "window": "yesterday"}
+    },
+    {
+      "id": "q12_flu_trend_california",
+      "question": "is flu rising in california over the last 2 weeks?",
+      "expect": {"intent": "trend", "state": "ca", "window": "last_14_days", "pathogen": "flu-a"}
+    },
+    {
+      "id": "q13_flu_detect_ohio_last_week",
+      "question": "was influenza A detected in Ohio last week?",
+      "expect": {"intent": "detect", "state": "oh", "window": "last_week", "pathogen": "flu-a"}
+    },
+    {
+      "id": "q14_covid_default_pathogen",
+      "question": "how is covid trending in texas this month?",
+      "expect": {"intent": "trend", "state": "tx", "window": "this_month", "pathogen": "sars-cov-2"}
+    }
+  ]
+}

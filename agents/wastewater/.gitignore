@@ -2,9 +2,4 @@
 .env
 __pycache__/
 *.pyc
-ask.cmd
-.hmem_bench/
-benchmark/
-docs/
-benchmark.py
 data/

@@ -1,0 +1,713 @@
+{
+ "startedAt": "2026-10-25T01:48:03+00:00",
+ "today": "2026-10-25",
+ "layers": [
+  "plan",
+  "answer",
+  "memory"
+ ],
+ "repeats": 1,
+ "summary": {
+  "plan": {
+   "runs": 11,
+   "exact": 11,
+   "intent": 11,
+   "state": 11,
+   "window": 11,
+   "offline_fallbacks": 1,
+   "median_latency_s": 2.67,
+   "by_route": {
+    "nvidia/nemotron-3.5-lightning-30b-a3b": "10/10",
+    "offline": "1/1"
+   }
+  },
+  "answer": {
+   "runs": 11,
+   "errors": 0,
+   "first_pass": 10,
+   "retry_pass": 0,
+   "fallback": 1,
+   "coverage": {
+    "full": 4,
+    "partial": 3,
+    "empty": 4
+   },
+   "median_latency_s": 16.97,
+   "judge_mean_fidelity": 9.91,
+   "judge_mean_clarity": 10,
+   "judge_accept": 11,
+   "judged": 11
+  },
+  "memory": {
+   "runs": 11,
+   "hits": 11,
+   "superseded_outranked": 11,
+   "median_latency_s": 12.04
+  }
+ },
+ "skipped": {},
+ "plan": [
+  {
+   "id": "q01_detect_last_week",
+   "repeat": 1,
+   "intent": "detect",
+   "state": null,
+   "window": "2026-10-18..2026-10-24",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_mr7w2q3g",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 4.994911699992372,
+   "ok": true
+  },
+  {
+   "id": "q02_trend_virginia",
+   "repeat": 1,
+   "intent": "trend",
+   "state": "va",
+   "window": "2026-09-01..2026-09-30",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_wel58inh",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.808412500016857,
+   "ok": true
+  },
+  {
+   "id": "q03_detect_texas_september",
+   "repeat": 1,
+   "intent": "detect",
+   "state": "tx",
+   "window": "2026-09-01..2026-09-30",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_xjjibty3",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.6653863999817986,
+   "ok": true
+  },
+  {
+   "id": "q04_trend_national_september",
+   "repeat": 1,
+   "intent": "trend",
+   "state": null,
+   "window": "2026-09-01..2026-09-30",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_gyfghsjw",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.3607006999955047,
+   "ok": true
+  },
+  {
+   "id": "q05_detect_new_york_14d",
+   "repeat": 1,
+   "intent": "detect",
+   "state": "ny",
+   "window": "2026-10-11..2026-10-24",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_k3xuoqim",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.4090495000127703,
+   "ok": true
+  },
+  {
+   "id": "q06_trend_california_this_month",
+   "repeat": 1,
+   "intent": "trend",
+   "state": "ca",
+   "window": "2026-10-01..2026-10-24",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_3ewyg7eg",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 3.5324413999915123,
+   "ok": true
+  },
+  {
+   "id": "q07_conversational_visitor",
+   "repeat": 1,
+   "intent": "trend",
+   "state": null,
+   "window": "2026-09-25..2026-10-25",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_ic44o6j1",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.846494299999904,
+   "ok": true
+  },
+  {
+   "id": "q08_unknown_state",
+   "repeat": 1,
+   "intent": "detect",
+   "state": null,
+   "window": "2026-10-18..2026-10-24",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_pyxogc7t",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.3601952999888454,
+   "ok": true
+  },
+  {
+   "id": "q09_explicit_range_florida",
+   "repeat": 1,
+   "intent": "detect",
+   "state": "fl",
+   "window": "2026-08-01..2026-08-15",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_txt5nkpi",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.452031900000293,
+   "ok": true
+  },
+  {
+   "id": "q10_trend_washington_last_month",
+   "repeat": 1,
+   "intent": "trend",
+   "state": "wa",
+   "window": "2026-09-01..2026-09-30",
+   "source": "offline",
+   "routed_model": null,
+   "receipt_id": null,
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [
+    "planner fallback: nightshift returned HTTP 502: {\"error\":{\"message\":\"/nemotron-3.5-lightning-30b-a3b_empty_response\",\"type\":\"api_error\",\"code\":\"provider_error\",\"param\":null,\"meterless_detail\":\"nvidia/nemotron-3.5-lightning-30b-a3b_empty_response\"},"
+   ],
+   "latency_s": 21.36829349998152,
+   "ok": true
+  },
+  {
+   "id": "q11_detect_va_code_yesterday",
+   "repeat": 1,
+   "intent": "detect",
+   "state": "va",
+   "window": "2026-10-24..2026-10-24",
+   "source": "nightshift",
+   "routed_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "receipt_id": "rcpt_req_1mavcz4k",
+   "intent_ok": true,
+   "state_ok": true,
+   "window_ok": true,
+   "notes": [],
+   "latency_s": 2.2185226999863517,
+   "ok": true
+  }
+ ],
+ "answer": [
+  {
+   "id": "q01_detect_last_week",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "empty",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_w6ev8f62",
+    "rcpt_req_4komjbf5"
+   ],
+   "memory_id": "mem_ce0db90843c1",
+   "latency_s": 15.679171499999939,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "The candidate accurately reports the zero-sample window, the fallback data, and all specified figures exactly as they appear in the fact sheet. The description is clear and complete."
+   },
+   "judge_receipt": "rcpt_req_pt3jmkx0",
+   "error": null
+  },
+  {
+   "id": "q02_trend_virginia",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "partial",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_h70uepfc",
+    "rcpt_req_m7rwbcw5"
+   ],
+   "memory_id": "mem_b27ca3521876",
+   "latency_s": 16.96717289998196,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures in the candidate match the fact sheet exactly. The window, region, sample counts, positive share, concentration, change in positive share, and change in mean concentration are all verbatim from the provided fact sheet. The candidate correctly identifies the partial coverage and latest sample date."
+   },
+   "judge_receipt": "rcpt_req_5uztf7ee",
+   "error": null
+  },
+  {
+   "id": "q03_detect_texas_september",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "full",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_zkhejr8d",
+    "rcpt_req_borq1878"
+   ],
+   "memory_id": "mem_94beeaf02760",
+   "latency_s": 10.09005930001149,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures from the fact sheet appear exactly in the candidate. The time window, region, sample counts, positive share, site count, concentration value, and data currency date are all correct and verbatim. The candidate is concise and fully aligned with the fact sheet."
+   },
+   "judge_receipt": "rcpt_req_hshkoaw1",
+   "error": null
+  },
+  {
+   "id": "q04_trend_national_september",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "full",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_fnew5eb8",
+    "rcpt_req_kp1atzg3"
+   ],
+   "memory_id": "mem_58a61eba4761",
+   "latency_s": 12.529405699984636,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures in the candidate match the fact sheet exactly. The window, region, sample counts, percentages, concentration values, and directional changes are all correct and verbatim."
+   },
+   "judge_receipt": "rcpt_req_78zb5he3",
+   "error": null
+  },
+  {
+   "id": "q05_detect_new_york_14d",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "empty",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_78dnv9xa",
+    "rcpt_req_1cu2kpih"
+   ],
+   "memory_id": "mem_fc0eeb3630c0",
+   "latency_s": 12.58256110001821,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures (dates, sample counts, positive count, positive share, mean concentration, and units) are present in the fact sheet and match exactly. The candidate correctly reports the absence of data in the primary window and accurately summarizes the fallback window."
+   },
+   "judge_receipt": "rcpt_req_9d73vic8",
+   "error": null
+  },
+  {
+   "id": "q06_trend_california_this_month",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "partial",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_bnggxjb9",
+    "rcpt_req_bmpfss04"
+   ],
+   "memory_id": "mem_180c1e2bbb1b",
+   "latency_s": 13.33270630001789,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures (dates, sample counts, positive share, concentration values, and changes) match the fact sheet exactly. The description of partial coverage and the comparison with the preceding window are accurate and clearly stated."
+   },
+   "judge_receipt": "rcpt_req_43ipxzlj",
+   "error": null
+  },
+  {
+   "id": "q07_conversational_visitor",
+   "provider": "offline",
+   "plan_source": "nightshift",
+   "coverage": "partial",
+   "write_attempts": 2,
+   "first_pass": false,
+   "retry_pass": false,
+   "fallback": true,
+   "foreign_figures": [
+    "542",
+    "656",
+    "82.6",
+    "423"
+   ],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_xtqewje8",
+    "rcpt_req_s6rtbwtb",
+    "rcpt_req_aubi3it0"
+   ],
+   "memory_id": "mem_519c9833d626",
+   "latency_s": 18.12699540000176,
+   "judge": {
+    "fidelity": 9,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures from the candidate match the fact sheet exactly. The window, region, sample counts, positive share, sites, concentration value, and directional comparison are correctly reproduced. No invented or re-rounded numbers are present."
+   },
+   "judge_receipt": "rcpt_req_86qcaff7",
+   "error": null
+  },
+  {
+   "id": "q08_unknown_state",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "empty",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_36v3elqo",
+    "rcpt_req_ym3xa6tr"
+   ],
+   "memory_id": "mem_9fd555b6877e",
+   "latency_s": 25.697284699999727,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures in the candidate match the fact sheet exactly. The window dates, region, and fallback data are correctly reported with no invented or re-rounded values."
+   },
+   "judge_receipt": "rcpt_req_3hfx7pba",
+   "error": null
+  },
+  {
+   "id": "q09_explicit_range_florida",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "full",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_5am5akt0",
+    "rcpt_req_y8xc455e"
+   ],
+   "memory_id": "mem_51129749f048",
+   "latency_s": 23.761461100017186,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures (window, samples, positives, positive share, sites, mean concentration, data currency, and note on mixed units) are present in the fact sheet and match exactly. The candidate is a precise restatement with no invented or re-rounded values."
+   },
+   "judge_receipt": "rcpt_req_2xeapboq",
+   "error": null
+  },
+  {
+   "id": "q10_trend_washington_last_month",
+   "provider": "nightshift",
+   "plan_source": "offline",
+   "coverage": "full",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_dbk59s1y"
+   ],
+   "memory_id": "mem_6e9dbbe79948",
+   "latency_s": 52.17551990001812,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures from the candidate match the fact sheet exactly. The window, region, sample counts, positive share, concentration, and directional changes are all correctly reported."
+   },
+   "judge_receipt": "rcpt_req_8puu5pwb",
+   "error": null
+  },
+  {
+   "id": "q11_detect_va_code_yesterday",
+   "provider": "nightshift",
+   "plan_source": "nightshift",
+   "coverage": "empty",
+   "write_attempts": 1,
+   "first_pass": true,
+   "retry_pass": false,
+   "fallback": false,
+   "foreign_figures": [],
+   "routed_models": [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b"
+   ],
+   "receipt_ids": [
+    "rcpt_req_da5651ry",
+    "rcpt_req_98u3b28t"
+   ],
+   "memory_id": "mem_4575220b62ab",
+   "latency_s": 24.54752200000803,
+   "judge": {
+    "fidelity": 10,
+    "clarity": 10,
+    "foreign_figures": [],
+    "verdict": "accept",
+    "reason": "All figures in the candidate match the fact sheet exactly. The window, region, sample counts, positivity rate, and mean concentration are correct and clearly stated."
+   },
+   "judge_receipt": "rcpt_req_d9iqruai",
+   "error": null
+  }
+ ],
+ "memory": [
+  {
+   "id": "q01_detect_last_week",
+   "first_memory": "mem_ce0db90843c1",
+   "recalled": [
+    "mem_9fd555b6877e",
+    "mem_ce0db90843c1",
+    "mem_58a61eba4761",
+    "mem_94beeaf02760",
+    "mem_51129749f048"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 11.7873724999954,
+   "error": null
+  },
+  {
+   "id": "q02_trend_virginia",
+   "first_memory": "mem_b27ca3521876",
+   "recalled": [
+    "mem_b27ca3521876"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 12.274982899980387,
+   "error": null
+  },
+  {
+   "id": "q03_detect_texas_september",
+   "first_memory": "mem_94beeaf02760",
+   "recalled": [
+    "mem_94beeaf02760",
+    "mem_6e9dbbe79948",
+    "mem_58a61eba4761",
+    "mem_51129749f048"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 10.68783069998608,
+   "error": null
+  },
+  {
+   "id": "q04_trend_national_september",
+   "first_memory": "mem_58a61eba4761",
+   "recalled": [
+    "mem_58a61eba4761",
+    "mem_6e9dbbe79948",
+    "mem_f9c1a1f86205",
+    "mem_94beeaf02760"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 12.03630290000001,
+   "error": null
+  },
+  {
+   "id": "q05_detect_new_york_14d",
+   "first_memory": "mem_fc0eeb3630c0",
+   "recalled": [
+    "mem_fc0eeb3630c0"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 12.143773999996483,
+   "error": null
+  },
+  {
+   "id": "q06_trend_california_this_month",
+   "first_memory": "mem_180c1e2bbb1b",
+   "recalled": [
+    "mem_180c1e2bbb1b"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 13.157918499986408,
+   "error": null
+  },
+  {
+   "id": "q07_conversational_visitor",
+   "first_memory": "mem_519c9833d626",
+   "recalled": [
+    "mem_522c058a8fe6",
+    "mem_58a61eba4761",
+    "mem_519c9833d626"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 12.187735599989537,
+   "error": null
+  },
+  {
+   "id": "q08_unknown_state",
+   "first_memory": "mem_9fd555b6877e",
+   "recalled": [
+    "mem_a922c89c443d",
+    "mem_ce0db90843c1",
+    "mem_9fd555b6877e",
+    "mem_58a61eba4761",
+    "mem_522c058a8fe6"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 11.717229600006249,
+   "error": null
+  },
+  {
+   "id": "q09_explicit_range_florida",
+   "first_memory": "mem_51129749f048",
+   "recalled": [
+    "mem_51129749f048"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 10.109509699977934,
+   "error": null
+  },
+  {
+   "id": "q10_trend_washington_last_month",
+   "first_memory": "mem_6e9dbbe79948",
+   "recalled": [
+    "mem_6e9dbbe79948",
+    "mem_94beeaf02760",
+    "mem_f9c1a1f86205",
+    "mem_58a61eba4761",
+    "mem_522c058a8fe6"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 34.02423720000661,
+   "error": null
+  },
+  {
+   "id": "q11_detect_va_code_yesterday",
+   "first_memory": "mem_4575220b62ab",
+   "recalled": [
+    "mem_4575220b62ab",
+    "mem_5ddf4ae4ea0f",
+    "mem_51129749f048",
+    "mem_94beeaf02760",
+    "mem_f9c1a1f86205"
+   ],
+   "hit": true,
+   "superseded_outranked": true,
+   "latency_s": 12.004302799992729,
+   "error": null
+  }
+ ]
+}
