@@ -111,22 +111,25 @@ values already in a `.env` file are kept. What it does:
 | Step | What happens |
 |---|---|
 | 1. Look around | finds Python, the JDK, the JDBC jar, the running Zetaris driver container and Nightshift's token; stops with a clear message if something is missing |
-| 2. getting-started | clones [zetaris/getting-started](https://github.com/zetaris/getting-started) next to this repository (the pertussis and guidance agents use its Zetaris client) and links it into `agents/pertussis_guidance/` |
-| 3. Settings | writes `getting-started/.env.local`, `agents/wastewater/.env` and `agents/weather/.env` (all git-ignored; secrets are never printed) |
-| 4. Packages | `pip install` of the planner's packages (`jaydebeapi`, `JPype1`, `httpx`) and a separate `.venv` for the weather service |
-| 5. Data in Zetaris | downloads the CDC NWSS SARS-CoV-2 and influenza A exports and creates `wastewater.sars_cov_2` and `wastewater.influenza_a`; creates the pertussis REST table, the census and CDC guidance tables and the `visitplanner` views; starts the weather Postgres (`weather-db`), loads the NWS forecasts and alerts, and registers it as the datasource `weather_pg` |
-| 6. Check | queries every table through Zetaris and prints the command to start the planner |
+| 2. Packages | `pip install` of the planner's packages (`jaydebeapi`, `JPype1`, `httpx`) and a separate `.venv` for the weather service |
+| 3. Sign in | signs in to Zetaris with your username and password; if Zetaris rejects them it asks again (three tries), and nothing is saved until a sign-in works |
+| 4. getting-started | clones [zetaris/getting-started](https://github.com/zetaris/getting-started) next to this repository (the pertussis and guidance agents use its Zetaris client) and links it into `agents/pertussis_guidance/` |
+| 5. Settings | writes `getting-started/.env.local`, `agents/wastewater/.env` and `agents/weather/.env` (all git-ignored; secrets are never printed) |
+| 6. Data in Zetaris | downloads the CDC NWSS SARS-CoV-2 and influenza A exports and creates `wastewater.sars_cov_2` and `wastewater.influenza_a`; creates the pertussis REST table, the census and CDC guidance tables and the `visitplanner` views; starts the weather Postgres (`weather-db`), loads the NWS forecasts and alerts, and registers it as the datasource `weather_pg` |
+| 7. Check | queries every table through Zetaris and prints the command to start the planner |
 
 `python install.py --check` reports what is in place without changing
-anything. Other options: `--java-home`, `--jdbc-jar`, `--zetaris-user`,
+anything. `python install.py --reset` forgets the saved Zetaris sign-in and
+paths, asks and detects them again, and rewrites the settings (use it after
+changing your Zetaris password or moving the JDK or the bundle). Other options: `--java-home`, `--jdbc-jar`, `--zetaris-user`,
 `--getting-started <folder>`, and `--no-weather-db` (no weather Postgres; the
 weather service then reads an offline SQLite copy instead of Zetaris).
 
 If a step fails, the script names it and what to do; fix that and run it
-again. The usual causes: Docker or the Zetaris platform not started, the
+again (stopping it with Ctrl+C is fine too). Finished steps are skipped and
+broken tables are rebuilt. The usual causes: Docker or the Zetaris platform not started, the
 JDBC jar not beside the repository (`--jdbc-jar`), or a wrong Zetaris
-username or password (edit `ZETARIS_USERNAME` and `ZETARIS_PASSWORD` in
-`getting-started/.env.local`, or delete both lines to be asked again).
+username or password (it asks again; `--reset` if it changed after setup).
 
 ## Run
 
