@@ -1,0 +1,24 @@
+$ python -m wastewater_agent ask "is sars-cov-2 rising in Virginia over the last 2 weeks?" --county "City of Richmond" --json
+In Richmond City, Virginia during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-09-28; the most recent 7-day window with data, 2026-09-22 to 2026-09-28, had 1 sample from 1 site, which was positive (100.0%) with a mean concentration of 39,235.0 copies/l wastewater. The requested window had 0 samples, and the preceding window 2026-09-29 to 2026-10-12 also had 0 samples, so the trend direction is unknown due to insufficient data in both windows. Earlier finding on record (mem_a52ba8701f72, 2026-10-26): No SARS-CoV-2 wastewater samples for Richmond City, Virginia 2026-10-13..2026-10-26 (latest sample 2026-09-28); most recent 7-day window 2026-09-22..2026-09-28: 1/1 positive (100.0%), 1 sites.
+
+window:   2026-10-13..2026-10-26 (last 2 weeks (ending yesterday))
+prior:    2026-09-29..2026-10-12
+fallback: 2026-09-22..2026-09-28 (most recent 7 days with data)
+coverage: empty  (latest sample 2026-09-28)
+rows:     samples=0 positives=0 sites=0 | prior samples=0 positives=0 | fallback samples=1 positives=1
+plan:     pathogen=sars-cov-2 intent=trend state=va county=Richmond City source=nightshift
+sql:
+  1. SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2'
+  2. SELECT COUNT(DISTINCT site) AS sites FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'
+  3. SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'
+  4. SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'
+  5. SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %' GROUP BY pcr_target_units ORDER BY samples DESC
+  6. SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'
+  7. SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %' GROUP BY pcr_target_units ORDER BY samples DESC
+  8. SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-22' AND sample_collect_date <= '2026-09-28' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'
+  9. SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-22' AND sample_collect_date <= '2026-09-28' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %' GROUP BY pcr_target_units ORDER BY samples DESC
+memories used: mem_a52ba8701f72, mem_c78b08d93045, mem_b895223bba7e, mem_92f2f864876f, mem_f8750f605fd9
+memory stored: mem_a1e7e1df6ea3
+receipt: rcpt_req_d2fgkaxj via nvidia/nemotron-3-ultra-550b-a55b  cache=miss reclaimed=0
+receipt: rcpt_req_gqdajbcn via nvidia/nemotron-3-ultra-550b-a55b  cache=miss reclaimed=0
+provider: nightshift

@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Any, Callable
 
+from ..states import region_name
 from .executor import QueryResults, Summary
 from .planner import Plan
 from .windows import Window
@@ -18,14 +19,18 @@ class FactSheet:
     intent: str
     state: str | None
     window: Window
-    samples: int
-    positives: int
-    positive_share: float | None
-    sites: int
-    mean_conc: float | None
-    units: list[tuple[str, int]]
-    latest_sample_date: date | None
-    coverage: str  # full | partial | empty
+    county: str | None = None
+    region: str = ""
+    pathogen: str = "sars-cov-2"
+    pathogen_name: str = "SARS-CoV-2"
+    samples: int = 0
+    positives: int = 0
+    positive_share: float | None = None
+    sites: int = 0
+    mean_conc: float | None = None
+    units: list[tuple[str, int]] = field(default_factory=list)
+    latest_sample_date: date | None = None
+    coverage: str = "empty"  # full | partial | empty
     prior_window: Window | None = None
     prior_samples: int | None = None
     prior_positives: int | None = None
@@ -52,6 +57,10 @@ class FactSheet:
         return {
             "intent": self.intent,
             "state": self.state,
+            "county": self.county,
+            "region": self.region,
+            "pathogen": self.pathogen,
+            "pathogen_name": self.pathogen_name,
             "window": w(self.window),
             "samples": self.samples,
             "positives": self.positives,
@@ -89,7 +98,7 @@ def _r(value: float | None, nd: int = 4) -> float | None:
 def evaluate(
     plan: Plan,
     results: QueryResults,
-    fetch_fallback: Callable[[Window, str | None], Summary] | None = None,
+    fetch_fallback: Callable[[Window, str | None, str | None], Summary] | None = None,
 ) -> FactSheet:
     cur = results.current
     latest = results.latest_state if plan.state else results.latest_overall
@@ -103,6 +112,10 @@ def evaluate(
     facts = FactSheet(
         intent=plan.intent,
         state=plan.state,
+        county=plan.county,
+        region=region_name(plan.state, plan.county),
+        pathogen=plan.pathogen,
+        pathogen_name=plan.pathogen_entry.name,
         window=plan.window,
         samples=cur.samples,
         positives=cur.positives,
@@ -146,7 +159,7 @@ def evaluate(
 
     if coverage == "empty" and latest is not None and fetch_fallback is not None:
         fb_window = Window(latest - timedelta(days=6), latest, "most recent 7 days with data")
-        fb = fetch_fallback(fb_window, plan.state)
+        fb = fetch_fallback(fb_window, plan.state, plan.county)
         facts.fallback_window = fb.window
         facts.fallback_samples = fb.samples
         facts.fallback_positives = fb.positives

@@ -1,0 +1,20 @@
+$ python -m wastewater_agent ask "is flu rising in California over the last 2 weeks?" --json
+In California during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-20. In the requested window, 133 of 146 samples were positive (91.1%) across 59 sites, with a mean concentration of 18,480.7 copies/g dry sludge (mixed units; indicative only). Compared with the preceding window 2026-09-29 to 2026-10-12 (396 samples, 87.4% positive, mean 14,144.1), the positive share was flat (+3.7 percentage points) and the mean concentration rose by 4,336.6.
+
+window:   2026-10-13..2026-10-26 (last 2 weeks (ending yesterday))
+prior:    2026-09-29..2026-10-12
+coverage: partial  (latest sample 2026-10-20)
+rows:     samples=146 positives=133 sites=59 | prior samples=396 positives=346
+plan:     pathogen=flu-a intent=trend state=ca source=nightshift
+sql:
+  1. SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav'
+  2. SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'ca'
+  3. SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'ca'
+  4. SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'ca' GROUP BY pcr_target_units ORDER BY samples DESC
+  5. SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'ca'
+  6. SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'ca' GROUP BY pcr_target_units ORDER BY samples DESC
+memories used: none
+memory stored: mem_8525a20462ff
+receipt: rcpt_req_83o2l2wl via nvidia/nemotron-3-ultra-550b-a55b  cache=miss reclaimed=0
+receipt: rcpt_req_8to6p4so via nvidia/nemotron-3-ultra-550b-a55b  cache=miss reclaimed=0
+provider: nightshift

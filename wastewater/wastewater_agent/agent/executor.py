@@ -50,20 +50,25 @@ class Executor:
     def __init__(self, client: JdbcClient) -> None:
         self.client = client
         self.statements: list[str] = []
+        self.pathogen = None  # set from the plan in run(); None means the registry default
 
     def _run(self, statement: str) -> list[dict[str, Any]]:
         self.statements.append(statement)
         return self.client.query(statement)
 
-    def latest(self, state: str | None) -> date | None:
-        rows = self._run(sql.latest_sample_date(state))
+    def latest(self, state: str | None, county: str | None = None) -> date | None:
+        rows = self._run(sql.latest_sample_date(state, county, self.pathogen))
         value = rows[0].get("latest_sample_date") if rows else None
         return date.fromisoformat(str(value)) if value else None
 
-    def summary(self, window: Window, state: str | None) -> Summary:
-        rows = self._run(sql.window_summary(window.start, window.end, state))
+    def county_sites(self, state: str, county: str) -> int:
+        rows = self._run(sql.county_sites(state, county, self.pathogen))
+        return int(rows[0].get("sites") or 0) if rows else 0
+
+    def summary(self, window: Window, state: str | None, county: str | None = None) -> Summary:
+        rows = self._run(sql.window_summary(window.start, window.end, state, county, self.pathogen))
         row = rows[0] if rows else {}
-        units_rows = self._run(sql.window_units(window.start, window.end, state))
+        units_rows = self._run(sql.window_units(window.start, window.end, state, county, self.pathogen))
         units = [(str(r.get("units")), int(r.get("samples") or 0)) for r in units_rows if r.get("units")]
         mean = row.get("mean_conc")
         return Summary(
@@ -77,10 +82,15 @@ class Executor:
 
     def run(self, plan: Plan) -> QueryResults:
         self.statements = []
+        self.pathogen = plan.pathogen_entry
         latest_overall = self.latest(None)
-        latest_state = self.latest(plan.state) if plan.state else None
-        current = self.summary(plan.window, plan.state)
-        prior = self.summary(plan.window.prior(), plan.state) if plan.intent == "trend" else None
+        if plan.state and plan.county and self.county_sites(plan.state, plan.county) == 0:
+            # No sampling site has ever served this county: answer for the state and say so.
+            plan.notes.append(f"no wastewater sampling site serves {plan.county_label}; answered for the whole state")
+            plan.county = None
+        latest_state = self.latest(plan.state, plan.county) if plan.state else None
+        current = self.summary(plan.window, plan.state, plan.county)
+        prior = self.summary(plan.window.prior(), plan.state, plan.county) if plan.intent == "trend" else None
         return QueryResults(
             latest_overall=latest_overall,
             latest_state=latest_state,

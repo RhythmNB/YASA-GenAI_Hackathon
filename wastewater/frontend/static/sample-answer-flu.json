@@ -1,0 +1,105 @@
+{
+  "id": "ans_sample_flu",
+  "askedAt": "2026-10-26T09:22:47+00:00",
+  "question": "is flu rising in Virginia over the last 2 weeks?",
+  "text": "In Richmond City, Virginia during 2026-10-12 to 2026-10-25, data are partial with the latest sample on 2026-10-12. In the requested window, 1 sample from 1 site was collected with 0 positives (0.0% positive share) and a mean concentration of 0.0 copies/l wastewater. Compared with the preceding window 2026-09-28 to 2026-10-11 (2 samples, 0.0% positive, mean 782.0), the positive share was flat (+0.0 percentage points) while the mean concentration decreased by 782.0. (Sample answer for demo mode, taken from a real run on 2026-10-26.)",
+  "provider": "nightshift",
+  "elapsedSeconds": 20.3,
+  "plan": {
+    "intent": "trend",
+    "state": "va",
+    "county": "Richmond City",
+    "pathogen": "flu-a",
+    "window": {
+      "start": "2026-10-12",
+      "end": "2026-10-25",
+      "label": "last 2 weeks (ending yesterday)"
+    },
+    "source": "nightshift",
+    "notes": []
+  },
+  "region": "Richmond City, Virginia",
+  "county": "Richmond City",
+  "pathogen": "flu-a",
+  "pathogenName": "influenza A",
+  "facts": {
+    "intent": "trend",
+    "state": "va",
+    "county": "Richmond City",
+    "region": "Richmond City, Virginia",
+    "pathogen": "flu-a",
+    "pathogen_name": "influenza A",
+    "window": {
+      "start": "2026-10-12",
+      "end": "2026-10-25",
+      "label": "last 2 weeks (ending yesterday)"
+    },
+    "samples": 1,
+    "positives": 0,
+    "positive_share": 0.0,
+    "sites": 1,
+    "mean_conc": 0.0,
+    "units": [
+      [
+        "copies/l wastewater",
+        1
+      ]
+    ],
+    "latest_sample_date": "2026-10-12",
+    "coverage": "partial",
+    "prior_window": {
+      "start": "2026-09-28",
+      "end": "2026-10-11",
+      "label": "preceding window"
+    },
+    "prior_samples": 2,
+    "prior_positives": 0,
+    "prior_positive_share": 0.0,
+    "prior_sites": 1,
+    "prior_mean_conc": 782.0,
+    "delta_share": 0.0,
+    "delta_conc": -782.0,
+    "direction": "flat",
+    "fallback_window": null,
+    "fallback_samples": null,
+    "fallback_positives": null,
+    "fallback_positive_share": null,
+    "fallback_sites": null,
+    "fallback_mean_conc": null,
+    "fallback_units": null,
+    "notes": [
+      "data lag: latest sample 2026-10-12 is before window end 2026-10-25"
+    ],
+    "state_note": null
+  },
+  "factSheet": "virus: influenza A\nregion: Richmond City, Virginia\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-12 to 2026-10-25 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-12)\nsamples: 1; positives: 0; positive share: 0.0%; sites: 1; mean concentration: 0.0 copies/l wastewater\npreceding window: 2026-09-28 to 2026-10-11\npreceding samples: 2; positives: 0; positive share: 0.0%; sites: 1; mean concentration: 782.0\ndirection of positive share: flat (+0.0 percentage points)\nchange in mean concentration: -782.0",
+  "statements": [
+    "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav'",
+    "SELECT COUNT(DISTINCT site) AS sites FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'",
+    "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'",
+    "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-12' AND sample_collect_date <= '2026-10-25' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'",
+    "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-12' AND sample_collect_date <= '2026-10-25' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %' GROUP BY pcr_target_units ORDER BY samples DESC",
+    "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-28' AND sample_collect_date <= '2026-10-11' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %'",
+    "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-28' AND sample_collect_date <= '2026-10-11' AND state_territory = 'va' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, richmond city, %' GROUP BY pcr_target_units ORDER BY samples DESC"
+  ],
+  "memoriesUsed": [],
+  "memoryStored": "mem_sample_flu",
+  "conflicts": [],
+  "receipts": [
+    {
+      "receiptId": "rcpt_req_n7fwkmwz",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+      "cache": "miss",
+      "reclaimed": 0
+    },
+    {
+      "receiptId": "rcpt_req_aaktqczv",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+      "cache": "miss",
+      "reclaimed": 0
+    }
+  ],
+  "notes": [],
+  "retrieval": "sample",
+  "disclaimer": "Wastewater surveillance is a population-level signal from the CDC NWSS export loaded in Zetaris. It is not medical or travel advice and does not describe any individual's risk."
+}

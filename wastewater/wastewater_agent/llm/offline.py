@@ -34,7 +34,8 @@ class OfflineProvider:
     # -- writer ------------------------------------------------------------
 
     def write(self, facts: dict[str, Any], memories: list[dict[str, Any]]) -> str:
-        where = state_name(facts.get("state"))
+        where = facts.get("region") or state_name(facts.get("state"))
+        virus = facts.get("pathogen_name") or "SARS-CoV-2"
         w = facts["window"]
         span = f"{w['start']} to {w['end']}"
         coverage = facts.get("coverage")
@@ -42,14 +43,14 @@ class OfflineProvider:
 
         if coverage == "empty":
             parts.append(
-                f"No SARS-CoV-2 wastewater samples are recorded for {where} between {span}; "
+                f"No {virus} wastewater samples are recorded for {where} between {span}; "
                 f"the latest sample in the dataset is dated {facts.get('latest_sample_date')}."
             )
             fw = facts.get("fallback_window")
             if fw and facts.get("fallback_samples"):
                 parts.append(
                     "Most recent 7-day window with data "
-                    f"({fw['start']} to {fw['end']}): SARS-CoV-2 was detected in "
+                    f"({fw['start']} to {fw['end']}): {virus} was detected in "
                     f"{facts['fallback_positives']} of {facts['fallback_samples']} samples "
                     f"({_pct(facts['fallback_positive_share'])}) across {facts['fallback_sites']} sites"
                     f"{_conc(facts.get('fallback_mean_conc'), facts.get('fallback_units'))}."
@@ -57,7 +58,7 @@ class OfflineProvider:
         else:
             detected = "was detected" if facts["positives"] > 0 else "was not detected"
             parts.append(
-                f"Between {span}, SARS-CoV-2 {detected} in {where}: "
+                f"Between {span}, {virus} {detected} in {where}: "
                 f"{facts['positives']} of {facts['samples']} samples were positive "
                 f"({_pct(facts['positive_share'])}) across {facts['sites']} sites"
                 f"{_conc(facts.get('mean_conc'), facts.get('units'))}."

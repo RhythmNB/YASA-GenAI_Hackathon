@@ -42,6 +42,46 @@ def find_state(text: str) -> str | None:
     return None
 
 
+_COUNTY_SUFFIX = re.compile(r"\s+(county|parish|borough|census area|municipio|municipality)$", re.I)
+_CITY_OF = re.compile(r"^city of\s+(.+)$", re.I)
+_COUNTY_OK = re.compile(r"^[a-z][a-z .'\-]{0,60}$", re.I)
+
+
+def normalize_county(label: str | None) -> str | None:
+    """Map a geocoder or user label onto the dataset's `counties_served` naming:
+    'Henrico County' -> 'Henrico', 'City of Richmond' -> 'Richmond City',
+    'San Francisco County' -> 'San Francisco'. Returns None when unusable."""
+    if not label:
+        return None
+    s = " ".join(str(label).split()).strip()
+    m = _CITY_OF.match(s)
+    if m:
+        s = f"{m.group(1)} City"
+    else:
+        s = _COUNTY_SUFFIX.sub("", s)
+        if re.search(r"\s+city$", s, re.I):
+            s = re.sub(r"\s+city$", " City", s, flags=re.I)
+    s = s.strip(" ,")
+    return s if _COUNTY_OK.match(s) else None
+
+
+def county_label(county: str | None, code: str | None = None) -> str:
+    """Display form: 'Henrico' -> 'Henrico County'; 'Richmond City' stays;
+    Louisiana uses parishes and Alaska boroughs."""
+    if not county:
+        return ""
+    if county.lower().endswith(" city"):
+        return county
+    unit = {"la": "Parish", "ak": "Borough"}.get((code or "").lower(), "County")
+    return f"{county} {unit}"
+
+
+def region_name(code: str | None, county: str | None = None) -> str:
+    if code and county:
+        return f"{county_label(county, code)}, {state_name(code)}"
+    return state_name(code)
+
+
 def state_name(code: str | None) -> str:
     if code is None:
         return "the United States (all reporting states)"

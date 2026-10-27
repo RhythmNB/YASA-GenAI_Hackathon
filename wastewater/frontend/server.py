@@ -68,10 +68,11 @@ class AgentService:
             self._agent = Agent(self.settings)
         return self._agent
 
-    def ask(self, question: str, county: str | None = None, pathogen: str | None = None) -> dict[str, Any]:
+    def ask(self, question: str, county: str | None = None, pathogen: str | None = None,
+            progress: Any = None) -> dict[str, Any]:
         with self._lock:
             t0 = time.perf_counter()
-            answer = self.agent.ask(question, county=county, pathogen=pathogen)
+            answer = self.agent.ask(question, county=county, pathogen=pathogen, progress=progress)
             record = serialise_answer(question, answer, time.perf_counter() - t0)
         self.answers[record["id"]] = record
         self.order.insert(0, record["id"])
@@ -96,7 +97,7 @@ class AgentService:
             out["zetaris"] = {"ok": False, "url": s.zetaris_jdbc_url, "error": str(e)[:200]}
         finally:
             client.close()
-        ns = NightshiftProvider(s.nightshift_base_url, s.nightshift_token)
+        ns = NightshiftProvider(s.nightshift_base_url, s.nightshift_token, models=s.nightshift_models)
         state, models = ns.readiness()
         out["nightshift"] = {"ok": state == "online", "state": state, "url": s.nightshift_base_url,
                              "routes": [m["id"] for m in models if str(m["id"]).startswith("meterless/") and m["availability"] in ("ready", "cloud")]}
@@ -317,6 +318,39 @@ class Handler(SimpleHTTPRequestHandler):
 
     # -- helpers --
 
+    def _ask_stream(self, question: str, county: str | None, pathogen: str | None) -> None:
+        """Newline-delimited JSON: one progress event per line as the agent works, then a
+        final {"stage": "answer", "record": ...} or {"stage": "error", "error": ...}. The
+        connection closes when the body ends (no Content-Length), which fetch() handles."""
+        self.send_response(200)
+        self.send_header("Content-Type", "application/x-ndjson; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Accel-Buffering", "no")
+        self.end_headers()
+        alive = True
+
+        def send(event: dict[str, Any]) -> None:
+            nonlocal alive
+            if not alive:
+                return
+            try:
+                self.wfile.write((json.dumps(event, ensure_ascii=False) + "\n").encode("utf-8"))
+                self.wfile.flush()
+            except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError):
+                alive = False  # the page went away; let the agent finish and store the answer
+
+        try:
+            record = SERVICE.ask(question, county, pathogen, progress=send)
+            send({"stage": "answer", "record": record})
+        except KeyError as e:
+            send({"stage": "error", "status": 400, "error": str(e)})
+        except ProviderUnauthorized as e:
+            send({"stage": "error", "status": 401, "error": str(e)})
+        except ZetarisError as e:
+            send({"stage": "error", "status": 502, "error": f"zetaris: {e}"})
+        except ProviderError as e:
+            send({"stage": "error", "status": 502, "error": f"nightshift: {e}"})
+
     def _json(self, status: int, payload: Any) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
@@ -395,6 +429,8 @@ class Handler(SimpleHTTPRequestHandler):
                     return self._json(400, {"error": "question is required"})
                 county = str(data.get("county") or "").strip() or None
                 pathogen = str(data.get("pathogen") or "").strip() or None
+                if data.get("stream"):
+                    return self._ask_stream(question, county, pathogen)
                 try:
                     return self._json(200, SERVICE.ask(question, county, pathogen))
                 except KeyError as e:

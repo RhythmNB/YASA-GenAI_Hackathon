@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
 <header class="topbar">
@@ -148,14 +148,20 @@
   </div>
 </main>
 
-<div class="progress hidden" id="answer-progress">
-  <div class="spinner"></div>
-  <div><strong id="progress-title">Checking the water…</strong><div class="steps-line" id="progress-step">Planning the query</div></div>
+<div class="progress hidden" id="answer-progress" role="status" aria-live="polite">
+  <div class="progress-head">
+    <div class="spinner" id="progress-spinner"></div>
+    <div class="progress-text">
+      <strong id="progress-title">Checking the water…</strong>
+      <div class="steps-line" id="progress-step">Planning the query</div>
+    </div>
+  </div>
+  <ul class="progress-trail" id="progress-trail"></ul>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin=""></script>
 <script>if (!window.lucide) document.write('<script src="vendor/lucide.min.js"><\/script>');</script>
-<script src="app.js?v=9"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>

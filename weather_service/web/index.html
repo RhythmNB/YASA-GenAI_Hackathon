@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather Visit Planner</title>
+<style>
+:root{
+  --bg:#f3ede6; --panel:#fbf8f4; --ink:#1f2a2c; --muted:#6b7476; --line:#e4dbd1;
+  --accent:#1e6b6f; --accent-ink:#fff; --chip:#efe7dd;
+  --good:#2f7d4f; --good-bg:#e3f1e8; --warn:#9a6a10; --warn-bg:#f8edd3;
+  --bad:#a63a2e; --bad-bg:#f6e0dc; --info:#4b5f8a; --info-bg:#e6eaf4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151b1c; --panel:#1e2627; --ink:#e7ecec; --muted:#9aa5a6; --line:#2e3a3b;
+    --accent:#4fb0b4; --accent-ink:#0d1516; --chip:#263233;
+    --good:#7fd19f; --good-bg:#1d3326; --warn:#e8c06a; --warn-bg:#3a2f17;
+    --bad:#f0968a; --bad-bg:#3d201c; --info:#a9b8e0; --info-bg:#222a3d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151b1c; --panel:#1e2627; --ink:#e7ecec; --muted:#9aa5a6; --line:#2e3a3b;
+  --accent:#4fb0b4; --accent-ink:#0d1516; --chip:#263233;
+  --good:#7fd19f; --good-bg:#1d3326; --warn:#e8c06a; --warn-bg:#3a2f17;
+  --bad:#f0968a; --bad-bg:#3d201c; --info:#a9b8e0; --info-bg:#222a3d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 120px}
+header{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 16px}
+.logo{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:18px}
+header h1{font-size:18px;margin:0;flex:1}
+.mode{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--muted)}
+button{font:inherit;cursor:pointer}
+.ghost{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:6px 10px}
+.intro{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:14px}
+.intro h2{margin:0 0 4px;font-size:20px}
+.intro p{margin:0 0 12px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px}
+#thread{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.q{align-self:flex-end;background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:14px 14px 4px 14px;max-width:80%}
+.a{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.a h3{margin:0 0 6px;font-size:16px}
+.summary{margin:0 0 12px}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.tag{font-size:12.5px;padding:3px 10px;border-radius:999px}
+.good{background:var(--good-bg);color:var(--good)} .warn{background:var(--warn-bg);color:var(--warn)}
+.bad{background:var(--bad-bg);color:var(--bad)} .info{background:var(--info-bg);color:var(--info)}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:8px}
+ul.advice{margin:4px 0 10px;padding-left:20px}
+details{margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
+summary{cursor:pointer;color:var(--muted);font-size:13px}
+.tbl{width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+code{font-size:12px;word-break:break-word;white-space:pre-wrap;color:var(--muted)}
+.foot{font-size:12px;color:var(--muted);margin-top:10px;display:flex;flex-wrap:wrap;gap:12px}
+.note{color:var(--muted);font-style:italic}
+form{position:fixed;left:0;right:0;bottom:0;padding:12px 16px;background:linear-gradient(transparent,var(--bg) 35%)}
+.bar{max-width:820px;margin:0 auto;display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px}
+.bar input{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;padding:8px 10px;outline:none;min-width:0}
+.send{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:0 16px}
+.send:disabled{opacity:.5}
+aside{position:fixed;top:0;right:0;height:100%;width:min(380px,100%);background:var(--panel);border-left:1px solid var(--line);padding:16px;overflow:auto;transform:translateX(100%);transition:transform .2s;z-index:5}
+aside.open{transform:none}
+.risk{border-radius:12px;padding:10px 14px;margin:6px 0 12px}
+.risk-level{font-weight:700;font-size:16px;letter-spacing:.02em}
+.risk-rec{font-size:14px;margin-bottom:2px}
+.risk ul.advice{margin:6px 0 6px}
+.mem{border-bottom:1px solid var(--line);padding:8px 0;font-size:13.5px}
+.mem small{display:block;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo" aria-hidden="true">☀</div>
+    <h1>Weather Visit Planner</h1>
+    <span class="mode" id="mode">…</span>
+    <button class="ghost" id="memBtn" type="button">Memory</button>
+    <button class="ghost" id="themeBtn" type="button" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <section class="intro">
+    <h2>Where are you visiting, and when?</h2>
+    <p>Ask about the weather for a trip to any of <span id="cityCount">200</span> US cities: the 50 largest plus the biggest 3–4 in every state. You'll get a weather risk level (low, moderate or high) with the reasons. Mention who's travelling (for example "with my 85-year-old dad" or "with a newborn") for stricter thresholds; nothing is assumed otherwise.</p>
+    <div class="chips">
+      <button class="chip" type="button">Visiting Dad in NYC this weekend</button>
+      <button class="chip" type="button">Is Phoenix too hot for a walk tomorrow?</button>
+      <button class="chip" type="button">Taking our newborn to Miami this weekend</button>
+      <button class="chip" type="button">Visiting Mum in Portland, Maine next week</button>
+      <button class="chip" type="button">Chicago this weekend</button>
+      <button class="chip" type="button">remember Dad is 85 and gets tired walking more than 20 minutes</button>
+    </div>
+  </section>
+
+  <div id="thread" aria-live="polite"></div>
+</div>
+
+<form id="form">
+  <div class="bar">
+    <input id="q" autocomplete="off" placeholder="Ask about a US city, or say 'remember …'">
+    <button class="send" id="send" aria-label="Send">➤</button>
+  </div>
+</form>
+
+<aside id="memPanel" aria-label="Household memory">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h3 style="margin:0">H-MEM memory</h3>
+    <button class="ghost" id="memClose" type="button">Close</button>
+  </div>
+  <p class="note">What the agents currently remember (newest first).</p>
+  <div id="memList"></div>
+</aside>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const thread = $("#thread");
+
+try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+$("#themeBtn").onclick = () => {
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  const cur = document.documentElement.dataset.theme || (dark ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("theme", next); } catch (e) {}
+};
+
+fetch("/api/status").then(r => r.json()).then(s => {
+  $("#mode").textContent = s.mode === "nightshift" ? "Nightshift model" : "Sample mode (no model)";
+  if (s.cities) $("#cityCount").textContent = s.cities;
+}).catch(() => { $("#mode").textContent = "offline"; });
+
+document.querySelectorAll(".chip").forEach(c => c.onclick = () => ask(c.textContent));
+$("#form").onsubmit = e => { e.preventDefault(); ask($("#q").value); };
+
+function levelClass(l){ return l === "high" ? "bad" : (l === "moderate" || l === "medium") ? "warn" : l === "low" ? "good" : "info"; }
+
+function renderWeather(r){
+  const h = r.handoff;
+  if (h.status !== "ok") return `<h3>Couldn't get the weather</h3><p class="note">${esc(h.error)}</p>`;
+  const windows = h.good_outdoor_windows.length
+    ? h.good_outdoor_windows.map(w => `<span class="tag good">✓ ${esc(w)}</span>`).join("")
+    : `<span class="tag warn">No low-risk daytime windows</span>`;
+  const risks = h.risks.length
+    ? h.risks.map(k => `<span class="tag ${levelClass(k.level)}">${esc(k.type)}${k.period ? " · " + esc(k.period) : ""}: ${esc(k.detail)}</span>`).join("")
+    : `<span class="tag good">No weather risks flagged</span>`;
+  const alerts = h.official_alerts.map(a => `<span class="tag bad">⚠ ${esc(a.event)}: ${esc(a.headline)}</span>`).join("");
+  const rows = h.evidence.map(e => `<tr><td>${esc(e.period)}</td><td><span class="tag ${levelClass(e.risk_level)}">${esc(e.risk_level)}</span></td><td>${e.temperature_f}°F / ${Math.round((e.temperature_f-32)*5/9)}°C</td><td>${e.precip_chance_pct}%</td><td>${esc(e.wind || "")}</td><td>${esc(e.summary)}</td></tr>`).join("");
+  const lvl = h.risk_level || "low";
+  const t = h.travellers || {groups: []};
+  const who = t.groups.length
+    ? `Stricter thresholds for: ${esc(t.groups.map(g => g.replace("_", " ")).join(", "))}` + (t.from_memory && t.from_memory.length ? " (partly from household memory)" : "")
+    : "No travellers described, so general (healthy adult) thresholds were used";
+  const riskBox = `<div class="risk ${levelClass(lvl)}"><div class="risk-level">Weather risk: ${esc(lvl.toUpperCase())}</div><div class="risk-rec">${esc(h.recommendation || "")}</div>
+    ${(h.risk_evaluation && h.risk_evaluation.reasons.length) ? `<ul class="advice">${h.risk_evaluation.reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+    <div class="note" style="font-size:12.5px">${who}</div></div>`;
+  const rv = h.outcome_review || {verdict: "pass", issues: [], confidence: {level: "?"}};
+  const conf = (h.confidence || rv.confidence.level || "?");
+  const review = `<span class="tag ${rv.verdict === "pass" ? "good" : "warn"}">Outcome review: ${rv.verdict === "pass" ? (rv.round > 1 ? "passed after revision" : "passed") : "needs revision"}</span>`
+    + `<span class="tag ${conf === "high" ? "good" : conf === "medium" ? "warn" : "bad"}">Confidence: ${esc(conf)}</span>`
+    + (rv.issues && rv.issues.length ? rv.issues.map(i => `<span class="tag warn">${esc(i)}</span>`).join("") : "");
+  const ev = r.evaluator.ok ? `<span class="tag good">Evaluator passed</span>` : `<span class="tag bad">Evaluator: ${esc(r.evaluator.issues.join("; "))}</span>`;
+  const fresh = h.stale ? `<span class="tag warn">Data ${h.data_age_hours} h old</span>` : `<span class="tag good">Data ${h.data_age_hours} h old</span>`;
+  return `
+    <h3>${esc(h.label)} · ${r.weekdays ? esc(r.weekdays.join(" & ")) : `next ${r.days} day${r.days > 1 ? "s" : ""}`}</h3>
+    ${r.note ? `<p class="note">${esc(r.note)}</p>` : ""}
+    ${riskBox}
+    <p class="summary">${esc(h.summary)}</p>
+    ${alerts ? `<div class="label">Official alerts</div><div class="row">${alerts}</div>` : ""}
+    <div class="label">Low-risk times to be outside</div><div class="row">${windows}</div>
+    <div class="label">Risks</div><div class="row">${risks}</div>
+    <div class="label">Advice</div><ul class="advice">${h.advice.map(a => `<li>${esc(a)}</li>`).join("")}</ul>
+    <div class="row">${review}${ev}${fresh}</div>
+    <details><summary>Forecast data the answer is based on</summary>
+      <div class="tbl"><table><thead><tr><th>Period</th><th>Risk</th><th>Temp</th><th>Rain</th><th>Wind</th><th>Forecast</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </details>
+    <details><summary>Sources and Zetaris queries</summary>
+      ${h.sources.map(s => `<p><code>${esc(s)}</code></p>`).join("")}
+    </details>
+    <div class="foot"><span>Model: ${esc(h.model)}</span><span>Memories used: ${h.memories_used.length}</span><span>Trace: ${esc(r.trace)}</span></div>
+    <p class="note" style="font-size:12.5px;margin:8px 0 0">Summarises National Weather Service data. Not medical advice; check with a GP about anything health-related.</p>`;
+}
+
+async function ask(text){
+  text = (text || "").trim();
+  if (!text) return;
+  $("#q").value = "";
+  $("#send").disabled = true;
+  thread.insertAdjacentHTML("beforeend", `<div class="q">${esc(text)}</div>`);
+  const card = document.createElement("div");
+  card.className = "a"; card.innerHTML = `<p class="note">Checking memory and the forecast…</p>`;
+  thread.appendChild(card); card.scrollIntoView({behavior:"smooth", block:"end"});
+  try {
+    const res = await fetch("/api/ask", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({question:text})});
+    const r = await res.json();
+    card.innerHTML = r.kind === "weather" ? renderWeather(r) : `<p>${esc(r.text)}</p>`;
+    if (r.kind === "remembered" && $("#memPanel").classList.contains("open")) loadMem();
+  } catch (e) {
+    card.innerHTML = `<p class="note">The app isn't responding. Is web_app.py still running?</p>`;
+  }
+  $("#send").disabled = false;
+  card.scrollIntoView({behavior:"smooth", block:"end"});
+}
+
+async function loadMem(){
+  const r = await fetch("/api/memory").then(x => x.json());
+  $("#memList").innerHTML = r.memories.length
+    ? r.memories.map(m => `<div class="mem">${esc(m.content)}<small>${esc(m.tier)} · ${esc(m.source)} · ${esc(m.created_at)}</small></div>`).join("")
+    : `<p class="note">Nothing remembered yet.</p>`;
+}
+$("#memBtn").onclick = () => { $("#memPanel").classList.add("open"); loadMem(); };
+$("#memClose").onclick = () => $("#memPanel").classList.remove("open");
+</script>
+</body>
+</html>

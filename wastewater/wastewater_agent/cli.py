@@ -26,6 +26,8 @@ def main(argv: list[str] | None = None) -> int:
 
     a = sub.add_parser("ask", help="answer a natural-language question")
     a.add_argument("question")
+    a.add_argument("--county", help="narrow to one county in the question's state, e.g. 'Henrico' or 'Richmond City'")
+    a.add_argument("--pathogen", choices=["sars-cov-2", "flu-a"], help="which virus to answer about (default: from the question's words, else SARS-CoV-2)")
     a.add_argument("--json", action="store_true", help="print the fact sheet and plan as JSON after the answer")
 
     sub.add_parser("status", help="check Zetaris, Nightshift and memory")
@@ -64,7 +66,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         if args.command == "ask":
-            return cmd_ask(settings, args.question, args.json)
+            return cmd_ask(settings, args.question, args.json, args.county, args.pathogen)
         if args.command == "status":
             return cmd_status(settings)
         if args.command == "benchmark":
@@ -90,12 +92,12 @@ def main(argv: list[str] | None = None) -> int:
 # -- commands ------------------------------------------------------------------
 
 
-def cmd_ask(settings, question: str, as_json: bool) -> int:
+def cmd_ask(settings, question: str, as_json: bool, county: str | None = None, pathogen: str | None = None) -> int:
     from .agent import Agent
 
     agent = Agent(settings)
     try:
-        answer = agent.ask(question)
+        answer = agent.ask(question, county=county, pathogen=pathogen)
     finally:
         agent.close()
     facts = answer.facts
@@ -113,7 +115,8 @@ def cmd_ask(settings, question: str, as_json: bool) -> int:
     if facts.fallback_samples is not None:
         rows += f" | fallback samples={facts.fallback_samples} positives={facts.fallback_positives}"
     print(f"rows:     {rows}")
-    print(f"plan:     intent={answer.plan.intent} state={answer.plan.state or 'us'} source={answer.plan.source}")
+    print(f"plan:     pathogen={answer.plan.pathogen} intent={answer.plan.intent} state={answer.plan.state or 'us'}"
+          f"{' county=' + answer.plan.county if answer.plan.county else ''} source={answer.plan.source}")
     for n in answer.plan.notes:
         print(f"  note: {n}")
     print("sql:")
@@ -144,12 +147,19 @@ def cmd_ask(settings, question: str, as_json: bool) -> int:
 def cmd_status(settings) -> int:
     ok = True
     print("zetaris:")
+    from . import pathogens
+
     client = JdbcClient(settings)
     try:
         client.query(sql.ping())
-        rows = client.query(sql.latest_sample_date())
-        latest = rows[0].get("latest_sample_date") if rows else None
-        print(f"  ok  {settings.zetaris_jdbc_url}  latest sample {latest}")
+        print(f"  ok  {settings.zetaris_jdbc_url}")
+        for p in pathogens.PATHOGENS.values():
+            try:
+                rows = client.query(sql.latest_sample_date(pathogen=p))
+                latest = rows[0].get("latest_sample_date") if rows else None
+                print(f"    {p.name:<12} {p.table:<26} latest sample {latest}")
+            except ZetarisError as e:
+                print(f"    {p.name:<12} {p.table:<26} FAIL {str(e).splitlines()[0][:80]}")
     except ZetarisError as e:
         ok = False
         print(f"  FAIL {e}")
@@ -157,7 +167,7 @@ def cmd_status(settings) -> int:
         client.close()
 
     print("nightshift:")
-    ns = NightshiftProvider(settings.nightshift_base_url, settings.nightshift_token)
+    ns = NightshiftProvider(settings.nightshift_base_url, settings.nightshift_token, models=settings.nightshift_models)
     state, models = ns.readiness()
     print(f"  {state}  {settings.nightshift_base_url}  token from {settings.nightshift_token_source}")
     for m in models:

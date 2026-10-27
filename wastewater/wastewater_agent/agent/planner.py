@@ -11,8 +11,14 @@ from typing import Any
 
 from ..llm.base import Completion, Provider, ProviderUnauthorized, ProviderUnavailable
 from ..llm.offline import OfflineProvider
-from ..states import US_STATES, find_state
+from .. import pathogens
+from ..states import US_STATES, county_label, find_state, normalize_county
 from .windows import Window, default_window, has_explicit_dates
+
+# "in Henrico County", "in Richmond City", "in Orleans Parish": parsed by code, never by the model.
+_COUNTY_IN_QUESTION = re.compile(
+    r"\bin\s+((?:[A-Z][A-Za-z.'\-]+\s?){1,4}?(?:County|Parish|Borough|City))\b"
+)
 
 INTENTS = ("detect", "trend")
 PLAN_MAX_TOKENS = 1200
@@ -37,10 +43,37 @@ class Plan:
     window: Window
     source: str  # nightshift | offline
     notes: list[str] = field(default_factory=list)
+    county: str | None = None  # dataset form, e.g. "Henrico" or "Richmond City"
+    pathogen: str = pathogens.DEFAULT_KEY  # registry key; chosen by the caller or by question words, never by the model
+
+    @property
+    def county_label(self) -> str:
+        return county_label(self.county, self.state)
+
+    @property
+    def pathogen_entry(self) -> pathogens.Pathogen:
+        return pathogens.get(self.pathogen)
 
     def to_dict(self) -> dict[str, Any]:
-        return {"intent": self.intent, "state": self.state, "window": self.window.to_dict(),
-                "source": self.source, "notes": list(self.notes)}
+        return {"intent": self.intent, "state": self.state, "county": self.county, "pathogen": self.pathogen,
+                "window": self.window.to_dict(), "source": self.source, "notes": list(self.notes)}
+
+
+def apply_county(p: Plan, question: str, county: str | None) -> Plan:
+    """Attach a county to the plan: from the caller (geocoded city) or from
+    'in X County' in the question. Needs a state; the county is a name within it."""
+    raw = county
+    if raw is None:
+        m = _COUNTY_IN_QUESTION.search(question)
+        raw = m.group(1) if m else None
+    norm = normalize_county(raw)
+    if norm is None:
+        return p
+    if p.state is None:
+        p.notes.append(f"county {norm!r} ignored because no state was identified")
+        return p
+    p.county = norm
+    return p
 
 
 class PlanError(ValueError):
@@ -53,8 +86,22 @@ def plan(
     today: date,
     provider: Provider | None,
     offline: OfflineProvider,
+    county: str | None = None,
+    pathogen: str | None = None,
 ) -> tuple[Plan, Completion | None, str | None]:
     """Returns (plan, completion or None, fallback_reason or None)."""
+    p, completion, reason = _plan(question, hint, today, provider, offline)
+    p.pathogen = (pathogens.get(pathogen) if pathogen else pathogens.from_question(question)).key
+    return apply_county(p, question, county), completion, reason
+
+
+def _plan(
+    question: str,
+    hint: Window | None,
+    today: date,
+    provider: Provider | None,
+    offline: OfflineProvider,
+) -> tuple[Plan, Completion | None, str | None]:
     hint_dict = {"start": hint.start.isoformat(), "end": hint.end.isoformat()} if hint else None
     if provider is not None:
         messages = [

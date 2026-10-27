@@ -1,0 +1,1738 @@
+{
+ "Aberdeen, SD": {
+  "county_fips": "46013",
+  "county_name": "Brown",
+  "county_zone": "SDC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/ABR/118,93/forecast",
+  "forecast_zone": "SDZ006",
+  "nws_office": "ABR"
+ },
+ "Albuquerque, NM": {
+  "county_fips": "35001",
+  "county_name": "Bernalillo",
+  "county_zone": "NMC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/ABQ/98,121/forecast",
+  "forecast_zone": "NMZ219",
+  "nws_office": "ABQ"
+ },
+ "Allentown, PA": {
+  "county_fips": "42077",
+  "county_name": "Lehigh",
+  "county_zone": "PAC077",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/34,107/forecast",
+  "forecast_zone": "PAZ061",
+  "nws_office": "PHI"
+ },
+ "Anchorage, AK": {
+  "county_fips": "02020",
+  "county_name": "Anchorage",
+  "county_zone": "AKC020",
+  "forecast_url": "https://api.weather.gov/gridpoints/AER/143,236/forecast",
+  "forecast_zone": "AKZ701",
+  "nws_office": "AER"
+ },
+ "Arlington, TX": {
+  "county_fips": "48439",
+  "county_name": "Tarrant",
+  "county_zone": "TXC439",
+  "forecast_url": "https://api.weather.gov/gridpoints/FWD/78,102/forecast",
+  "forecast_zone": "TXZ118",
+  "nws_office": "FWD"
+ },
+ "Atlanta, GA": {
+  "county_fips": "13121",
+  "county_name": "Fulton",
+  "county_zone": "GAC121",
+  "forecast_url": "https://api.weather.gov/gridpoints/FFC/51,87/forecast",
+  "forecast_zone": "GAZ033",
+  "nws_office": "FFC"
+ },
+ "Augusta, GA": {
+  "county_fips": "13245",
+  "county_name": "Richmond",
+  "county_zone": "GAC245",
+  "forecast_url": "https://api.weather.gov/gridpoints/CAE/31,34/forecast",
+  "forecast_zone": "GAZ065",
+  "nws_office": "CAE"
+ },
+ "Aurora, CO": {
+  "county_fips": "08005",
+  "county_name": "Arapahoe",
+  "county_zone": "COC005",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOU/68,61/forecast",
+  "forecast_zone": "COZ040",
+  "nws_office": "BOU"
+ },
+ "Aurora, IL": {
+  "county_fips": "17089",
+  "county_name": "Kane",
+  "county_zone": "ILC089",
+  "forecast_url": "https://api.weather.gov/gridpoints/LOT/52,66/forecast",
+  "forecast_zone": "ILZ012",
+  "nws_office": "LOT"
+ },
+ "Austin, TX": {
+  "county_fips": "48453",
+  "county_name": "Travis",
+  "county_zone": "TXC453",
+  "forecast_url": "https://api.weather.gov/gridpoints/EWX/156,91/forecast",
+  "forecast_zone": "TXZ192",
+  "nws_office": "EWX"
+ },
+ "Bakersfield, CA": {
+  "county_fips": "06029",
+  "county_name": "Kern",
+  "county_zone": "CAC029",
+  "forecast_url": "https://api.weather.gov/gridpoints/HNX/68,35/forecast",
+  "forecast_zone": "CAZ314",
+  "nws_office": "HNX"
+ },
+ "Baltimore, MD": {
+  "county_fips": "24510",
+  "county_name": "Baltimore City",
+  "county_zone": "MDC510",
+  "forecast_url": "https://api.weather.gov/gridpoints/LWX/109,91/forecast",
+  "forecast_zone": "MDZ011",
+  "nws_office": "LWX"
+ },
+ "Bangor, ME": {
+  "county_fips": "23019",
+  "county_name": "Penobscot",
+  "county_zone": "MEC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/CAR/66,74/forecast",
+  "forecast_zone": "MEZ015",
+  "nws_office": "CAR"
+ },
+ "Baton Rouge, LA": {
+  "county_fips": "22033",
+  "county_name": "East Baton Rouge",
+  "county_zone": "LAC033",
+  "forecast_url": "https://api.weather.gov/gridpoints/LIX/25,109/forecast",
+  "forecast_zone": "LAZ048",
+  "nws_office": "LIX"
+ },
+ "Bellevue, NE": {
+  "county_fips": "31153",
+  "county_name": "Sarpy",
+  "county_zone": "NEC153",
+  "forecast_url": "https://api.weather.gov/gridpoints/OAX/84,55/forecast",
+  "forecast_zone": "NEZ053",
+  "nws_office": "OAX"
+ },
+ "Billings, MT": {
+  "county_fips": "30111",
+  "county_name": "Yellowstone",
+  "county_zone": "MTC111",
+  "forecast_url": "https://api.weather.gov/gridpoints/BYZ/103,92/forecast",
+  "forecast_zone": "MTZ235",
+  "nws_office": "BYZ"
+ },
+ "Birmingham, AL": {
+  "county_fips": "01073",
+  "county_name": "Jefferson",
+  "county_zone": "ALC073",
+  "forecast_url": "https://api.weather.gov/gridpoints/BMX/59,84/forecast",
+  "forecast_zone": "ALZ024",
+  "nws_office": "BMX"
+ },
+ "Bismarck, ND": {
+  "county_fips": "38015",
+  "county_name": "Burleigh",
+  "county_zone": "NDC015",
+  "forecast_url": "https://api.weather.gov/gridpoints/BIS/110,47/forecast",
+  "forecast_zone": "NDZ035",
+  "nws_office": "BIS"
+ },
+ "Bloomington, MN": {
+  "county_fips": "27053",
+  "county_name": "Hennepin",
+  "county_zone": "MNC053",
+  "forecast_url": "https://api.weather.gov/gridpoints/MPX/107,66/forecast",
+  "forecast_zone": "MNZ060",
+  "nws_office": "MPX"
+ },
+ "Boise, ID": {
+  "county_fips": "16001",
+  "county_name": "Ada",
+  "county_zone": "IDC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOI/133,86/forecast",
+  "forecast_zone": "IDZ014",
+  "nws_office": "BOI"
+ },
+ "Boston, MA": {
+  "county_fips": "25025",
+  "county_name": "Suffolk",
+  "county_zone": "MAC025",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/71,101/forecast",
+  "forecast_zone": "MAZ015",
+  "nws_office": "BOX"
+ },
+ "Bowling Green, KY": {
+  "county_fips": "21227",
+  "county_name": "Warren",
+  "county_zone": "KYC227",
+  "forecast_url": "https://api.weather.gov/gridpoints/LMK/28,18/forecast",
+  "forecast_zone": "KYZ071",
+  "nws_office": "LMK"
+ },
+ "Bozeman, MT": {
+  "county_fips": "30031",
+  "county_name": "Gallatin",
+  "county_zone": "MTC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/TFX/96,58/forecast",
+  "forecast_zone": "MTZ326",
+  "nws_office": "TFX"
+ },
+ "Bridgeport, CT": {
+  "county_fips": "09001",
+  "county_name": "Fairfield",
+  "county_zone": "CTC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/57,68/forecast",
+  "forecast_zone": "CTZ009",
+  "nws_office": "OKX"
+ },
+ "Broken Arrow, OK": {
+  "county_fips": "40143",
+  "county_name": "Tulsa",
+  "county_zone": "OKC143",
+  "forecast_url": "https://api.weather.gov/gridpoints/TSA/48,100/forecast",
+  "forecast_zone": "OKZ060",
+  "nws_office": "TSA"
+ },
+ "Brookings, SD": {
+  "county_fips": "46011",
+  "county_name": "Brookings",
+  "county_zone": "SDC011",
+  "forecast_url": "https://api.weather.gov/gridpoints/FSD/96,100/forecast",
+  "forecast_zone": "SDZ040",
+  "nws_office": "FSD"
+ },
+ "Buffalo, NY": {
+  "county_fips": "36029",
+  "county_name": "Erie",
+  "county_zone": "NYC029",
+  "forecast_url": "https://api.weather.gov/gridpoints/BUF/36,47/forecast",
+  "forecast_zone": "NYZ010",
+  "nws_office": "BUF"
+ },
+ "Burlington, VT": {
+  "county_fips": "50007",
+  "county_name": "Chittenden",
+  "county_zone": "VTC007",
+  "forecast_url": "https://api.weather.gov/gridpoints/BTV/89,56/forecast",
+  "forecast_zone": "VTZ005",
+  "nws_office": "BTV"
+ },
+ "Caldwell, ID": {
+  "county_fips": "16027",
+  "county_name": "Canyon",
+  "county_zone": "IDC027",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOI/118,91/forecast",
+  "forecast_zone": "IDZ012",
+  "nws_office": "BOI"
+ },
+ "Cambridge, MA": {
+  "county_fips": "25017",
+  "county_name": "Middlesex",
+  "county_zone": "MAC017",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/70,101/forecast",
+  "forecast_zone": "MAZ014",
+  "nws_office": "BOX"
+ },
+ "Carmel, IN": {
+  "county_fips": "18057",
+  "county_name": "Hamilton",
+  "county_zone": "INC057",
+  "forecast_url": "https://api.weather.gov/gridpoints/IND/59,79/forecast",
+  "forecast_zone": "INZ039",
+  "nws_office": "IND"
+ },
+ "Casper, WY": {
+  "county_fips": "56025",
+  "county_name": "Natrona",
+  "county_zone": "WYC025",
+  "forecast_url": "https://api.weather.gov/gridpoints/RIW/187,95/forecast",
+  "forecast_zone": "WYZ020",
+  "nws_office": "RIW"
+ },
+ "Cedar Rapids, IA": {
+  "county_fips": "19113",
+  "county_name": "Linn",
+  "county_zone": "IAC113",
+  "forecast_url": "https://api.weather.gov/gridpoints/DVN/30,86/forecast",
+  "forecast_zone": "IAZ052",
+  "nws_office": "DVN"
+ },
+ "Chandler, AZ": {
+  "county_fips": "04013",
+  "county_name": "Maricopa",
+  "county_zone": "AZC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/PSR/167,50/forecast",
+  "forecast_zone": "AZZ548",
+  "nws_office": "PSR"
+ },
+ "Charleston, SC": {
+  "county_fips": "45019",
+  "county_name": "Charleston",
+  "county_zone": "SCC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/CHS/87,77/forecast",
+  "forecast_zone": "SCZ150",
+  "nws_office": "CHS"
+ },
+ "Charleston, WV": {
+  "county_fips": "54039",
+  "county_name": "Kanawha",
+  "county_zone": "WVC039",
+  "forecast_url": "https://api.weather.gov/gridpoints/RLX/63,67/forecast",
+  "forecast_zone": "WVZ015",
+  "nws_office": "RLX"
+ },
+ "Charlotte, NC": {
+  "county_fips": "37119",
+  "county_name": "Mecklenburg",
+  "county_zone": "NCC119",
+  "forecast_url": "https://api.weather.gov/gridpoints/GSP/119,65/forecast",
+  "forecast_zone": "NCZ071",
+  "nws_office": "GSP"
+ },
+ "Chattanooga, TN": {
+  "county_fips": "47065",
+  "county_name": "Hamilton",
+  "county_zone": "TNC065",
+  "forecast_url": "https://api.weather.gov/gridpoints/MRX/24,7/forecast",
+  "forecast_zone": "TNZ099",
+  "nws_office": "MRX"
+ },
+ "Chesapeake, VA": {
+  "county_fips": "51550",
+  "county_name": "City of Chesapeake",
+  "county_zone": "VAC550",
+  "forecast_url": "https://api.weather.gov/gridpoints/AKQ/91,48/forecast",
+  "forecast_zone": "VAZ097",
+  "nws_office": "AKQ"
+ },
+ "Cheyenne, WY": {
+  "county_fips": "56021",
+  "county_name": "Laramie",
+  "county_zone": "WYC021",
+  "forecast_url": "https://api.weather.gov/gridpoints/CYS/110,14/forecast",
+  "forecast_zone": "WYZ118",
+  "nws_office": "CYS"
+ },
+ "Chicago, IL": {
+  "county_fips": "17031",
+  "county_name": "Cook",
+  "county_zone": "ILC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/LOT/76,73/forecast",
+  "forecast_zone": "ILZ104",
+  "nws_office": "LOT"
+ },
+ "Cincinnati, OH": {
+  "county_fips": "39061",
+  "county_name": "Hamilton",
+  "county_zone": "OHC061",
+  "forecast_url": "https://api.weather.gov/gridpoints/ILN/36,38/forecast",
+  "forecast_zone": "OHZ077",
+  "nws_office": "ILN"
+ },
+ "Cleveland, OH": {
+  "county_fips": "39035",
+  "county_name": "Cuyahoga",
+  "county_zone": "OHC035",
+  "forecast_url": "https://api.weather.gov/gridpoints/CLE/83,65/forecast",
+  "forecast_zone": "OHZ011",
+  "nws_office": "CLE"
+ },
+ "Colchester, VT": {
+  "county_fips": "50007",
+  "county_name": "Chittenden",
+  "county_zone": "VTC007",
+  "forecast_url": "https://api.weather.gov/gridpoints/BTV/90,60/forecast",
+  "forecast_zone": "VTZ005",
+  "nws_office": "BTV"
+ },
+ "Colorado Springs, CO": {
+  "county_fips": "08041",
+  "county_name": "El Paso",
+  "county_zone": "COC041",
+  "forecast_url": "https://api.weather.gov/gridpoints/PUB/90,91/forecast",
+  "forecast_zone": "COZ085",
+  "nws_office": "PUB"
+ },
+ "Columbia, MO": {
+  "county_fips": "29019",
+  "county_name": "Boone",
+  "county_zone": "MOC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/LSX/20,87/forecast",
+  "forecast_zone": "MOZ041",
+  "nws_office": "LSX"
+ },
+ "Columbia, SC": {
+  "county_fips": "45079",
+  "county_name": "Richland",
+  "county_zone": "SCC079",
+  "forecast_url": "https://api.weather.gov/gridpoints/CAE/65,61/forecast",
+  "forecast_zone": "SCZ028",
+  "nws_office": "CAE"
+ },
+ "Columbus, GA": {
+  "county_fips": "13215",
+  "county_name": "Muscogee",
+  "county_zone": "GAC215",
+  "forecast_url": "https://api.weather.gov/gridpoints/FFC/33,28/forecast",
+  "forecast_zone": "GAZ089",
+  "nws_office": "FFC"
+ },
+ "Columbus, OH": {
+  "county_fips": "39049",
+  "county_name": "Franklin",
+  "county_zone": "OHC049",
+  "forecast_url": "https://api.weather.gov/gridpoints/ILN/85,81/forecast",
+  "forecast_zone": "OHZ055",
+  "nws_office": "ILN"
+ },
+ "Concord, NH": {
+  "county_fips": "33013",
+  "county_name": "Merrimack",
+  "county_zone": "NHC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/34,30/forecast",
+  "forecast_zone": "NHZ008",
+  "nws_office": "GYX"
+ },
+ "Cranston, RI": {
+  "county_fips": "44007",
+  "county_name": "Providence",
+  "county_zone": "RIC007",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/63,73/forecast",
+  "forecast_zone": "RIZ002",
+  "nws_office": "BOX"
+ },
+ "Dallas, TX": {
+  "county_fips": "48113",
+  "county_name": "Dallas",
+  "county_zone": "TXC113",
+  "forecast_url": "https://api.weather.gov/gridpoints/FWD/89,104/forecast",
+  "forecast_zone": "TXZ119",
+  "nws_office": "FWD"
+ },
+ "Davenport, IA": {
+  "county_fips": "19163",
+  "county_name": "Scott",
+  "county_zone": "IAC163",
+  "forecast_url": "https://api.weather.gov/gridpoints/DVN/68,66/forecast",
+  "forecast_zone": "IAZ068",
+  "nws_office": "DVN"
+ },
+ "Denver, CO": {
+  "county_fips": "08031",
+  "county_name": "Denver",
+  "county_zone": "COC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOU/63,62/forecast",
+  "forecast_zone": "COZ040",
+  "nws_office": "BOU"
+ },
+ "Des Moines, IA": {
+  "county_fips": "19153",
+  "county_name": "Polk",
+  "county_zone": "IAC153",
+  "forecast_url": "https://api.weather.gov/gridpoints/DMX/73,49/forecast",
+  "forecast_zone": "IAZ060",
+  "nws_office": "DMX"
+ },
+ "Detroit, MI": {
+  "county_fips": "26163",
+  "county_name": "Wayne",
+  "county_zone": "MIC163",
+  "forecast_url": "https://api.weather.gov/gridpoints/DTX/66,34/forecast",
+  "forecast_zone": "MIZ076",
+  "nws_office": "DTX"
+ },
+ "Dover, DE": {
+  "county_fips": "10001",
+  "county_name": "Kent",
+  "county_zone": "DEC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/42,41/forecast",
+  "forecast_zone": "DEZ002",
+  "nws_office": "PHI"
+ },
+ "Dover, NH": {
+  "county_fips": "33017",
+  "county_name": "Strafford",
+  "county_zone": "NHC017",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/56,33/forecast",
+  "forecast_zone": "NHZ010",
+  "nws_office": "GYX"
+ },
+ "Duluth, MN": {
+  "county_fips": "27137",
+  "county_name": "St. Louis",
+  "county_zone": "MNC137",
+  "forecast_url": "https://api.weather.gov/gridpoints/DLH/91,69/forecast",
+  "forecast_zone": "MNZ037",
+  "nws_office": "DLH"
+ },
+ "Durham, NC": {
+  "county_fips": "37063",
+  "county_name": "Durham",
+  "county_zone": "NCC063",
+  "forecast_url": "https://api.weather.gov/gridpoints/RAH/64,66/forecast",
+  "forecast_zone": "NCZ025",
+  "nws_office": "RAH"
+ },
+ "East Honolulu, HI": {
+  "county_fips": "15003",
+  "county_name": "Oahu in Honolulu",
+  "county_zone": "HIC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/HFO/160,144/forecast",
+  "forecast_zone": "HIZ032",
+  "nws_office": "HFO"
+ },
+ "El Paso, TX": {
+  "county_fips": "48141",
+  "county_name": "El Paso",
+  "county_zone": "TXC141",
+  "forecast_url": "https://api.weather.gov/gridpoints/EPZ/100,56/forecast",
+  "forecast_zone": "TXZ418",
+  "nws_office": "EPZ"
+ },
+ "Elizabeth, NJ": {
+  "county_fips": "34039",
+  "county_name": "Union",
+  "county_zone": "NJC039",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/27,39/forecast",
+  "forecast_zone": "NJZ108",
+  "nws_office": "OKX"
+ },
+ "Eugene, OR": {
+  "county_fips": "41039",
+  "county_name": "Lane",
+  "county_zone": "ORC039",
+  "forecast_url": "https://api.weather.gov/gridpoints/PQR/85,39/forecast",
+  "forecast_zone": "ORZ118",
+  "nws_office": "PQR"
+ },
+ "Evansville, IN": {
+  "county_fips": "18163",
+  "county_name": "Vanderburgh",
+  "county_zone": "INC163",
+  "forecast_url": "https://api.weather.gov/gridpoints/PAH/166,97/forecast",
+  "forecast_zone": "INZ086",
+  "nws_office": "PAH"
+ },
+ "Fairbanks, AK": {
+  "county_fips": "02090",
+  "county_name": "Fairbanks North Star",
+  "county_zone": "AKC090",
+  "forecast_url": "https://api.weather.gov/gridpoints/AFG/493,119/forecast",
+  "forecast_zone": "AKZ844",
+  "nws_office": "AFG"
+ },
+ "Fargo, ND": {
+  "county_fips": "38017",
+  "county_name": "Cass",
+  "county_zone": "NDC017",
+  "forecast_url": "https://api.weather.gov/gridpoints/FGF/100,57/forecast",
+  "forecast_zone": "NDZ039",
+  "nws_office": "FGF"
+ },
+ "Fayetteville, AR": {
+  "county_fips": "05143",
+  "county_name": "Washington",
+  "county_zone": "ARC143",
+  "forecast_url": "https://api.weather.gov/gridpoints/TSA/107,100/forecast",
+  "forecast_zone": "ARZ010",
+  "nws_office": "TSA"
+ },
+ "Fort Collins, CO": {
+  "county_fips": "08069",
+  "county_name": "Larimer",
+  "county_zone": "COC069",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOU/63,100/forecast",
+  "forecast_zone": "COZ038",
+  "nws_office": "BOU"
+ },
+ "Fort Smith, AR": {
+  "county_fips": "05131",
+  "county_name": "Sebastian",
+  "county_zone": "ARC131",
+  "forecast_url": "https://api.weather.gov/gridpoints/TSA/99,70/forecast",
+  "forecast_zone": "ARZ129",
+  "nws_office": "TSA"
+ },
+ "Fort Wayne, IN": {
+  "county_fips": "18003",
+  "county_name": "Allen",
+  "county_zone": "INC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/IWX/69,38/forecast",
+  "forecast_zone": "INZ018",
+  "nws_office": "IWX"
+ },
+ "Fort Worth, TX": {
+  "county_fips": "48439",
+  "county_name": "Tarrant",
+  "county_zone": "TXC439",
+  "forecast_url": "https://api.weather.gov/gridpoints/FWD/69,103/forecast",
+  "forecast_zone": "TXZ118",
+  "nws_office": "FWD"
+ },
+ "Frederick, MD": {
+  "county_fips": "24021",
+  "county_name": "Frederick",
+  "county_zone": "MDC021",
+  "forecast_url": "https://api.weather.gov/gridpoints/LWX/80,93/forecast",
+  "forecast_zone": "MDZ004",
+  "nws_office": "LWX"
+ },
+ "Fresno, CA": {
+  "county_fips": "06019",
+  "county_name": "Fresno",
+  "county_zone": "CAC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/HNX/52,100/forecast",
+  "forecast_zone": "CAZ307",
+  "nws_office": "HNX"
+ },
+ "Gaithersburg, MD": {
+  "county_fips": "24031",
+  "county_name": "Montgomery",
+  "county_zone": "MDC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/LWX/89,82/forecast",
+  "forecast_zone": "MDZ504",
+  "nws_office": "LWX"
+ },
+ "Gilbert, AZ": {
+  "county_fips": "04013",
+  "county_name": "Maricopa",
+  "county_zone": "AZC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/PSR/169,52/forecast",
+  "forecast_zone": "AZZ548",
+  "nws_office": "PSR"
+ },
+ "Gillette, WY": {
+  "county_fips": "56005",
+  "county_name": "Campbell",
+  "county_zone": "WYC005",
+  "forecast_url": "https://api.weather.gov/gridpoints/UNR/22,73/forecast",
+  "forecast_zone": "WYZ054",
+  "nws_office": "UNR"
+ },
+ "Grand Forks, ND": {
+  "county_fips": "38035",
+  "county_name": "Grand Forks",
+  "county_zone": "NDC035",
+  "forecast_url": "https://api.weather.gov/gridpoints/FGF/93,107/forecast",
+  "forecast_zone": "NDZ027",
+  "nws_office": "FGF"
+ },
+ "Grand Island, NE": {
+  "county_fips": "31079",
+  "county_name": "Hall",
+  "county_zone": "NEC079",
+  "forecast_url": "https://api.weather.gov/gridpoints/GID/68,84/forecast",
+  "forecast_zone": "NEZ062",
+  "nws_office": "GID"
+ },
+ "Grand Rapids, MI": {
+  "county_fips": "26081",
+  "county_name": "Kent",
+  "county_zone": "MIC081",
+  "forecast_url": "https://api.weather.gov/gridpoints/GRR/41,47/forecast",
+  "forecast_zone": "MIZ057",
+  "nws_office": "GRR"
+ },
+ "Great Falls, MT": {
+  "county_fips": "30013",
+  "county_name": "Cascade",
+  "county_zone": "MTC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/TFX/98,145/forecast",
+  "forecast_zone": "MTZ312",
+  "nws_office": "TFX"
+ },
+ "Green Bay, WI": {
+  "county_fips": "55009",
+  "county_name": "Brown",
+  "county_zone": "WIC009",
+  "forecast_url": "https://api.weather.gov/gridpoints/GRB/79,32/forecast",
+  "forecast_zone": "WIZ039",
+  "nws_office": "GRB"
+ },
+ "Greensboro, NC": {
+  "county_fips": "37081",
+  "county_name": "Guilford",
+  "county_zone": "NCC081",
+  "forecast_url": "https://api.weather.gov/gridpoints/RAH/32,66/forecast",
+  "forecast_zone": "NCZ022",
+  "nws_office": "RAH"
+ },
+ "Gresham, OR": {
+  "county_fips": "41051",
+  "county_name": "Multnomah",
+  "county_zone": "ORC051",
+  "forecast_url": "https://api.weather.gov/gridpoints/PQR/120,101/forecast",
+  "forecast_zone": "ORZ112",
+  "nws_office": "PQR"
+ },
+ "Gulfport, MS": {
+  "county_fips": "28047",
+  "county_name": "Harrison",
+  "county_zone": "MSC047",
+  "forecast_url": "https://api.weather.gov/gridpoints/LIX/104,108/forecast",
+  "forecast_zone": "MSZ087",
+  "nws_office": "LIX"
+ },
+ "Hartford, CT": {
+  "county_fips": "09003",
+  "county_name": "Hartford",
+  "county_zone": "CTC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/22,65/forecast",
+  "forecast_zone": "CTZ002",
+  "nws_office": "BOX"
+ },
+ "Hattiesburg, MS": {
+  "county_fips": "28035",
+  "county_name": "Forrest",
+  "county_zone": "MSC035",
+  "forecast_url": "https://api.weather.gov/gridpoints/JAN/111,21/forecast",
+  "forecast_zone": "MSZ074",
+  "nws_office": "JAN"
+ },
+ "Henderson, NV": {
+  "county_fips": "32003",
+  "county_name": "Clark",
+  "county_zone": "NVC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/VEF/127,91/forecast",
+  "forecast_zone": "NVZ020",
+  "nws_office": "VEF"
+ },
+ "Hilo, HI": {
+  "county_fips": "15001",
+  "county_name": "Hawaii in Hawaii",
+  "county_zone": "HIC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/HFO/270,74/forecast",
+  "forecast_zone": "HIZ053",
+  "nws_office": "HFO"
+ },
+ "Honolulu, HI": {
+  "county_fips": "15003",
+  "county_name": "Oahu in Honolulu",
+  "county_zone": "HIC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/HFO/154,145/forecast",
+  "forecast_zone": "HIZ033",
+  "nws_office": "HFO"
+ },
+ "Houston, TX": {
+  "county_fips": "48201",
+  "county_name": "Harris",
+  "county_zone": "TXC201",
+  "forecast_url": "https://api.weather.gov/gridpoints/HGX/63,95/forecast",
+  "forecast_zone": "TXZ213",
+  "nws_office": "HGX"
+ },
+ "Huntington, WV": {
+  "county_fips": "54011",
+  "county_name": "Cabell",
+  "county_zone": "WVC011",
+  "forecast_url": "https://api.weather.gov/gridpoints/RLX/34,68/forecast",
+  "forecast_zone": "WVZ006",
+  "nws_office": "RLX"
+ },
+ "Huntsville, AL": {
+  "county_fips": "01089",
+  "county_name": "Madison",
+  "county_zone": "ALC089",
+  "forecast_url": "https://api.weather.gov/gridpoints/HUN/63,43/forecast",
+  "forecast_zone": "ALZ006",
+  "nws_office": "HUN"
+ },
+ "Idaho Falls, ID": {
+  "county_fips": "16019",
+  "county_name": "Bonneville",
+  "county_zone": "IDC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/PIH/124,74/forecast",
+  "forecast_zone": "IDZ053",
+  "nws_office": "PIH"
+ },
+ "Indianapolis, IN": {
+  "county_fips": "18097",
+  "county_name": "Marion",
+  "county_zone": "INC097",
+  "forecast_url": "https://api.weather.gov/gridpoints/IND/58,69/forecast",
+  "forecast_zone": "INZ047",
+  "nws_office": "IND"
+ },
+ "Jackson, MS": {
+  "county_fips": "28049",
+  "county_name": "Hinds",
+  "county_zone": "MSC049",
+  "forecast_url": "https://api.weather.gov/gridpoints/JAN/76,63/forecast",
+  "forecast_zone": "MSZ048",
+  "nws_office": "JAN"
+ },
+ "Jacksonville, FL": {
+  "county_fips": "12031",
+  "county_name": "Duval",
+  "county_zone": "FLC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/JAX/66,65/forecast",
+  "forecast_zone": "FLZ125",
+  "nws_office": "JAX"
+ },
+ "Jersey City, NJ": {
+  "county_fips": "34017",
+  "county_name": "Hudson",
+  "county_zone": "NJC017",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/32,42/forecast",
+  "forecast_zone": "NJZ006",
+  "nws_office": "OKX"
+ },
+ "Joliet, IL": {
+  "county_fips": "17197",
+  "county_name": "Will",
+  "county_zone": "ILC197",
+  "forecast_url": "https://api.weather.gov/gridpoints/LOT/61,56/forecast",
+  "forecast_zone": "ILZ106",
+  "nws_office": "LOT"
+ },
+ "Juneau, AK": {
+  "county_fips": "02110",
+  "county_name": "Juneau",
+  "county_zone": "AKC110",
+  "forecast_url": "https://api.weather.gov/gridpoints/AJK/194,163/forecast",
+  "forecast_zone": "AKZ325",
+  "nws_office": "AJK"
+ },
+ "Kahului, HI": {
+  "county_fips": "15009",
+  "county_name": "Kahoolawe in Maui",
+  "county_zone": "HIC009",
+  "forecast_url": "https://api.weather.gov/gridpoints/HFO/212,126/forecast",
+  "forecast_zone": "HIZ045",
+  "nws_office": "HFO"
+ },
+ "Kailua, HI": {
+  "county_fips": "15003",
+  "county_name": "Oahu in Honolulu",
+  "county_zone": "HIC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/HFO/159,149/forecast",
+  "forecast_zone": "HIZ009",
+  "nws_office": "HFO"
+ },
+ "Kansas City, KS": {
+  "county_fips": "20209",
+  "county_name": "Wyandotte",
+  "county_zone": "KSC209",
+  "forecast_url": "https://api.weather.gov/gridpoints/EAX/42,51/forecast",
+  "forecast_zone": "KSZ104",
+  "nws_office": "EAX"
+ },
+ "Kansas City, MO": {
+  "county_fips": "29095",
+  "county_name": "Jackson",
+  "county_zone": "MOC095",
+  "forecast_url": "https://api.weather.gov/gridpoints/EAX/44,51/forecast",
+  "forecast_zone": "MOZ037",
+  "nws_office": "EAX"
+ },
+ "Kenosha, WI": {
+  "county_fips": "55059",
+  "county_name": "Kenosha",
+  "county_zone": "WIC059",
+  "forecast_url": "https://api.weather.gov/gridpoints/MKX/92,44/forecast",
+  "forecast_zone": "WIZ072",
+  "nws_office": "MKX"
+ },
+ "Knoxville, TN": {
+  "county_fips": "47093",
+  "county_name": "Knox",
+  "county_zone": "TNC093",
+  "forecast_url": "https://api.weather.gov/gridpoints/MRX/71,51/forecast",
+  "forecast_zone": "TNZ069",
+  "nws_office": "MRX"
+ },
+ "Lafayette, LA": {
+  "county_fips": "22055",
+  "county_name": "Lafayette",
+  "county_zone": "LAC055",
+  "forecast_url": "https://api.weather.gov/gridpoints/LCH/105,95/forecast",
+  "forecast_zone": "LAZ044",
+  "nws_office": "LCH"
+ },
+ "Lakewood, NJ": {
+  "county_fips": "34029",
+  "county_name": "Ocean",
+  "county_zone": "NJC029",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/81,90/forecast",
+  "forecast_zone": "NJZ020",
+  "nws_office": "PHI"
+ },
+ "Laramie, WY": {
+  "county_fips": "56001",
+  "county_name": "Albany",
+  "county_zone": "WYC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/CYS/84,23/forecast",
+  "forecast_zone": "WYZ115",
+  "nws_office": "CYS"
+ },
+ "Las Cruces, NM": {
+  "county_fips": "35013",
+  "county_name": "Dona Ana",
+  "county_zone": "NMC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/EPZ/92,81/forecast",
+  "forecast_zone": "NMZ411",
+  "nws_office": "EPZ"
+ },
+ "Las Vegas, NV": {
+  "county_fips": "32003",
+  "county_name": "Clark",
+  "county_zone": "NVC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/VEF/123,98/forecast",
+  "forecast_zone": "NVZ020",
+  "nws_office": "VEF"
+ },
+ "Lewiston, ME": {
+  "county_fips": "23001",
+  "county_name": "Androscoggin",
+  "county_zone": "MEC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/70,78/forecast",
+  "forecast_zone": "MEZ020",
+  "nws_office": "GYX"
+ },
+ "Lexington, KY": {
+  "county_fips": "21067",
+  "county_name": "Fayette",
+  "county_zone": "KYC067",
+  "forecast_url": "https://api.weather.gov/gridpoints/LMK/95,71/forecast",
+  "forecast_zone": "KYZ041",
+  "nws_office": "LMK"
+ },
+ "Lincoln, NE": {
+  "county_fips": "31109",
+  "county_name": "Lancaster",
+  "county_zone": "NEC109",
+  "forecast_url": "https://api.weather.gov/gridpoints/OAX/56,40/forecast",
+  "forecast_zone": "NEZ066",
+  "nws_office": "OAX"
+ },
+ "Little Rock, AR": {
+  "county_fips": "05119",
+  "county_name": "Pulaski",
+  "county_zone": "ARC119",
+  "forecast_url": "https://api.weather.gov/gridpoints/LZK/82,73/forecast",
+  "forecast_zone": "ARZ044",
+  "nws_office": "LZK"
+ },
+ "Long Beach, CA": {
+  "county_fips": "06037",
+  "county_name": "Los Angeles",
+  "county_zone": "CAC037",
+  "forecast_url": "https://api.weather.gov/gridpoints/LOX/155,32/forecast",
+  "forecast_zone": "CAZ366",
+  "nws_office": "LOX"
+ },
+ "Los Angeles, CA": {
+  "county_fips": "06037",
+  "county_name": "Los Angeles",
+  "county_zone": "CAC037",
+  "forecast_url": "https://api.weather.gov/gridpoints/LOX/155,45/forecast",
+  "forecast_zone": "CAZ368",
+  "nws_office": "LOX"
+ },
+ "Louisville, KY": {
+  "county_fips": "21111",
+  "county_name": "Jefferson",
+  "county_zone": "KYC111",
+  "forecast_url": "https://api.weather.gov/gridpoints/LMK/50,78/forecast",
+  "forecast_zone": "KYZ030",
+  "nws_office": "LMK"
+ },
+ "Macon, GA": {
+  "county_fips": "13021",
+  "county_name": "Bibb",
+  "county_zone": "GAC021",
+  "forecast_url": "https://api.weather.gov/gridpoints/FFC/82,49/forecast",
+  "forecast_zone": "GAZ082",
+  "nws_office": "FFC"
+ },
+ "Madison, WI": {
+  "county_fips": "55025",
+  "county_name": "Dane",
+  "county_zone": "WIC025",
+  "forecast_url": "https://api.weather.gov/gridpoints/MKX/38,64/forecast",
+  "forecast_zone": "WIZ063",
+  "nws_office": "MKX"
+ },
+ "Manchester, NH": {
+  "county_fips": "33011",
+  "county_name": "Hillsborough",
+  "county_zone": "NHC011",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/38,20/forecast",
+  "forecast_zone": "NHZ012",
+  "nws_office": "GYX"
+ },
+ "Memphis, TN": {
+  "county_fips": "47157",
+  "county_name": "Shelby",
+  "county_zone": "TNC157",
+  "forecast_url": "https://api.weather.gov/gridpoints/MEG/42,67/forecast",
+  "forecast_zone": "TNZ088",
+  "nws_office": "MEG"
+ },
+ "Meridian, ID": {
+  "county_fips": "16001",
+  "county_name": "Ada",
+  "county_zone": "IDC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOI/127,87/forecast",
+  "forecast_zone": "IDZ014",
+  "nws_office": "BOI"
+ },
+ "Mesa, AZ": {
+  "county_fips": "04013",
+  "county_name": "Maricopa",
+  "county_zone": "AZC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/PSR/168,55/forecast",
+  "forecast_zone": "AZZ548",
+  "nws_office": "PSR"
+ },
+ "Miami, FL": {
+  "county_fips": "12086",
+  "county_name": "Miami-Dade",
+  "county_zone": "FLC086",
+  "forecast_url": "https://api.weather.gov/gridpoints/MFL/110,50/forecast",
+  "forecast_zone": "FLZ173",
+  "nws_office": "MFL"
+ },
+ "Middletown, DE": {
+  "county_fips": "10003",
+  "county_name": "New Castle",
+  "county_zone": "DEC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/34,53/forecast",
+  "forecast_zone": "DEZ001",
+  "nws_office": "PHI"
+ },
+ "Milwaukee, WI": {
+  "county_fips": "55079",
+  "county_name": "Milwaukee",
+  "county_zone": "WIC079",
+  "forecast_url": "https://api.weather.gov/gridpoints/MKX/88,65/forecast",
+  "forecast_zone": "WIZ066",
+  "nws_office": "MKX"
+ },
+ "Minneapolis, MN": {
+  "county_fips": "27053",
+  "county_name": "Hennepin",
+  "county_zone": "MNC053",
+  "forecast_url": "https://api.weather.gov/gridpoints/MPX/108,72/forecast",
+  "forecast_zone": "MNZ060",
+  "nws_office": "MPX"
+ },
+ "Minot, ND": {
+  "county_fips": "38101",
+  "county_name": "Ward",
+  "county_zone": "NDC101",
+  "forecast_url": "https://api.weather.gov/gridpoints/BIS/97,115/forecast",
+  "forecast_zone": "NDZ056",
+  "nws_office": "BIS"
+ },
+ "Missoula, MT": {
+  "county_fips": "30063",
+  "county_name": "Missoula",
+  "county_zone": "MTC063",
+  "forecast_url": "https://api.weather.gov/gridpoints/MSO/105,131/forecast",
+  "forecast_zone": "MTZ005",
+  "nws_office": "MSO"
+ },
+ "Mobile, AL": {
+  "county_fips": "01097",
+  "county_name": "Mobile",
+  "county_zone": "ALC097",
+  "forecast_url": "https://api.weather.gov/gridpoints/MOB/52,67/forecast",
+  "forecast_zone": "ALZ263",
+  "nws_office": "MOB"
+ },
+ "Montgomery, AL": {
+  "county_fips": "01101",
+  "county_name": "Montgomery",
+  "county_zone": "ALC101",
+  "forecast_url": "https://api.weather.gov/gridpoints/BMX/81,35/forecast",
+  "forecast_zone": "ALZ044",
+  "nws_office": "BMX"
+ },
+ "Morgantown, WV": {
+  "county_fips": "54061",
+  "county_name": "Monongalia",
+  "county_zone": "WVC061",
+  "forecast_url": "https://api.weather.gov/gridpoints/PBZ/83,30/forecast",
+  "forecast_zone": "WVZ509",
+  "nws_office": "PBZ"
+ },
+ "Mount Pleasant, SC": {
+  "county_fips": "45019",
+  "county_name": "Charleston",
+  "county_zone": "SCC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/CHS/89,78/forecast",
+  "forecast_zone": "SCZ150",
+  "nws_office": "CHS"
+ },
+ "Nampa, ID": {
+  "county_fips": "16027",
+  "county_name": "Canyon",
+  "county_zone": "IDC027",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOI/121,84/forecast",
+  "forecast_zone": "IDZ012",
+  "nws_office": "BOI"
+ },
+ "Naperville, IL": {
+  "county_fips": "17043",
+  "county_name": "DuPage",
+  "county_zone": "ILC043",
+  "forecast_url": "https://api.weather.gov/gridpoints/LOT/58,66/forecast",
+  "forecast_zone": "ILZ013",
+  "nws_office": "LOT"
+ },
+ "Nashua, NH": {
+  "county_fips": "33011",
+  "county_name": "Hillsborough",
+  "county_zone": "NHC011",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/40,10/forecast",
+  "forecast_zone": "NHZ012",
+  "nws_office": "GYX"
+ },
+ "Nashville, TN": {
+  "county_fips": "47037",
+  "county_name": "Davidson",
+  "county_zone": "TNC037",
+  "forecast_url": "https://api.weather.gov/gridpoints/OHX/50,57/forecast",
+  "forecast_zone": "TNZ027",
+  "nws_office": "OHX"
+ },
+ "New Haven, CT": {
+  "county_fips": "09009",
+  "county_name": "New Haven",
+  "county_zone": "CTC009",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/66,75/forecast",
+  "forecast_zone": "CTZ010",
+  "nws_office": "OKX"
+ },
+ "New Orleans, LA": {
+  "county_fips": "22071",
+  "county_name": "Orleans",
+  "county_zone": "LAC071",
+  "forecast_url": "https://api.weather.gov/gridpoints/LIX/68,88/forecast",
+  "forecast_zone": "LAZ077",
+  "nws_office": "LIX"
+ },
+ "New York, NY": {
+  "county_fips": "36061",
+  "county_name": "New York (Manhattan)",
+  "county_zone": "NYC061",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/33,42/forecast",
+  "forecast_zone": "NYZ072",
+  "nws_office": "OKX"
+ },
+ "Newark, DE": {
+  "county_fips": "10003",
+  "county_name": "New Castle",
+  "county_zone": "DEC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/31,64/forecast",
+  "forecast_zone": "DEZ001",
+  "nws_office": "PHI"
+ },
+ "Newark, NJ": {
+  "county_fips": "34013",
+  "county_name": "Essex",
+  "county_zone": "NJC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/27,42/forecast",
+  "forecast_zone": "NJZ106",
+  "nws_office": "OKX"
+ },
+ "Norfolk, VA": {
+  "county_fips": "51710",
+  "county_name": "City of Norfolk",
+  "county_zone": "VAC710",
+  "forecast_url": "https://api.weather.gov/gridpoints/AKQ/90,52/forecast",
+  "forecast_zone": "VAZ530",
+  "nws_office": "AKQ"
+ },
+ "Norman, OK": {
+  "county_fips": "40027",
+  "county_name": "Cleveland",
+  "county_zone": "OKC027",
+  "forecast_url": "https://api.weather.gov/gridpoints/OUN/100,83/forecast",
+  "forecast_zone": "OKZ029",
+  "nws_office": "OUN"
+ },
+ "North Charleston, SC": {
+  "county_fips": "45019",
+  "county_name": "Charleston",
+  "county_zone": "SCC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/CHS/85,80/forecast",
+  "forecast_zone": "SCZ150",
+  "nws_office": "CHS"
+ },
+ "North Las Vegas, NV": {
+  "county_fips": "32003",
+  "county_name": "Clark",
+  "county_zone": "NVC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/VEF/124,99/forecast",
+  "forecast_zone": "NVZ020",
+  "nws_office": "VEF"
+ },
+ "Oakland, CA": {
+  "county_fips": "06001",
+  "county_name": "Alameda",
+  "county_zone": "CAC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/MTR/90,105/forecast",
+  "forecast_zone": "CAZ508",
+  "nws_office": "MTR"
+ },
+ "Oklahoma City, OK": {
+  "county_fips": "40109",
+  "county_name": "Oklahoma",
+  "county_zone": "OKC109",
+  "forecast_url": "https://api.weather.gov/gridpoints/OUN/97,94/forecast",
+  "forecast_zone": "OKZ025",
+  "nws_office": "OUN"
+ },
+ "Olathe, KS": {
+  "county_fips": "20091",
+  "county_name": "Johnson",
+  "county_zone": "KSC091",
+  "forecast_url": "https://api.weather.gov/gridpoints/EAX/35,41/forecast",
+  "forecast_zone": "KSZ105",
+  "nws_office": "EAX"
+ },
+ "Omaha, NE": {
+  "county_fips": "31055",
+  "county_name": "Douglas",
+  "county_zone": "NEC055",
+  "forecast_url": "https://api.weather.gov/gridpoints/OAX/83,60/forecast",
+  "forecast_zone": "NEZ052",
+  "nws_office": "OAX"
+ },
+ "Orlando, FL": {
+  "county_fips": "12095",
+  "county_name": "Orange",
+  "county_zone": "FLC095",
+  "forecast_url": "https://api.weather.gov/gridpoints/MLB/26,68/forecast",
+  "forecast_zone": "FLZ045",
+  "nws_office": "MLB"
+ },
+ "Overland Park, KS": {
+  "county_fips": "20091",
+  "county_name": "Johnson",
+  "county_zone": "KSC091",
+  "forecast_url": "https://api.weather.gov/gridpoints/EAX/41,45/forecast",
+  "forecast_zone": "KSZ105",
+  "nws_office": "EAX"
+ },
+ "Owensboro, KY": {
+  "county_fips": "21059",
+  "county_name": "Daviess",
+  "county_zone": "KYC059",
+  "forecast_url": "https://api.weather.gov/gridpoints/PAH/183,89/forecast",
+  "forecast_zone": "KYZ019",
+  "nws_office": "PAH"
+ },
+ "Parkersburg, WV": {
+  "county_fips": "54107",
+  "county_name": "Wood",
+  "county_zone": "WVC107",
+  "forecast_url": "https://api.weather.gov/gridpoints/RLX/61,109/forecast",
+  "forecast_zone": "WVZ009",
+  "nws_office": "RLX"
+ },
+ "Paterson, NJ": {
+  "county_fips": "34031",
+  "county_name": "Passaic",
+  "county_zone": "NJC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/26,50/forecast",
+  "forecast_zone": "NJZ004",
+  "nws_office": "OKX"
+ },
+ "Pawtucket, RI": {
+  "county_fips": "44007",
+  "county_name": "Providence",
+  "county_zone": "RIC007",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/64,77/forecast",
+  "forecast_zone": "RIZ002",
+  "nws_office": "BOX"
+ },
+ "Pearl City, HI": {
+  "county_fips": "15003",
+  "county_name": "Oahu in Honolulu",
+  "county_zone": "HIC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/HFO/149,149/forecast",
+  "forecast_zone": "HIZ010",
+  "nws_office": "HFO"
+ },
+ "Philadelphia, PA": {
+  "county_fips": "42101",
+  "county_name": "Philadelphia",
+  "county_zone": "PAC101",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/50,79/forecast",
+  "forecast_zone": "PAZ071",
+  "nws_office": "PHI"
+ },
+ "Phoenix, AZ": {
+  "county_fips": "04013",
+  "county_name": "Maricopa",
+  "county_zone": "AZC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/PSR/159,58/forecast",
+  "forecast_zone": "AZZ543",
+  "nws_office": "PSR"
+ },
+ "Pittsburgh, PA": {
+  "county_fips": "42003",
+  "county_name": "Allegheny",
+  "county_zone": "PAC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/PBZ/78,66/forecast",
+  "forecast_zone": "PAZ021",
+  "nws_office": "PBZ"
+ },
+ "Portland, ME": {
+  "county_fips": "23005",
+  "county_name": "Cumberland",
+  "county_zone": "MEC005",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/72,58/forecast",
+  "forecast_zone": "MEZ024",
+  "nws_office": "GYX"
+ },
+ "Portland, OR": {
+  "county_fips": "41051",
+  "county_name": "Multnomah",
+  "county_zone": "ORC051",
+  "forecast_url": "https://api.weather.gov/gridpoints/PQR/113,104/forecast",
+  "forecast_zone": "ORZ111",
+  "nws_office": "PQR"
+ },
+ "Providence, RI": {
+  "county_fips": "44007",
+  "county_name": "Providence",
+  "county_zone": "RIC007",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/64,75/forecast",
+  "forecast_zone": "RIZ002",
+  "nws_office": "BOX"
+ },
+ "Provo, UT": {
+  "county_fips": "49049",
+  "county_name": "Utah",
+  "county_zone": "UTC049",
+  "forecast_url": "https://api.weather.gov/gridpoints/SLC/105,151/forecast",
+  "forecast_zone": "UTZ106",
+  "nws_office": "SLC"
+ },
+ "Raleigh, NC": {
+  "county_fips": "37183",
+  "county_name": "Wake",
+  "county_zone": "NCC183",
+  "forecast_url": "https://api.weather.gov/gridpoints/RAH/75,57/forecast",
+  "forecast_zone": "NCZ041",
+  "nws_office": "RAH"
+ },
+ "Rapid City, SD": {
+  "county_fips": "46103",
+  "county_name": "Pennington",
+  "county_zone": "SDC103",
+  "forecast_url": "https://api.weather.gov/gridpoints/UNR/97,58/forecast",
+  "forecast_zone": "SDZ026",
+  "nws_office": "UNR"
+ },
+ "Reading, PA": {
+  "county_fips": "42011",
+  "county_name": "Berks",
+  "county_zone": "PAC011",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/21,92/forecast",
+  "forecast_zone": "PAZ060",
+  "nws_office": "PHI"
+ },
+ "Reno, NV": {
+  "county_fips": "32031",
+  "county_name": "Washoe",
+  "county_zone": "NVC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/REV/45,106/forecast",
+  "forecast_zone": "NVZ003",
+  "nws_office": "REV"
+ },
+ "Richmond, VA": {
+  "county_fips": "51760",
+  "county_name": "City of Richmond",
+  "county_zone": "VAC760",
+  "forecast_url": "https://api.weather.gov/gridpoints/AKQ/46,77/forecast",
+  "forecast_zone": "VAZ515",
+  "nws_office": "AKQ"
+ },
+ "Rio Rancho, NM": {
+  "county_fips": "35043",
+  "county_name": "Sandoval",
+  "county_zone": "NMC043",
+  "forecast_url": "https://api.weather.gov/gridpoints/ABQ/98,128/forecast",
+  "forecast_zone": "NMZ219",
+  "nws_office": "ABQ"
+ },
+ "Rochester, MN": {
+  "county_fips": "27109",
+  "county_name": "Olmsted",
+  "county_zone": "MNC109",
+  "forecast_url": "https://api.weather.gov/gridpoints/ARX/22,70/forecast",
+  "forecast_zone": "MNZ087",
+  "nws_office": "ARX"
+ },
+ "Rochester, NY": {
+  "county_fips": "36055",
+  "county_name": "Monroe",
+  "county_zone": "NYC055",
+  "forecast_url": "https://api.weather.gov/gridpoints/BUF/77,65/forecast",
+  "forecast_zone": "NYZ003",
+  "nws_office": "BUF"
+ },
+ "Rockville, MD": {
+  "county_fips": "24031",
+  "county_name": "Montgomery",
+  "county_zone": "MDC031",
+  "forecast_url": "https://api.weather.gov/gridpoints/LWX/91,79/forecast",
+  "forecast_zone": "MDZ504",
+  "nws_office": "LWX"
+ },
+ "Rutland, VT": {
+  "county_fips": "50021",
+  "county_name": "Rutland",
+  "county_zone": "VTC021",
+  "forecast_url": "https://api.weather.gov/gridpoints/BTV/103,18/forecast",
+  "forecast_zone": "VTZ011",
+  "nws_office": "BTV"
+ },
+ "Sacramento, CA": {
+  "county_fips": "06067",
+  "county_name": "Sacramento",
+  "county_zone": "CAC067",
+  "forecast_url": "https://api.weather.gov/gridpoints/STO/41,68/forecast",
+  "forecast_zone": "CAZ154",
+  "nws_office": "STO"
+ },
+ "Saint Paul, MN": {
+  "county_fips": "27123",
+  "county_name": "Ramsey",
+  "county_zone": "MNC123",
+  "forecast_url": "https://api.weather.gov/gridpoints/MPX/114,71/forecast",
+  "forecast_zone": "MNZ062",
+  "nws_office": "MPX"
+ },
+ "Salem, OR": {
+  "county_fips": "41047",
+  "county_name": "Marion",
+  "county_zone": "ORC047",
+  "forecast_url": "https://api.weather.gov/gridpoints/PQR/96,80/forecast",
+  "forecast_zone": "ORZ115",
+  "nws_office": "PQR"
+ },
+ "Salt Lake City, UT": {
+  "county_fips": "49035",
+  "county_name": "Salt Lake",
+  "county_zone": "UTC035",
+  "forecast_url": "https://api.weather.gov/gridpoints/SLC/100,175/forecast",
+  "forecast_zone": "UTZ105",
+  "nws_office": "SLC"
+ },
+ "San Antonio, TX": {
+  "county_fips": "48029",
+  "county_name": "Bexar",
+  "county_zone": "TXC029",
+  "forecast_url": "https://api.weather.gov/gridpoints/EWX/126,54/forecast",
+  "forecast_zone": "TXZ205",
+  "nws_office": "EWX"
+ },
+ "San Diego, CA": {
+  "county_fips": "06073",
+  "county_name": "San Diego",
+  "county_zone": "CAC073",
+  "forecast_url": "https://api.weather.gov/gridpoints/SGX/57,14/forecast",
+  "forecast_zone": "CAZ043",
+  "nws_office": "SGX"
+ },
+ "San Francisco, CA": {
+  "county_fips": "06075",
+  "county_name": "San Francisco",
+  "county_zone": "CAC075",
+  "forecast_url": "https://api.weather.gov/gridpoints/MTR/85,105/forecast",
+  "forecast_zone": "CAZ006",
+  "nws_office": "MTR"
+ },
+ "San Jose, CA": {
+  "county_fips": "06085",
+  "county_name": "Santa Clara",
+  "county_zone": "CAC085",
+  "forecast_url": "https://api.weather.gov/gridpoints/MTR/99,82/forecast",
+  "forecast_zone": "CAZ513",
+  "nws_office": "MTR"
+ },
+ "Santa Fe, NM": {
+  "county_fips": "35049",
+  "county_name": "Santa Fe",
+  "county_zone": "NMC049",
+  "forecast_url": "https://api.weather.gov/gridpoints/ABQ/126,146/forecast",
+  "forecast_zone": "NMZ218",
+  "nws_office": "ABQ"
+ },
+ "Savannah, GA": {
+  "county_fips": "13051",
+  "county_name": "Chatham",
+  "county_zone": "GAC051",
+  "forecast_url": "https://api.weather.gov/gridpoints/CHS/47,41/forecast",
+  "forecast_zone": "GAZ218",
+  "nws_office": "CHS"
+ },
+ "Seattle, WA": {
+  "county_fips": "53033",
+  "county_name": "King",
+  "county_zone": "WAC033",
+  "forecast_url": "https://api.weather.gov/gridpoints/SEW/125,68/forecast",
+  "forecast_zone": "WAZ315",
+  "nws_office": "SEW"
+ },
+ "Shreveport, LA": {
+  "county_fips": "22017",
+  "county_name": "Caddo",
+  "county_zone": "LAC017",
+  "forecast_url": "https://api.weather.gov/gridpoints/SHV/74,69/forecast",
+  "forecast_zone": "LAZ001",
+  "nws_office": "SHV"
+ },
+ "Sioux City, IA": {
+  "county_fips": "19193",
+  "county_name": "Woodbury",
+  "county_zone": "IAC193",
+  "forecast_url": "https://api.weather.gov/gridpoints/FSD/108,16/forecast",
+  "forecast_zone": "IAZ031",
+  "nws_office": "FSD"
+ },
+ "Sioux Falls, SD": {
+  "county_fips": "46099",
+  "county_name": "Minnehaha",
+  "county_zone": "SDC099",
+  "forecast_url": "https://api.weather.gov/gridpoints/FSD/98,64/forecast",
+  "forecast_zone": "SDZ062",
+  "nws_office": "FSD"
+ },
+ "South Bend, IN": {
+  "county_fips": "18141",
+  "county_name": "St. Joseph",
+  "county_zone": "INC141",
+  "forecast_url": "https://api.weather.gov/gridpoints/IWX/29,63/forecast",
+  "forecast_zone": "INZ104",
+  "nws_office": "IWX"
+ },
+ "South Burlington, VT": {
+  "county_fips": "50007",
+  "county_name": "Chittenden",
+  "county_zone": "VTC007",
+  "forecast_url": "https://api.weather.gov/gridpoints/BTV/90,56/forecast",
+  "forecast_zone": "VTZ005",
+  "nws_office": "BTV"
+ },
+ "South Portland, ME": {
+  "county_fips": "23005",
+  "county_name": "Cumberland",
+  "county_zone": "MEC005",
+  "forecast_url": "https://api.weather.gov/gridpoints/GYX/73,57/forecast",
+  "forecast_zone": "MEZ024",
+  "nws_office": "GYX"
+ },
+ "Southaven, MS": {
+  "county_fips": "28033",
+  "county_name": "DeSoto",
+  "county_zone": "MSC033",
+  "forecast_url": "https://api.weather.gov/gridpoints/MEG/44,60/forecast",
+  "forecast_zone": "MSZ001",
+  "nws_office": "MEG"
+ },
+ "Spokane, WA": {
+  "county_fips": "53063",
+  "county_name": "Spokane",
+  "county_zone": "WAC063",
+  "forecast_url": "https://api.weather.gov/gridpoints/OTX/140,90/forecast",
+  "forecast_zone": "WAZ036",
+  "nws_office": "OTX"
+ },
+ "Springdale, AR": {
+  "county_fips": "05143",
+  "county_name": "Washington",
+  "county_zone": "ARC143",
+  "forecast_url": "https://api.weather.gov/gridpoints/TSA/108,106/forecast",
+  "forecast_zone": "ARZ010",
+  "nws_office": "TSA"
+ },
+ "Springfield, MA": {
+  "county_fips": "25013",
+  "county_name": "Hampden",
+  "county_zone": "MAC013",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/22,80/forecast",
+  "forecast_zone": "MAZ011",
+  "nws_office": "BOX"
+ },
+ "Springfield, MO": {
+  "county_fips": "29077",
+  "county_name": "Greene",
+  "county_zone": "MOC077",
+  "forecast_url": "https://api.weather.gov/gridpoints/SGF/67,35/forecast",
+  "forecast_zone": "MOZ090",
+  "nws_office": "SGF"
+ },
+ "St. Louis, MO": {
+  "county_fips": "29510",
+  "county_name": "St. Louis City",
+  "county_zone": "MOC510",
+  "forecast_url": "https://api.weather.gov/gridpoints/LSX/95,74/forecast",
+  "forecast_zone": "MOZ064",
+  "nws_office": "LSX"
+ },
+ "Stamford, CT": {
+  "county_fips": "09001",
+  "county_name": "Fairfield",
+  "county_zone": "CTC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/47,60/forecast",
+  "forecast_zone": "CTZ009",
+  "nws_office": "OKX"
+ },
+ "Sterling Heights, MI": {
+  "county_fips": "26099",
+  "county_name": "Macomb",
+  "county_zone": "MIC099",
+  "forecast_url": "https://api.weather.gov/gridpoints/DTX/65,45/forecast",
+  "forecast_zone": "MIZ070",
+  "nws_office": "DTX"
+ },
+ "Tacoma, WA": {
+  "county_fips": "53053",
+  "county_name": "Pierce",
+  "county_zone": "WAC053",
+  "forecast_url": "https://api.weather.gov/gridpoints/SEW/118,52/forecast",
+  "forecast_zone": "WAZ316",
+  "nws_office": "SEW"
+ },
+ "Tampa, FL": {
+  "county_fips": "12057",
+  "county_name": "Hillsborough",
+  "county_zone": "FLC057",
+  "forecast_url": "https://api.weather.gov/gridpoints/TBW/71,98/forecast",
+  "forecast_zone": "FLZ151",
+  "nws_office": "TBW"
+ },
+ "Toledo, OH": {
+  "county_fips": "39095",
+  "county_name": "Lucas",
+  "county_zone": "OHC095",
+  "forecast_url": "https://api.weather.gov/gridpoints/CLE/20,66/forecast",
+  "forecast_zone": "OHZ003",
+  "nws_office": "CLE"
+ },
+ "Tucson, AZ": {
+  "county_fips": "04019",
+  "county_name": "Pima",
+  "county_zone": "AZC019",
+  "forecast_url": "https://api.weather.gov/gridpoints/TWC/91,49/forecast",
+  "forecast_zone": "AZZ504",
+  "nws_office": "TWC"
+ },
+ "Tulsa, OK": {
+  "county_fips": "40143",
+  "county_name": "Tulsa",
+  "county_zone": "OKC143",
+  "forecast_url": "https://api.weather.gov/gridpoints/TSA/41,105/forecast",
+  "forecast_zone": "OKZ060",
+  "nws_office": "TSA"
+ },
+ "Vancouver, WA": {
+  "county_fips": "53011",
+  "county_name": "Clark",
+  "county_zone": "WAC011",
+  "forecast_url": "https://api.weather.gov/gridpoints/PQR/114,109/forecast",
+  "forecast_zone": "WAZ206",
+  "nws_office": "PQR"
+ },
+ "Virginia Beach, VA": {
+  "county_fips": "51810",
+  "county_name": "City of Virginia Beach",
+  "county_zone": "VAC810",
+  "forecast_url": "https://api.weather.gov/gridpoints/AKQ/99,51/forecast",
+  "forecast_zone": "VAZ098",
+  "nws_office": "AKQ"
+ },
+ "Warren, MI": {
+  "county_fips": "26099",
+  "county_name": "Macomb",
+  "county_zone": "MIC099",
+  "forecast_url": "https://api.weather.gov/gridpoints/DTX/66,42/forecast",
+  "forecast_zone": "MIZ070",
+  "nws_office": "DTX"
+ },
+ "Warwick, RI": {
+  "county_fips": "44003",
+  "county_name": "Kent",
+  "county_zone": "RIC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/63,70/forecast",
+  "forecast_zone": "RIZ004",
+  "nws_office": "BOX"
+ },
+ "Washington, DC": {
+  "county_fips": "11001",
+  "county_name": "District of Columbia",
+  "county_zone": "DCC001",
+  "forecast_url": "https://api.weather.gov/gridpoints/LWX/96,72/forecast",
+  "forecast_zone": "DCZ001",
+  "nws_office": "LWX"
+ },
+ "Wasilla, AK": {
+  "county_fips": "02170",
+  "county_name": "Matanuska-Susitna",
+  "county_zone": "AKC170",
+  "forecast_url": "https://api.weather.gov/gridpoints/AER/151,250/forecast",
+  "forecast_zone": "AKZ711",
+  "nws_office": "AER"
+ },
+ "West Jordan, UT": {
+  "county_fips": "49035",
+  "county_name": "Salt Lake",
+  "county_zone": "UTC035",
+  "forecast_url": "https://api.weather.gov/gridpoints/SLC/98,169/forecast",
+  "forecast_zone": "UTZ105",
+  "nws_office": "SLC"
+ },
+ "West Valley City, UT": {
+  "county_fips": "49035",
+  "county_name": "Salt Lake",
+  "county_zone": "UTC035",
+  "forecast_url": "https://api.weather.gov/gridpoints/SLC/96,173/forecast",
+  "forecast_zone": "UTZ105",
+  "nws_office": "SLC"
+ },
+ "Wichita, KS": {
+  "county_fips": "20173",
+  "county_name": "Sedgwick",
+  "county_zone": "KSC173",
+  "forecast_url": "https://api.weather.gov/gridpoints/ICT/62,34/forecast",
+  "forecast_zone": "KSZ083",
+  "nws_office": "ICT"
+ },
+ "Wilmington, DE": {
+  "county_fips": "10003",
+  "county_name": "New Castle",
+  "county_zone": "DEC003",
+  "forecast_url": "https://api.weather.gov/gridpoints/PHI/38,67/forecast",
+  "forecast_zone": "DEZ001",
+  "nws_office": "PHI"
+ },
+ "Worcester, MA": {
+  "county_fips": "25027",
+  "county_name": "Worcester",
+  "county_zone": "MAC027",
+  "forecast_url": "https://api.weather.gov/gridpoints/BOX/47,92/forecast",
+  "forecast_zone": "MAZ012",
+  "nws_office": "BOX"
+ },
+ "Yonkers, NY": {
+  "county_fips": "36119",
+  "county_name": "Westchester",
+  "county_zone": "NYC119",
+  "forecast_url": "https://api.weather.gov/gridpoints/OKX/35,52/forecast",
+  "forecast_zone": "NYZ071",
+  "nws_office": "OKX"
+ }
+}

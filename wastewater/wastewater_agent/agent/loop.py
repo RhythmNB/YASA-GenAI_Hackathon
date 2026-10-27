@@ -5,8 +5,10 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass, field
 from datetime import date
+from collections.abc import Callable
 from typing import Any
 
+from .. import pathogens
 from ..config import Settings
 from ..hmem import HMem
 from ..hmem.record import MemoryRecord
@@ -49,7 +51,7 @@ class Agent:
         self.settings = settings
         self.client = client or JdbcClient(settings)
         self.hmem = hmem or HMem(settings.hmem_dir)
-        self.nightshift = provider or NightshiftProvider(settings.nightshift_base_url, settings.nightshift_token)
+        self.nightshift = provider or NightshiftProvider(settings.nightshift_base_url, settings.nightshift_token, models=settings.nightshift_models)
         self.offline = OfflineProvider()
         self.today = today or date.today()
 
@@ -63,39 +65,72 @@ class Agent:
             )
         return None, "nightshift offline (GET /v1/models failed)"
 
-    def ask(self, question: str) -> Answer:
+    def ask(self, question: str, county: str | None = None, pathogen: str | None = None,
+            progress: Callable[[dict[str, Any]], None] | None = None) -> Answer:
+        """`county` is an optional county name (any common form) inside the question's state,
+        e.g. from a geocoded city; it narrows every query to sites serving that county.
+        `pathogen` is a registry key ('sars-cov-2', 'flu-a'); when absent the question's words decide.
+        `progress`, when given, receives one dict per stage ({"stage", "state", ...}) as the
+        question is processed, including every Nightshift route attempt with its model."""
+        self.nightshift.on_event = progress
+        try:
+            return self._ask(question, county, pathogen, progress or (lambda e: None))
+        finally:
+            self.nightshift.on_event = None
+
+    def _ask(self, question: str, county: str | None, pathogen: str | None,
+             emit: Callable[[dict[str, Any]], None]) -> Answer:
         fallbacks: list[str] = []
         provider, reason = self._select_provider()
         if reason:
             fallbacks.append(reason)
 
         hint = windows.resolve(question, self.today)
-        plan, plan_completion, plan_reason = planner.plan(question, hint, self.today, provider, self.offline)
+        emit({"stage": "plan", "state": "start"})
+        plan, plan_completion, plan_reason = planner.plan(question, hint, self.today, provider, self.offline,
+                                                         county=county, pathogen=pathogen)
         if plan_reason:
             fallbacks.append(plan_reason)
+        emit({"stage": "plan", "state": "done", "source": plan.source,
+              "model": plan_completion.routed_model if plan_completion is not None else None,
+              "fallback": plan_reason, "pathogen": plan.pathogen, "state_code": plan.state, "county": plan.county})
 
         recalled = self.hmem.recall(
             question,
-            entities=[plan.state or "us", plan.window.start.isoformat(), plan.window.end.isoformat()],
-            tags=["sars-cov-2", plan.intent, plan.state or "us"],
+            entities=[e for e in (plan.pathogen, plan.state or "us", plan.county, plan.window.start.isoformat(), plan.window.end.isoformat()) if e],
+            tags=[plan.pathogen, plan.intent, plan.state or "us"] + ([plan.county.lower()] if plan.county else []),
             domain=DOMAIN,
         )
+        # Only findings about the same virus may be quoted back. Records written before the
+        # pathogen tag existed are SARS-CoV-2 findings.
+        known = set(pathogens.PATHOGENS)
+        same_virus = [m for m in recalled.memories
+                      if (next((t for t in m.tags if t in known), pathogens.DEFAULT_KEY)) == plan.pathogen]
+        recalled.memories = same_virus
         memory_views = [
             {"id": m.id, "content": m.content, "learnedAt": m.provenance.get("learnedAt"),
              "confidence": m.confidence, "superseded": bool(m.supersededBy)}
-            for m in recalled.memories
+            for m in same_virus
         ]
+        emit({"stage": "recall", "state": "done", "count": len(same_virus)})
 
+        emit({"stage": "query", "state": "start"})
         executor = Executor(self.client)
         results = executor.run(plan)
         facts = evaluator.evaluate(plan, results, fetch_fallback=executor.summary)
         statements = list(executor.statements)
+        emit({"stage": "query", "state": "done", "statements": len(statements), "coverage": facts.coverage,
+              "samples": facts.samples})
 
+        emit({"stage": "write", "state": "start"})
         text, write_completions, write_reason = writer.write(facts, memory_views, provider, self.offline)
         if write_reason:
             fallbacks.append(write_reason)
+        emit({"stage": "write", "state": "done", "attempts": len(write_completions), "fallback": write_reason,
+              "model": write_completions[-1].routed_model if write_completions and write_reason is None else None})
 
         record, conflicts = self.hmem.remember(**memory_fields(facts, plan, statements))
+        emit({"stage": "memory", "state": "done", "id": record.id, "conflicts": len(conflicts)})
 
         completions = ([plan_completion] if plan_completion is not None else []) + write_completions
         # The label describes who wrote the answer prose; notes list any fallbacks.
@@ -125,12 +160,14 @@ def memory_fields(facts: FactSheet, plan: Plan, statements: list[str]) -> dict[s
     w = plan.window
     label = hashlib.sha256("\n".join(statements).encode("utf-8")).hexdigest()[:16]
     content = summarise(facts)
-    entities = [region, w.start.isoformat(), w.end.isoformat()]
+    entities = [plan.pathogen, region] + ([plan.county] if plan.county else []) + [w.start.isoformat(), w.end.isoformat()]
     if facts.fallback_window is not None:
         entities += [facts.fallback_window.start.isoformat(), facts.fallback_window.end.isoformat()]
     metadata: dict[str, Any] = {
         "intent": plan.intent,
+        "pathogen": plan.pathogen,
         "state": plan.state,
+        "county": plan.county,
         "windowStart": w.start.isoformat(),
         "windowEnd": w.end.isoformat(),
         "samples": facts.samples,
@@ -148,7 +185,7 @@ def memory_fields(facts: FactSheet, plan: Plan, statements: list[str]) -> dict[s
     }
     return {
         "content": content,
-        "tags": ["sars-cov-2", plan.intent, region],
+        "tags": [plan.pathogen, plan.intent, region] + ([plan.county.lower()] if plan.county else []),
         "entities": entities,
         "metadata": metadata,
         "label": label,
@@ -157,16 +194,16 @@ def memory_fields(facts: FactSheet, plan: Plan, statements: list[str]) -> dict[s
 
 
 def summarise(facts: FactSheet) -> str:
-    where = state_name(facts.state)
+    where = facts.region or state_name(facts.state)
     w = facts.window
     if facts.coverage == "empty":
-        s = f"No SARS-CoV-2 wastewater samples for {where} {w.start}..{w.end} (latest sample {facts.latest_sample_date})"
+        s = f"No {facts.pathogen_name} wastewater samples for {where} {w.start}..{w.end} (latest sample {facts.latest_sample_date})"
         if facts.fallback_window and facts.fallback_samples:
             fw = facts.fallback_window
             s += (f"; most recent 7-day window {fw.start}..{fw.end}: {facts.fallback_positives}/{facts.fallback_samples} "
                   f"positive ({_pct(facts.fallback_positive_share)}), {facts.fallback_sites} sites")
         return s + "."
-    s = (f"SARS-CoV-2 {'detected' if facts.positives else 'not detected'} in {where} {w.start}..{w.end}: "
+    s = (f"{facts.pathogen_name} {'detected' if facts.positives else 'not detected'} in {where} {w.start}..{w.end}: "
          f"{facts.positives}/{facts.samples} positive ({_pct(facts.positive_share)}), {facts.sites} sites")
     if facts.mean_conc is not None:
         s += f", mean conc {facts.mean_conc:,.0f}"

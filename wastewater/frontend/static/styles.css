@@ -179,9 +179,18 @@ i[data-lucide] { display: inline-block; width: 1em; height: 1em; }
 .plain { margin: 0 0 .8rem; padding-left: 1.1rem; } .plain li { margin: .3rem 0; }
 
 /* ---------- progress toast ---------- */
-.progress { position: fixed; right: 1.25rem; bottom: 1.25rem; background: var(--ink); color: var(--page); border-radius: var(--r-md); padding: .8rem 1rem; display: flex; gap: .8rem; align-items: center; max-width: 420px; z-index: 50; box-shadow: var(--shadow); }
-.progress strong { display: block; font-size: var(--fs-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
-.steps-line { font-size: var(--fs-0); opacity: .75; }
+.progress { position: fixed; right: 1.25rem; bottom: 1.25rem; background: var(--ink); color: var(--page); border-radius: var(--r-md); padding: .8rem 1rem; display: flex; flex-direction: column; gap: .55rem; width: min(420px, calc(100vw - 2.5rem)); z-index: 50; box-shadow: var(--shadow); }
+.progress-head { display: flex; gap: .8rem; align-items: center; }
+.progress-text { min-width: 0; }
+.progress strong { display: block; font-size: var(--fs-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.steps-line { font-size: var(--fs-0); opacity: .85; }
+.steps-line .model, .progress-trail .model { font-weight: 600; color: var(--mustard); }
+.progress-trail { list-style: none; margin: 0; padding: 0 0 0 calc(20px + .8rem); display: flex; flex-direction: column; gap: .15rem; font-size: var(--fs-0); opacity: .75; }
+.progress-trail:empty { display: none; }
+.progress-trail li { display: flex; gap: .4rem; align-items: baseline; }
+.progress-trail li::before { content: "\2713"; flex: none; font-size: .75em; }
+.progress-trail li.warn::before { content: "!"; color: var(--brick); font-weight: 700; }
+.progress.done .spinner { animation: none; border-color: var(--sage); border-top-color: var(--sage); }
 .spinner { width: 20px; height: 20px; border-radius: 50%; border: 3px solid rgba(255,255,255,.25); border-top-color: var(--mustard); animation: spin 1s linear infinite; flex: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 

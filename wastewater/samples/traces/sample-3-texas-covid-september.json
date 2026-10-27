@@ -1,0 +1,66 @@
+{
+  "plan": {
+    "intent": "detect",
+    "state": "tx",
+    "county": null,
+    "pathogen": "sars-cov-2",
+    "window": {
+      "start": "2026-09-01",
+      "end": "2026-09-30",
+      "label": "September 2026"
+    },
+    "source": "nightshift",
+    "notes": []
+  },
+  "factSheet": {
+    "intent": "detect",
+    "state": "tx",
+    "county": null,
+    "region": "Texas",
+    "pathogen": "sars-cov-2",
+    "pathogen_name": "SARS-CoV-2",
+    "window": {
+      "start": "2026-09-01",
+      "end": "2026-09-30",
+      "label": "September 2026"
+    },
+    "samples": 297,
+    "positives": 290,
+    "positive_share": 0.9764,
+    "sites": 45,
+    "mean_conc": 52161.2,
+    "units": [
+      [
+        "copies/g dry sludge",
+        161
+      ],
+      [
+        "copies/l wastewater",
+        136
+      ]
+    ],
+    "latest_sample_date": "2026-10-12",
+    "coverage": "full",
+    "prior_window": null,
+    "prior_samples": null,
+    "prior_positives": null,
+    "prior_positive_share": null,
+    "prior_sites": null,
+    "prior_mean_conc": null,
+    "delta_share": null,
+    "delta_conc": null,
+    "direction": null,
+    "fallback_window": null,
+    "fallback_samples": null,
+    "fallback_positives": null,
+    "fallback_positive_share": null,
+    "fallback_sites": null,
+    "fallback_mean_conc": null,
+    "fallback_units": null,
+    "notes": [
+      "mean concentration averages mixed units; treat as indicative only"
+    ],
+    "state_note": null
+  },
+  "retrieval": "29 candidate(s) scored; 0 passed the 0.35 gate (top 5); query entities=['2026-09-01', '2026-09-30', 'sars-cov-2', 'tx'] tags=['detect', 'sars-cov-2', 'tx'] domain=wastewater"
+}

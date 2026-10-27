@@ -215,22 +215,81 @@
   }
 
   /* ---------- check the water ---------- */
-  const STEPS = ["Planning the query with Nightshift", "Recalling earlier findings", "Running the SQL templates on Zetaris", "Building the fact sheet", "Writing the answer and checking every figure"];
+  /* The progress card follows the agent's own events (streamed as JSON lines from
+     /api/ask with stream: true): each stage, and the model that handled each
+     Nightshift call. Demo mode replays a recorded sequence. */
+  const shortModel = (m) => (m ? String(m).replace(/^nvidia\//, "") : "");
+  const modelHtml = (m) => `<span class="model" title="${esc(m)}">${esc(shortModel(m))}</span>`;
+  const progress = {
+    stageOf: null,  // the stage a route event belongs to ("plan" or "write")
+    begin(title) {
+      $("progress-title").textContent = title;
+      $("progress-step").textContent = "Starting";
+      $("progress-trail").innerHTML = "";
+      $("answer-progress").classList.remove("hidden", "done");
+      this.stageOf = null;
+    },
+    step(html) { $("progress-step").innerHTML = html; },
+    trail(html, warn = false) { const li = document.createElement("li"); if (warn) li.className = "warn"; li.innerHTML = html; $("progress-trail").appendChild(li); },
+    event(e) {
+      const verb = this.stageOf === "write" ? "Writing" : "Planning";
+      switch (`${e.stage}:${e.state}`) {
+        case "plan:start": this.stageOf = "plan"; this.step("Planning the query"); break;
+        case "route:start": this.step(`${verb} with ${modelHtml(e.model)}`); break;
+        case "route:failed": this.trail(`${esc(shortModel(e.model))} failed, trying the next route`, true); break;
+        case "route:done": break;  // the stage's own done event records the model
+        case "plan:done":
+          this.trail(e.model ? `Planned by ${modelHtml(e.model)}` : "Planned by rules (Nightshift unavailable)", !e.model);
+          break;
+        case "recall:done": this.trail(e.count ? `Recalled ${e.count} earlier finding${e.count === 1 ? "" : "s"}` : "No earlier findings to recall"); break;
+        case "query:start": this.stageOf = null; this.step("Running SQL on Zetaris"); break;
+        case "query:done": this.trail(`${e.statements} SQL statements on Zetaris, ${e.samples ?? 0} samples (${e.coverage} coverage)`); break;
+        case "write:start": this.stageOf = "write"; this.step("Writing the answer"); break;
+        case "write:done":
+          this.trail(e.model ? `Written by ${modelHtml(e.model)}, figures checked${e.attempts > 1 ? ` (${e.attempts} attempts)` : ""}`
+                             : "Written from templates (model output rejected)", !e.model);
+          break;
+        case "memory:done": this.trail("Finding stored in memory"); this.step("Done"); break;
+      }
+    },
+    finish() { $("answer-progress").classList.add("done"); $("progress-step").textContent = "Done"; setTimeout(() => $("answer-progress").classList.add("hidden"), 6000); },
+  };
+  async function askStream(body, onEvent) {
+    const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, stream: true }) });
+    if (!res.ok || !(res.headers.get("content-type") || "").includes("ndjson")) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `${res.status} ${res.statusText}`);
+    }
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let buf = "", record = null;
+    for (;;) {
+      const { value, done } = await reader.read();
+      buf += done ? dec.decode() : dec.decode(value, { stream: true });
+      const lines = buf.split("\n"); buf = done ? "" : lines.pop();
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const e = JSON.parse(line);
+        if (e.stage === "answer") record = e.record;
+        else if (e.stage === "error") throw new Error(e.error);
+        else onEvent(e);
+      }
+      if (done) break;
+    }
+    if (!record) throw new Error("the connection closed before the answer arrived");
+    return record;
+  }
   const block = (key) => $(`pb-${key}`);
   const part = (key, role) => block(key).querySelector(`[data-role="${role}"]`);
   async function check() {
     const t = trip();
     $("visit-submit").disabled = true;
-    $("answer-progress").classList.remove("hidden");
     for (const p of PATHOGENS) {
       const question = p.question(t.stateName);
-      $("progress-title").textContent = `Checking ${p.name} in ${t.stateName}`;
-      let i = 0; $("progress-step").textContent = STEPS[0];
-      const timer = setInterval(() => { if (i < STEPS.length - 1) $("progress-step").textContent = STEPS[++i]; }, 4000);
+      progress.begin(`Checking ${p.name} in ${t.to ? t.to.name : t.stateName}`);
       part(p.key, "error").classList.add("hidden");
       try {
         const rec = DEMO ? await demoAnswer(p, question)
-          : await api("/api/ask", { method: "POST", body: JSON.stringify({ question, county: t.to ? t.to.county : null, pathogen: p.key }) });
+          : await askStream({ question, county: t.to ? t.to.county : null, pathogen: p.key }, (e) => progress.event(e));
         render(rec);
       } catch (e) {
         const err = part(p.key, "error");
@@ -238,9 +297,9 @@
         err.classList.remove("hidden");
         block(p.key).classList.remove("hidden");
         $("plan-empty").classList.add("hidden");
-      } finally { clearInterval(timer); }
+      }
     }
-    $("answer-progress").classList.add("hidden");
+    progress.finish();
     $("visit-submit").disabled = false;
     if (!DEMO) loadStatus();
   }
@@ -249,7 +308,17 @@
     const rec = await (await fetch(p.sample)).json();
     rec.question = question; rec.id = "ans_demo_" + Date.now().toString(36); rec.askedAt = new Date().toISOString();
     rec.pathogen = rec.pathogen || p.key;
-    await new Promise((r) => setTimeout(r, 700));
+    // Replay the stages with the models the stored receipts name.
+    const model = (i) => (rec.receipts[i] || rec.receipts[0] || {}).routedModel || "nvidia/nemotron-3-ultra-550b-a55b";
+    const f = rec.facts, pause = (ms) => new Promise((r) => setTimeout(r, ms));
+    const script = [
+      ["plan:start", {}], ["route:start", { model: "meterless/auto" }], ["plan:done", { model: model(0) }],
+      ["recall:done", { count: rec.memoriesUsed.length }], ["query:start", {}],
+      ["query:done", { statements: rec.statements.length, samples: f.samples, coverage: f.coverage }],
+      ["write:start", {}], ["route:start", { model: "meterless/auto" }], ["write:done", { model: model(1), attempts: 1 }],
+      ["memory:done", {}],
+    ];
+    for (const [k, extra] of script) { const [stage, state] = k.split(":"); progress.event({ stage, state, ...extra }); await pause(350); }
     return rec;
   }
 

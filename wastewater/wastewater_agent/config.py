@@ -21,6 +21,15 @@ JDBC_DRIVER_CLASS = "com.zetaris.lightning.jdbc.LightningDriver"
 
 DEFAULT_NIGHTSHIFT_BASE_URL = "http://127.0.0.1:8088/v1"
 NIGHTSHIFT_MODEL = "meterless/auto"
+# Routes tried in order for every completion. When one fails with a provider
+# error (for example a 502 because the cloud function behind meterless/auto was
+# removed), the next is tried before anything falls back to the offline
+# templates. Override with NIGHTSHIFT_MODELS=a,b,c.
+NIGHTSHIFT_MODELS = (
+    NIGHTSHIFT_MODEL,
+    "nvidia/nemotron-3-ultra-550b-a55b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+)
 NIGHTSHIFT_APP = "wastewater-agent"
 
 
@@ -54,6 +63,7 @@ class Settings:
     nightshift_base_url: str
     nightshift_token: str | None
     nightshift_token_source: str
+    nightshift_models: tuple[str, ...]
     hmem_dir: Path
     zetaris_env_file: Path | None
 
@@ -87,6 +97,9 @@ def load_settings() -> Settings:
         nightshift_base_url=os.environ.get("NIGHTSHIFT_BASE_URL", DEFAULT_NIGHTSHIFT_BASE_URL).rstrip("/"),
         nightshift_token=token,
         nightshift_token_source=token_source,
+        nightshift_models=tuple(
+            m.strip() for m in os.environ.get("NIGHTSHIFT_MODELS", ",".join(NIGHTSHIFT_MODELS)).split(",") if m.strip()
+        ) or NIGHTSHIFT_MODELS,
         hmem_dir=Path(os.environ.get("HMEM_DIR", str(AGENT_ROOT / ".hmem"))),
         zetaris_env_file=zetaris_env_used,
     )

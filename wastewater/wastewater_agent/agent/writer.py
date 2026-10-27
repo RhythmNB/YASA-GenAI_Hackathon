@@ -16,9 +16,10 @@ from .evaluator import FactSheet
 # The routed model (Nemotron) emits reasoning before its answer, so the budget must cover both. The design's 400 was exhausted by reasoning alone.
 PROSE_MAX_TOKENS = 1500
 
-SYSTEM_PROMPT = """Write an answer about SARS-CoV-2 wastewater surveillance for a general reader.
+SYSTEM_PROMPT = """Write an answer about wastewater surveillance of one virus for a general reader.
 Hard rules:
 - Use ONLY the figures in the fact sheet, exactly as written (percentages stay percentages). Never invent, estimate, re-round or compute new figures.
+- Name the virus exactly as the "virus" line gives it; never mention any other virus.
 - The first sentence names the region exactly as the "region" line gives it and states the window's start and end dates.
 - If coverage is partial or empty, say that the data lags: give the latest sample date and, when a fallback window is given, report it clearly labelled as the most recent 7-day window with data.
 - For a trend question, compare the window with the preceding window using the given direction and change figures.
@@ -41,7 +42,8 @@ def prior_sentence(memories: list[dict[str, Any]]) -> str:
 def render_facts(facts: FactSheet) -> str:
     """Labelled lines are read more reliably than nested JSON by small models."""
     lines = [
-        f"region: {state_name(facts.state)}",
+        f"virus: {facts.pathogen_name}",
+        f"region: {facts.region or state_name(facts.state)}",
         f"question type: {'trend (compare with the preceding window)' if facts.intent == 'trend' else 'detection'}",
         f"window: {facts.window.start} to {facts.window.end} ({facts.window.label})",
         f"coverage: {facts.coverage} (latest sample date in the data: {facts.latest_sample_date})",
@@ -107,7 +109,7 @@ def write(
     earlier question into a new answer; the check catches that as well as
     ordinary hallucination. One retry carries a nonce to defeat reuse."""
     payload = facts.to_dict()
-    payload["region"] = state_name(facts.state)
+    payload["region"] = facts.region or state_name(facts.state)
     prior = prior_sentence(memories)
     sheet = render_facts(facts)
     allowed = allowed_numbers(sheet)

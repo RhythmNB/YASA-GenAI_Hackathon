@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from typing import Any
 
 import httpx
 
-from ..config import NIGHTSHIFT_APP, NIGHTSHIFT_MODEL
+from ..config import NIGHTSHIFT_APP, NIGHTSHIFT_MODELS
 from .base import Completion, ProviderUnauthorized, ProviderUnavailable
 
 _FENCED_JSON = re.compile(r"```(?:json)?\s*(\{.*?\})\s*```", re.S)
@@ -25,14 +26,24 @@ class NightshiftProvider:
         token: str | None,
         *,
         app: str = NIGHTSHIFT_APP,
-        model: str = NIGHTSHIFT_MODEL,
+        model: str | None = None,
+        models: tuple[str, ...] | list[str] | None = None,
         timeout: float = 180.0,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self._token = token
         self.app = app
-        self.model = model
+        # `model` pins a single route (the judge does this); otherwise the
+        # chain is tried in order and a failing route is skipped for a while.
+        self.models: tuple[str, ...] = (model,) if model else tuple(models or NIGHTSHIFT_MODELS)
+        self.model = self.models[0]
         self.timeout = timeout
+        self._skip_until: dict[str, float] = {}
+        # Optional progress sink: called with {"stage": "route", "state": start|done|failed, ...}
+        # for every route attempt. The agent sets it for the duration of one question.
+        self.on_event = None
+
+    ROUTE_SKIP_SECONDS = 300.0
 
     def _headers(self) -> dict[str, str]:
         return {
@@ -78,8 +89,38 @@ class NightshiftProvider:
     def complete(
         self, messages: list[dict[str, str]], *, json_mode: bool = False, max_tokens: int = 400
     ) -> Completion:
+        """Try each route in turn; a route that fails is skipped for a few minutes."""
+        now = time.monotonic()
+        order = [m for m in self.models if self._skip_until.get(m, 0.0) <= now] or list(self.models)
+        errors: list[str] = []
+        for model in order:
+            self._emit({"stage": "route", "state": "start", "model": model})
+            try:
+                completion = self._complete_with(model, messages, json_mode=json_mode, max_tokens=max_tokens)
+            except ProviderUnavailable as e:
+                errors.append(f"{model}: {e}")
+                self._emit({"stage": "route", "state": "failed", "model": model, "error": str(e)[:160]})
+                if "unreachable" in str(e):
+                    break  # the proxy itself is down; other routes cannot help
+                self._skip_until[model] = time.monotonic() + self.ROUTE_SKIP_SECONDS
+                continue
+            self._emit({"stage": "route", "state": "done", "model": completion.routed_model or model,
+                        "receipt": completion.receipt_id})
+            return completion
+        raise ProviderUnavailable(errors[0] if len(errors) == 1 else "all routes failed: " + " | ".join(errors))
+
+    def _emit(self, event: dict[str, Any]) -> None:
+        if self.on_event is not None:
+            try:
+                self.on_event(event)
+            except Exception:  # a progress sink must never break a completion
+                pass
+
+    def _complete_with(
+        self, model: str, messages: list[dict[str, str]], *, json_mode: bool, max_tokens: int
+    ) -> Completion:
         body = {
-            "model": self.model,
+            "model": model,
             "temperature": 0,
             "max_tokens": max_tokens,
             "messages": messages,
@@ -123,7 +164,7 @@ class NightshiftProvider:
             provider=self.name,
             receipt_id=receipt.get("receipt_id"),
             routed_model=receipt.get("routed_model") or data.get("model"),
-            raw={"receipt": receipt, "usage": data.get("usage"), "model": data.get("model")},
+            raw={"receipt": receipt, "usage": data.get("usage"), "model": data.get("model"), "requested_model": model},
         )
 
 
