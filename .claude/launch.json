@@ -2,15 +2,15 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "wastewater-frontend",
+      "name": "planner-frontend",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["wastewater/frontend/server.py", "--port", "8765"],
+      "runtimeArgs": ["planner/frontend/server.py", "--port", "8765"],
       "port": 8765
     },
     {
       "name": "weather-service",
-      "runtimeExecutable": "weather_service/.venv/Scripts/python.exe",
-      "runtimeArgs": ["weather_service/web_app.py", "--no-browser", "--port", "8770"],
+      "runtimeExecutable": "agents/weather/.venv/Scripts/python.exe",
+      "runtimeArgs": ["agents/weather/web_app.py", "--no-browser", "--port", "8770"],
       "port": 8770
     }
   ]
