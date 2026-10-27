@@ -20,10 +20,7 @@ templates). Everything after that is done here:
      REST table and views with the census and guidance tables, and the weather
      Postgres (NWS forecasts and alerts) as the datasource weather_pg
   7. checks every table answers through Zetaris
-
-Each step skips what is already done, so a second run only checks. Nothing is
-saved until Zetaris has accepted the sign-in, so a wrong password or a run
-stopped half way leaves nothing to undo: run it again."""
+"""
 
 from __future__ import annotations
 

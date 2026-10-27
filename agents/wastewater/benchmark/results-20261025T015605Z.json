@@ -41,7 +41,8 @@
   "memory": {
    "runs": 11,
    "hits": 11,
-   "superseded_outranked": 11,
+   "live_first": 11,
+   "live_first_checked": 11,
    "median_latency_s": 12.04
   }
  },
@@ -575,7 +576,7 @@
     "mem_51129749f048"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 11.7873724999954,
    "error": null
   },
@@ -586,7 +587,7 @@
     "mem_b27ca3521876"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 12.274982899980387,
    "error": null
   },
@@ -600,7 +601,7 @@
     "mem_51129749f048"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 10.68783069998608,
    "error": null
   },
@@ -614,7 +615,7 @@
     "mem_94beeaf02760"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 12.03630290000001,
    "error": null
   },
@@ -625,7 +626,7 @@
     "mem_fc0eeb3630c0"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 12.143773999996483,
    "error": null
   },
@@ -636,7 +637,7 @@
     "mem_180c1e2bbb1b"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 13.157918499986408,
    "error": null
   },
@@ -649,7 +650,7 @@
     "mem_519c9833d626"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 12.187735599989537,
    "error": null
   },
@@ -664,7 +665,7 @@
     "mem_522c058a8fe6"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 11.717229600006249,
    "error": null
   },
@@ -675,7 +676,7 @@
     "mem_51129749f048"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 10.109509699977934,
    "error": null
   },
@@ -690,7 +691,7 @@
     "mem_522c058a8fe6"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 34.02423720000661,
    "error": null
   },
@@ -705,7 +706,7 @@
     "mem_f9c1a1f86205"
    ],
    "hit": true,
-   "superseded_outranked": true,
+   "live_first": true,
    "latency_s": 12.004302799992729,
    "error": null
   }

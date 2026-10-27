@@ -1,0 +1,394 @@
+{
+ "startedAt": "2026-10-27T11:34:08+00:00",
+ "layers": [
+  "rules",
+  "compose"
+ ],
+ "repeats": 1,
+ "summary": {
+  "rules": {
+   "verdict": "10/10",
+   "draft": "8/8",
+   "replan": "5/5",
+   "keep": "3/3",
+   "all": "26/26"
+  },
+  "compose": {
+   "runs": 3,
+   "errors": 0,
+   "verdict_match": 3,
+   "first_draft_model_written": 1,
+   "model_written": 1,
+   "template_fallback": 2,
+   "figure_rejections": 12,
+   "foreign_figures": {
+    "95": 2,
+    "90": 1,
+    "30": 1,
+    "80": 1
+   },
+   "evaluator_pass": 1,
+   "median_drafts": 3,
+   "median_latency_s": 47.6
+  }
+ },
+ "skipped": {},
+ "rules": [
+  {
+   "group": "verdict",
+   "name": "all low",
+   "ok": true,
+   "expected": "low",
+   "got": "low"
+  },
+  {
+   "group": "verdict",
+   "name": "weather moderate",
+   "ok": true,
+   "expected": "moderate",
+   "got": "moderate"
+  },
+  {
+   "group": "verdict",
+   "name": "covid high",
+   "ok": true,
+   "expected": "high",
+   "got": "high"
+  },
+  {
+   "group": "verdict",
+   "name": "flu moderate, older adult in household",
+   "ok": true,
+   "expected": "high",
+   "got": "high"
+  },
+  {
+   "group": "verdict",
+   "name": "pertussis moderate, newborn in household",
+   "ok": true,
+   "expected": "high",
+   "got": "high"
+  },
+  {
+   "group": "verdict",
+   "name": "weather moderate, newborn: weather is not escalated",
+   "ok": true,
+   "expected": "moderate",
+   "got": "moderate"
+  },
+  {
+   "group": "verdict",
+   "name": "pertussis moderate, no stated group",
+   "ok": true,
+   "expected": "moderate",
+   "got": "moderate"
+  },
+  {
+   "group": "verdict",
+   "name": "guidance never sets the level",
+   "ok": true,
+   "expected": "unknown",
+   "got": "unknown"
+  },
+  {
+   "group": "verdict",
+   "name": "a failed source is ignored even if it carries a level",
+   "ok": true,
+   "expected": "low",
+   "got": "low"
+  },
+  {
+   "group": "verdict",
+   "name": "every source failed",
+   "ok": true,
+   "expected": "unknown",
+   "got": "unknown"
+  },
+  {
+   "group": "draft",
+   "name": "clean draft",
+   "ok": true,
+   "expected": [],
+   "got": []
+  },
+  {
+   "group": "draft",
+   "name": "figure not in the fact sheet",
+   "ok": true,
+   "expected": [
+    "figures that are not in the fact sheet"
+   ],
+   "got": [
+    "Remove or correct figures that are not in the fact sheet: 87."
+   ]
+  },
+  {
+   "group": "draft",
+   "name": "N95 read as a figure",
+   "ok": true,
+   "expected": [
+    "figures that are not in the fact sheet"
+   ],
+   "got": [
+    "Remove or correct figures that are not in the fact sheet: 95."
+   ]
+  },
+  {
+   "group": "draft",
+   "name": "intro contradicts the verdict",
+   "ok": true,
+   "expected": [
+    "contradicts it"
+   ],
+   "got": [
+    "The verdict is Stop (reconsider, or go with full precautions); the intro says \"good to go\", which contradicts it."
+   ]
+  },
+  {
+   "group": "draft",
+   "name": "no precaution for the stated group",
+   "ok": true,
+   "expected": [
+    "Add a precaution specifically for the older adults"
+   ],
+   "got": [
+    "Add a precaution specifically for the older adults in the household."
+   ]
+  },
+  {
+   "group": "draft",
+   "name": "failed source described as fine",
+   "ok": true,
+   "expected": [
+    "was not available for this plan"
+   ],
+   "got": [
+    "Flu (influenza A) in wastewater was not available for this plan; do not describe it as low or fine (\"Flu levels are low as well.\")."
+   ]
+  },
+  {
+   "group": "draft",
+   "name": "destination not named",
+   "ok": true,
+   "expected": [
+    "Name the destination"
+   ],
+   "got": [
+    "Name the destination, Richmond or Virginia, in the intro."
+   ]
+  },
+  {
+   "group": "draft",
+   "name": "too few precautions",
+   "ok": true,
+   "expected": [
+    "Give between 5 and 8 precautions"
+   ],
+   "got": [
+    "Give between 5 and 8 precautions (there are 2)."
+   ]
+  },
+  {
+   "group": "replan",
+   "name": "everything answered",
+   "ok": true,
+   "expected": [],
+   "got": []
+  },
+  {
+   "group": "replan",
+   "name": "a source failed: retry it",
+   "ok": true,
+   "expected": [
+    [
+     "covid",
+     "retry"
+    ]
+   ],
+   "got": [
+    [
+     "covid",
+     "retry"
+    ]
+   ]
+  },
+  {
+   "group": "replan",
+   "name": "no recent county samples: ask at state level",
+   "ok": true,
+   "expected": [
+    [
+     "flu",
+     "state_level"
+    ]
+   ],
+   "got": [
+    [
+     "flu",
+     "state_level"
+    ]
+   ]
+  },
+  {
+   "group": "replan",
+   "name": "no samples but already state level: leave it",
+   "ok": true,
+   "expected": [],
+   "got": []
+  },
+  {
+   "group": "replan",
+   "name": "a skipped source is left alone",
+   "ok": true,
+   "expected": [],
+   "got": []
+  },
+  {
+   "group": "keep",
+   "name": "state-level answer with a level replaces an empty county answer",
+   "ok": true,
+   "expected": true,
+   "got": true
+  },
+  {
+   "group": "keep",
+   "name": "a failed retry never replaces an answer",
+   "ok": true,
+   "expected": false,
+   "got": false
+  },
+  {
+   "group": "keep",
+   "name": "an equally empty answer keeps the first",
+   "ok": true,
+   "expected": false,
+   "got": false
+  }
+ ],
+ "compose": [
+  {
+   "fixture": "austin-richmond",
+   "run": 1,
+   "expected_level": "high",
+   "level": "high",
+   "composer_model": "template",
+   "first_draft_model": "template",
+   "drafts": 3,
+   "final": "revise",
+   "figure_rejections": 6,
+   "foreign_figures": [
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95",
+    "95"
+   ],
+   "json_failures": 0,
+   "rule_issues": [],
+   "model_issues": [
+    "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+    "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+    "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+    "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change.",
+    "Say the COVID-19 reading is from 13 Oct, not a generic 'rising' without the date.",
+    "Say the flu reading is from 20 Oct, not a generic 'fair share' without the date.",
+    "Remove the weather-specific precautions (layered clothing, rain gear, Sunday–Monday showers) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+    "Remove the instruction to 'read the CDC guidance section below' because the sheet's CDC caveat says the guidance text refers to the 2025-2026 vaccine and a 2026-2027 update should be looked for; do not direct the user to read it.",
+    "The intro does not mention the household includes older adults, which is the reason the verdict is high; add that the household includes older adults.",
+    "The intro states flu is rising but omits that the reading is state-wide with no recent Richmond City data; clarify that the flu data is state-wide and lags the travel window.",
+    "Precaution 1 says to check the readings again a few days before travel; this is unnecessary because the data is static and already provided, and the trip starts in 2026-11-10 while the latest samples are from Oct 2026.",
+    "Precaution 5 references 'CDC guidance section below' but the fact sheet states the CDC guidance text is shown separately and should not be rewritten; remove this reference or rephrase to avoid implying the draft included it."
+   ],
+   "latency_s": 157.1005941000003,
+   "error": null,
+   "model_written": false
+  },
+  {
+   "fixture": "newyork-philadelphia",
+   "run": 1,
+   "expected_level": "low",
+   "level": "low",
+   "composer_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "first_draft_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "drafts": 2,
+   "final": "pass",
+   "figure_rejections": 0,
+   "foreign_figures": [],
+   "json_failures": 0,
+   "rule_issues": [],
+   "model_issues": [
+    "Remove COVID-19 wastewater claim from intro; the fact sheet says COVID-19 level is unknown with latest sample 4 Oct, not current for travel window.",
+    "Update weather details to reflect December travel dates (Dec 13-17) rather than current 7-day forecast; the fact sheet notes forecast only covers next 7 days and to check again nearer the date.",
+    "Remove 'Monitor for any respiratory symptoms during the visit' precaution; the fact sheet provides no COVID-19 testing or symptom monitoring guidance for this trip.",
+    "Remove duplicate 'Wash hands frequently and carry hand sanitizer.' precaution."
+   ],
+   "latency_s": 14.593240700000024,
+   "error": null,
+   "model_written": true
+  },
+  {
+   "fixture": "newyork-portland",
+   "run": 1,
+   "expected_level": "moderate",
+   "level": "moderate",
+   "composer_model": "template",
+   "first_draft_model": "template",
+   "drafts": 3,
+   "final": "revise",
+   "figure_rejections": 6,
+   "foreign_figures": [
+    "80",
+    "80",
+    "30",
+    "95",
+    "95",
+    "80",
+    "80",
+    "30",
+    "95",
+    "95",
+    "80",
+    "80",
+    "95",
+    "95",
+    "90",
+    "95",
+    "95",
+    "80",
+    "95",
+    "95",
+    "80",
+    "80",
+    "95",
+    "95"
+   ],
+   "json_failures": 0,
+   "rule_issues": [],
+   "model_issues": [
+    "Remove the raw rain probability lines from the precautions list; replace with actionable guidance (e.g., carry waterproof gear through Thursday, plan indoor activities Friday–Monday).",
+    "Add COVID-19 and flu wastewater context: note the 100% COVID-19 positivity (21–27 Sep) and 50% flu positivity (28 Sep–04 Oct), and that both lag the travel window.",
+    "Add practical respiratory precautions for the household (mask in crowded indoor spaces, hand hygiene, ventilation, symptom monitoring) given the wastewater findings.",
+    "Soften the Tdap line to reflect the fact sheet: suggest checking with a healthcare provider about pertussis booster eligibility rather than stating a firm two-week deadline.",
+    "Remove the raw rain probability lines from the precautions list; replace with actionable guidance (e.g., carry waterproof gear through Thursday, plan indoor activities Friday–Monday).",
+    "Add COVID-19 and flu wastewater context: note the 100% COVID-19 positivity (21–27 Sep) and 50% flu positivity (28 Sep–04 Oct), and that both lag the travel window.",
+    "Add practical respiratory precautions for the household (mask in crowded indoor spaces, hand hygiene, ventilation, symptom monitoring) given the wastewater findings.",
+    "Soften the Tdap line to reflect the fact sheet: suggest checking with a healthcare provider about pertussis booster eligibility rather than stating a firm two-week deadline.",
+    "Remove the raw rain probability lines from the precautions list; replace with actionable guidance from the weather section (e.g., carry waterproof gear and wear layers through Thursday, plan indoor activities Friday through Monday).",
+    "Add COVID-19 and flu wastewater context: note the 100% COVID-19 positivity (21–27 Sep) and 50% flu positivity (28 Sep–04 Oct), and that both lag the travel window.",
+    "Add practical respiratory precautions for the household (mask in crowded indoor spaces, hand hygiene, ventilation, symptom monitoring) given the wastewater findings.",
+    "Soften the Tdap line to reflect the fact sheet: suggest checking with a healthcare provider about pertussis booster eligibility rather than stating a firm two-week deadline."
+   ],
+   "latency_s": 47.59836920000089,
+   "error": null,
+   "model_written": false
+  }
+ ],
+ "e2e": []
+}

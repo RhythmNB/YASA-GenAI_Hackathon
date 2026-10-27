@@ -144,7 +144,9 @@ class MemoryResult:
     first_memory: str | None
     recalled: list[str]
     hit: bool
-    superseded_outranked: bool | None
+    # True when the first recalled record is a live one (or every recalled record
+    # is superseded, so there is nothing live to rank first); None when nothing was recalled.
+    live_first: bool | None
     latency_s: float
     error: str | None = None
 
@@ -345,11 +347,10 @@ class Benchmark:
             return MemoryResult(q.id, first_memory, [], False, None, time.perf_counter() - t0, error=str(e))
         recalled = [m.id for m in ans.memories_used]
         hit = first_memory is not None and first_memory in recalled
-        superseded_ok: bool | None = None
+        live_first: bool | None = None
         if ans.memories_used:
-            live_first = not ans.memories_used[0].supersededBy
-            superseded_ok = live_first or all(m.supersededBy for m in ans.memories_used)
-        return MemoryResult(q.id, first_memory, recalled, hit, superseded_ok, time.perf_counter() - t0)
+            live_first = (not ans.memories_used[0].supersededBy) or all(m.supersededBy for m in ans.memories_used)
+        return MemoryResult(q.id, first_memory, recalled, hit, live_first, time.perf_counter() - t0)
 
     def _judge(self, sheet: str, candidate: str) -> tuple[dict[str, Any] | None, str | None]:
         messages = [
@@ -406,7 +407,8 @@ class Benchmark:
             s["memory"] = {
                 "runs": len(self.report.memory),
                 "hits": sum(r.hit for r in m),
-                "superseded_outranked": sum(bool(r.superseded_outranked) for r in m if r.superseded_outranked is not None),
+                "live_first": sum(bool(r.live_first) for r in m if r.live_first is not None),
+                "live_first_checked": sum(r.live_first is not None for r in m),
                 "median_latency_s": round(statistics.median(r.latency_s for r in m), 2) if m else None,
             }
         self.report.summary = s
@@ -442,6 +444,6 @@ def print_summary(report: Report, log=print) -> None:
                 f"accept {a['judge_accept']}/{a['judged']}")
     if "memory" in s:
         m = s["memory"]
-        log(f"memory:  recall hits {m['hits']}/{m['runs']}  superseded outranked {m['superseded_outranked']}  median {m['median_latency_s']}s")
+        log(f"memory:  recall hits {m['hits']}/{m['runs']}  live record first {m['live_first']}/{m['live_first_checked']}  median {m['median_latency_s']}s")
     for layer, why in report.skipped.items():
         log(f"skipped: {layer}: {why[:120]}")

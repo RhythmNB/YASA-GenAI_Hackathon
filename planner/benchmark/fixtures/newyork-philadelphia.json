@@ -1,0 +1,481 @@
+{
+ "name": "newyork-philadelphia",
+ "expectedLevel": "low",
+ "capturedAt": "2026-10-27T11:07:10+00:00",
+ "trip": {
+  "toCity": "Philadelphia",
+  "toState": "pa",
+  "toCounty": "Philadelphia",
+  "fromCity": "New York",
+  "fromState": "ny",
+  "start": "2026-12-13",
+  "end": "2026-12-17",
+  "adults": 2,
+  "children": 0,
+  "with": []
+ },
+ "findings": [
+  {
+   "source": "covid",
+   "title": "COVID-19 in wastewater",
+   "status": "ok",
+   "level": "unknown",
+   "headline": "100% of 6 samples positive in Philadelphia County, Pennsylvania",
+   "meaning": "No COVID-19 wastewater samples for Philadelphia County, Pennsylvania in the last two weeks; the most recent reading, from 04 Oct, is shown below.",
+   "text": "In Philadelphia County, Pennsylvania during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-04; the most recent 7-day window with data, 2026-09-28 to 2026-10-04, had 6 samples from 3 sites, all positive (100.0% positive share) with a mean concentration of 22,272.7 copies/l wastewater. The requested window had 0 samples, and the preceding window 2026-09-29 to 2026-10-12 had 6 samples from 3 sites, all positive (100.0% positive share) with a mean concentration of 22,272.7, so the trend direction is unknown due to insufficient data in one of the windows. Earlier finding on record (mem_731f26a3b448, 2026-10-27): No SARS-CoV-2 wastewater samples for Philadelphia County, Pennsylvania 2026-10-13..2026-10-26 (latest sample 2026-10-04); most recent 7-day window 2026-09-28..2026-10-04: 6/6 positive (100.0%), 3 sites.",
+   "facts": [
+    "No samples in the two weeks you asked about; latest sample 04 Oct",
+    "Most recent reading (28 Sep to 04 Oct): 100% of 6 samples positive, from 3 sites"
+   ],
+   "caveats": [
+    "data lag: latest sample 2026-10-04 is before window end 2026-10-26"
+   ],
+   "sources": [
+    {
+     "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+     "url": "https://www.cdc.gov/nwss/"
+    }
+   ],
+   "model": "nvidia/nemotron-3-ultra-550b-a55b",
+   "trace": "mem_c10c370c20e7",
+   "seconds": 41.36799880000035,
+   "error": null,
+   "raw": {
+    "question": "is sars-cov-2 rising in Pennsylvania over the last 2 weeks?",
+    "facts": {
+     "intent": "trend",
+     "state": "pa",
+     "county": "Philadelphia",
+     "region": "Philadelphia County, Pennsylvania",
+     "pathogen": "sars-cov-2",
+     "pathogen_name": "SARS-CoV-2",
+     "window": {
+      "start": "2026-10-13",
+      "end": "2026-10-26",
+      "label": "last 2 weeks (ending yesterday)"
+     },
+     "samples": 0,
+     "positives": 0,
+     "positive_share": null,
+     "sites": 0,
+     "mean_conc": null,
+     "units": [],
+     "latest_sample_date": "2026-10-04",
+     "coverage": "empty",
+     "prior_window": {
+      "start": "2026-09-29",
+      "end": "2026-10-12",
+      "label": "preceding window"
+     },
+     "prior_samples": 6,
+     "prior_positives": 6,
+     "prior_positive_share": 1.0,
+     "prior_sites": 3,
+     "prior_mean_conc": 22272.7,
+     "delta_share": null,
+     "delta_conc": null,
+     "direction": "unknown",
+     "fallback_window": {
+      "start": "2026-09-28",
+      "end": "2026-10-04",
+      "label": "most recent 7 days with data"
+     },
+     "fallback_samples": 6,
+     "fallback_positives": 6,
+     "fallback_positive_share": 1.0,
+     "fallback_sites": 3,
+     "fallback_mean_conc": 22272.7,
+     "fallback_units": [
+      [
+       "copies/l wastewater",
+       6
+      ]
+     ],
+     "notes": [
+      "data lag: latest sample 2026-10-04 is before window end 2026-10-26"
+     ],
+     "state_note": null
+    },
+    "factSheet": "virus: SARS-CoV-2\nregion: Philadelphia County, Pennsylvania\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-13 to 2026-10-26 (last 2 weeks (ending yesterday))\ncoverage: empty (latest sample date in the data: 2026-10-04)\nsamples in window: 0 (no data for this window)\npreceding window: 2026-09-29 to 2026-10-12\npreceding samples: 6; positives: 6; positive share: 100.0%; sites: 3; mean concentration: 22,272.7\ndirection: unknown (not enough data in one of the windows)\nfallback window (most recent 7 days with data): 2026-09-28 to 2026-10-04\nfallback samples: 6; positives: 6; positive share: 100.0%; sites: 3; mean concentration: 22,272.7 copies/l wastewater",
+    "statements": [
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2'",
+     "SELECT COUNT(DISTINCT site) AS sites FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %' GROUP BY pcr_target_units ORDER BY samples DESC",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %' GROUP BY pcr_target_units ORDER BY samples DESC",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-28' AND sample_collect_date <= '2026-10-04' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-28' AND sample_collect_date <= '2026-10-04' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %' GROUP BY pcr_target_units ORDER BY samples DESC"
+    ],
+    "receipts": [
+     {
+      "receiptId": "rcpt_req_mey1d61o",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     {
+      "receiptId": "rcpt_req_e1jx5k02",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     }
+    ],
+    "coverage": "empty",
+    "positiveShare": 1.0,
+    "direction": "unknown"
+   }
+  },
+  {
+   "source": "flu",
+   "title": "Flu (influenza A) in wastewater",
+   "status": "ok",
+   "level": "low",
+   "headline": "0% of 1 samples positive, flat in Philadelphia County, Pennsylvania",
+   "meaning": "Little flu in Philadelphia County, Pennsylvania's wastewater recently.",
+   "text": "In Philadelphia County, Pennsylvania during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-13. In the requested window, 1 sample from 1 site had a positive share of 0.0% with a mean concentration of 1,285.8 copies/l wastewater. Compared with the preceding window 2026-09-29 to 2026-10-12, the positive share was flat (+0.0 percentage points) while the mean concentration fell by 160.4. Earlier finding on record (mem_e87f26e2cc40, 2026-10-27): influenza A not detected in Philadelphia County, Pennsylvania 2026-10-13..2026-10-26: 0/1 positive (0.0%), 1 sites, mean conc 1,286 (partial coverage, latest sample 2026-10-13); vs preceding window positive share flat (+0.0 pp).",
+   "facts": [
+    "0% of 1 sample were positive between 13 Oct and 26 Oct, from 1 site",
+    "Latest sample 13 Oct (the data lags the end of the period)",
+    "Two weeks before: 0% positive, so the share is flat (+0 points)"
+   ],
+   "caveats": [
+    "data lag: latest sample 2026-10-13 is before window end 2026-10-26"
+   ],
+   "sources": [
+    {
+     "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+     "url": "https://www.cdc.gov/nwss/"
+    }
+   ],
+   "model": "nvidia/nemotron-3-ultra-550b-a55b",
+   "trace": "mem_1ef64e712efa",
+   "seconds": 33.925381999997626,
+   "error": null,
+   "raw": {
+    "question": "is flu rising in Pennsylvania over the last 2 weeks?",
+    "facts": {
+     "intent": "trend",
+     "state": "pa",
+     "county": "Philadelphia",
+     "region": "Philadelphia County, Pennsylvania",
+     "pathogen": "flu-a",
+     "pathogen_name": "influenza A",
+     "window": {
+      "start": "2026-10-13",
+      "end": "2026-10-26",
+      "label": "last 2 weeks (ending yesterday)"
+     },
+     "samples": 1,
+     "positives": 0,
+     "positive_share": 0.0,
+     "sites": 1,
+     "mean_conc": 1285.8,
+     "units": [
+      [
+       "copies/l wastewater",
+       1
+      ]
+     ],
+     "latest_sample_date": "2026-10-13",
+     "coverage": "partial",
+     "prior_window": {
+      "start": "2026-09-29",
+      "end": "2026-10-12",
+      "label": "preceding window"
+     },
+     "prior_samples": 9,
+     "prior_positives": 0,
+     "prior_positive_share": 0.0,
+     "prior_sites": 3,
+     "prior_mean_conc": 1446.2,
+     "delta_share": 0.0,
+     "delta_conc": -160.4,
+     "direction": "flat",
+     "fallback_window": null,
+     "fallback_samples": null,
+     "fallback_positives": null,
+     "fallback_positive_share": null,
+     "fallback_sites": null,
+     "fallback_mean_conc": null,
+     "fallback_units": null,
+     "notes": [
+      "data lag: latest sample 2026-10-13 is before window end 2026-10-26"
+     ],
+     "state_note": null
+    },
+    "factSheet": "virus: influenza A\nregion: Philadelphia County, Pennsylvania\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-13 to 2026-10-26 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-13)\nsamples: 1; positives: 0; positive share: 0.0%; sites: 1; mean concentration: 1,285.8 copies/l wastewater\npreceding window: 2026-09-29 to 2026-10-12\npreceding samples: 9; positives: 0; positive share: 0.0%; sites: 3; mean concentration: 1,446.2\ndirection of positive share: flat (+0.0 percentage points)\nchange in mean concentration: -160.4",
+    "statements": [
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav'",
+     "SELECT COUNT(DISTINCT site) AS sites FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %' GROUP BY pcr_target_units ORDER BY samples DESC",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'pa' AND LOWER(CONCAT(', ', counties_served, ', ')) LIKE '%, philadelphia, %' GROUP BY pcr_target_units ORDER BY samples DESC"
+    ],
+    "receipts": [
+     {
+      "receiptId": "rcpt_req_xiuxpvtv",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     {
+      "receiptId": "rcpt_req_42dqrsst",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     }
+    ],
+    "coverage": "partial",
+    "positiveShare": 0.0,
+    "direction": "flat"
+   }
+  },
+  {
+   "source": "pertussis",
+   "title": "Whooping cough",
+   "status": "ok",
+   "level": "low",
+   "headline": "329 cases this year in Pennsylvania (2.52 per 100,000), lower than at this point last year; close to the national rate",
+   "meaning": "Whooping cough in Pennsylvania is lower than at this point last year and close to the national rate.",
+   "text": "New York has reported 656 whooping cough cases so far this year (3.28 per 100,000 people), lower than at this point last year (804 cases) [1][2]. That is close to the national rate of 3.47 per 100,000 [1][2]. Pennsylvania has reported 329 whooping cough cases so far this year (2.52 per 100,000 people), lower than at this point last year (529 cases) [1][2]. That is close to the national rate of 3.47 per 100,000 [1][2]. Figures are provisional CDC counts up to week 41 of 2026 and are often revised as late reports arrive [1].",
+   "facts": [
+    "New York: 656 cases so far this year (3.28 per 100,000), lower than at this point last year, close to the national rate",
+    "Pennsylvania: 329 cases so far this year (2.52 per 100,000), lower than at this point last year, close to the national rate",
+    "National rate 3.47 per 100,000, data to CDC week 41"
+   ],
+   "caveats": [
+    "Counts are provisional and reported by state; recent weeks are often revised upward as late reports arrive.",
+    "These are state-wide figures and do not describe a particular city, household or person."
+   ],
+   "sources": [
+    {
+     "title": "CDC NNDSS Weekly Data (provisional), pertussis",
+     "url": "https://data.cdc.gov/Public-Health-Surveillance/NNDSS-Weekly-Data/x9gk-5huc"
+    },
+    {
+     "title": "US Census Bureau, Vintage 2025 state population estimates",
+     "url": "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-total.html"
+    }
+   ],
+   "model": "template",
+   "trace": "template",
+   "seconds": 5.1357881000003545,
+   "error": null,
+   "raw": {
+    "facts": {
+     "pathogen": "pertussis (whooping cough)",
+     "as_of_mmwr_week": 41,
+     "national": {
+      "ytd_cases": 11567,
+      "prev_ytd_cases": 27616,
+      "ytd_rate_per_100k": 3.47,
+      "ratio_vs_last_year": 0.42,
+      "states_included": 48
+     },
+     "states": [
+      {
+       "state": "New York",
+       "mmwr_week": 41,
+       "data_ok": true,
+       "notes": [],
+       "ytd_cases": 656,
+       "prev_ytd_cases": 804,
+       "ytd_rate_per_100k": 3.28,
+       "ratio_vs_last_year": 0.82,
+       "trend": "lower than at this point last year",
+       "rate_vs_national_x": 0.9,
+       "vs_national": "close to the national rate"
+      },
+      {
+       "state": "Pennsylvania",
+       "mmwr_week": 41,
+       "data_ok": true,
+       "notes": [],
+       "ytd_cases": 329,
+       "prev_ytd_cases": 529,
+       "ytd_rate_per_100k": 2.52,
+       "ratio_vs_last_year": 0.62,
+       "trend": "lower than at this point last year",
+       "rate_vs_national_x": 0.7,
+       "vs_national": "close to the national rate"
+      }
+     ],
+     "general_caveats": [
+      "Counts are provisional and reported by state; recent weeks are often revised upward as late reports arrive.",
+      "These are state-wide figures and do not describe a particular city, household or person."
+     ]
+    },
+    "method": "template",
+    "destination": {
+     "state": "Pennsylvania",
+     "mmwr_week": 41,
+     "data_ok": true,
+     "notes": [],
+     "ytd_cases": 329,
+     "prev_ytd_cases": 529,
+     "ytd_rate_per_100k": 2.52,
+     "ratio_vs_last_year": 0.62,
+     "trend": "lower than at this point last year",
+     "rate_vs_national_x": 0.7,
+     "vs_national": "close to the national rate"
+    }
+   }
+  },
+  {
+   "source": "weather",
+   "title": "Weather",
+   "status": "ok",
+   "level": "low",
+   "headline": "Weather risk low (Good to go) for the next 14 forecast periods",
+   "meaning": "Good to go. No weather risk flagged for the forecast days.",
+   "text": "Weather risk: low (Good to go). Philadelphia enjoys a mild, mostly sunny stretch this week with daytime highs in the 60s-70s and cool evenings in the 50s. Minimal rain is expected through Saturday, but showers become likely Sunday through Monday.",
+   "facts": [
+    "Low-risk times outdoors: Today, Wednesday, Thursday, Friday, Saturday, Sunday, Monday",
+    "Dress in light layers to adapt to daytime highs in the 60s-70s and cool evenings in the 50s.",
+    "Carry a compact umbrella or rain jacket for Sunday and Monday when showers are most likely.",
+    "Plan indoor activities for Sunday and Monday evenings if showers develop.",
+    "Confidence high, data 0.2 h old"
+   ],
+   "caveats": [
+    "The forecast covers only the next 7 days; your trip starts 2026-12-13. This is the current outlook for the city; check again nearer the date."
+   ],
+   "sources": [
+    {
+     "title": "National Weather Service forecast and alerts (api.weather.gov)",
+     "url": "https://api.weather.gov"
+    }
+   ],
+   "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "trace": "run_20261027T110343Z-ca6060.jsonl",
+   "seconds": 28.080211699998472,
+   "error": null,
+   "raw": {
+    "goodOutdoorWindows": [
+     "Today",
+     "Wednesday",
+     "Thursday",
+     "Friday",
+     "Saturday",
+     "Sunday",
+     "Monday"
+    ],
+    "reasons": [],
+    "profile": "general",
+    "travellers": {
+     "groups": [],
+     "stated": [],
+     "from_memory": []
+    },
+    "evaluator": {
+     "ok": false,
+     "issues": [
+      "outcome review: (model) RISKS array is empty, but the answer assumes general travellers without specifying who they are. The TRAVELLERS field states 'not specified', but the advice should either explicitly address generic travellers or note that no specific risk groups were identified.",
+      "outcome review: (model) The answer provides general weather advice but does not address any specific risks. Since RISKS is empty, there are no risks to address, making the advice potentially incomplete for a formal outcome review."
+     ]
+    },
+    "outcomeReview": {
+     "verdict": "revise",
+     "issues": [
+      "(model) RISKS array is empty, but the answer assumes general travellers without specifying who they are. The TRAVELLERS field states 'not specified', but the advice should either explicitly address generic travellers or note that no specific risk groups were identified.",
+      "(model) The answer provides general weather advice but does not address any specific risks. Since RISKS is empty, there are no risks to address, making the advice potentially incomplete for a formal outcome review."
+     ],
+     "rule_issues": [],
+     "model_issues": [
+      "RISKS array is empty, but the answer assumes general travellers without specifying who they are. The TRAVELLERS field states 'not specified', but the advice should either explicitly address generic travellers or note that no specific risk groups were identified.",
+      "The answer provides general weather advice but does not address any specific risks. Since RISKS is empty, there are no risks to address, making the advice potentially incomplete for a formal outcome review."
+     ],
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       "data 0.2 h old"
+      ]
+     },
+     "reviewer_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+     "round": 2
+    },
+    "periodsCovered": [
+     "Today",
+     "Tonight",
+     "Wednesday",
+     "Wednesday Night",
+     "Thursday",
+     "Thursday Night",
+     "Friday",
+     "Friday Night",
+     "Saturday",
+     "Saturday Night",
+     "Sunday",
+     "Sunday Night",
+     "Monday",
+     "Monday Night"
+    ]
+   }
+  },
+  {
+   "source": "guidance",
+   "title": "CDC guidance",
+   "status": "ok",
+   "level": "unknown",
+   "headline": "CDC advice for visiting general",
+   "meaning": "What CDC recommends when visiting family and friends",
+   "text": "What CDC recommends when visiting family and friends:\n- If you have respiratory symptoms (fever, cough, runny nose), stay home and away from others. Resume normal activities only after at least 24 hours of improving symptoms with no fever (without fever-reducing medicine), then take extra care for 5 days: cleaner air, hand hygiene, a well-fitted mask, distance and testing, especially around people at higher risk. [1]\n- CDC's core prevention steps are staying up to date on vaccines, washing hands, and cleaner air where people gather. Masks, distance and testing add protection when illness is rising in the community or when you are with someone at higher risk. [2]\nThis summarises CDC guidance (pages retrieved 2026-10-26); it is not personal medical advice.",
+   "facts": [],
+   "caveats": [],
+   "sources": [
+    {
+     "title": "CDC: Preventing spread of respiratory viruses when you're sick",
+     "url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html"
+    },
+    {
+     "title": "CDC: Preventing respiratory illnesses",
+     "url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html"
+    }
+   ],
+   "model": null,
+   "trace": null,
+   "seconds": 0.2561171999986982,
+   "error": null,
+   "raw": {
+    "facts": {
+     "visited": "general",
+     "audiences": [
+      "visitor_any"
+     ],
+     "pathogens": [
+      "respiratory",
+      "influenza",
+      "covid"
+     ],
+     "priority": [],
+     "guidance_ids": [
+      "GEN-01",
+      "GEN-02"
+     ],
+     "rows": [
+      {
+       "guidance_id": "GEN-01",
+       "pathogen": "respiratory",
+       "audience": "visitor_any",
+       "advice": "If you have respiratory symptoms (fever, cough, runny nose), stay home and away from others. Resume normal activities only after at least 24 hours of improving symptoms with no fever (without fever-reducing medicine), then take extra care for 5 days: cleaner air, hand hygiene, a well-fitted mask, distance and testing, especially around people at higher risk.",
+       "source_title": "CDC: Preventing spread of respiratory viruses when you're sick",
+       "source_url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html",
+       "cdc_last_reviewed": "2025-08-18",
+       "cdc_last_updated": "2025-08-18",
+       "retrieved": "2026-10-26",
+       "status_note": ""
+      },
+      {
+       "guidance_id": "GEN-02",
+       "pathogen": "respiratory",
+       "audience": "visitor_any",
+       "advice": "CDC's core prevention steps are staying up to date on vaccines, washing hands, and cleaner air where people gather. Masks, distance and testing add protection when illness is rising in the community or when you are with someone at higher risk.",
+       "source_title": "CDC: Preventing respiratory illnesses",
+       "source_url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html",
+       "cdc_last_reviewed": "2025-08-18",
+       "cdc_last_updated": "2025-08-18",
+       "retrieved": "2026-10-26",
+       "status_note": ""
+      }
+     ]
+    },
+    "priority": []
+   }
+  }
+ ]
+}
