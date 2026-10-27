@@ -68,8 +68,14 @@ class Settings:
 
 
 def _default_token_file() -> Path:
+    """The Windows app's proxy-token, else the macOS app's runtime-token."""
     local = os.environ.get("LOCALAPPDATA") or str(Path.home() / "AppData" / "Local")
-    return Path(local) / "ai.meterless.runtime" / "proxy-token"
+    windows = Path(local) / "ai.meterless.runtime" / "proxy-token"
+    if windows.is_file():
+        return windows
+    # The macOS app folder carries the build in its name (ai.meterless.nightshift.m1m4).
+    mac = sorted((Path.home() / "Library" / "Application Support").glob("ai.meterless.nightshift*/runtime-token"))
+    return mac[0] if mac else windows
 
 
 def load_settings() -> Settings:

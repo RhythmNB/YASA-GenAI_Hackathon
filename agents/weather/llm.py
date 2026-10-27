@@ -9,6 +9,7 @@ themselves. Point it at Meterless Nightshift through configuration:
 
 Every call is written to the trace with the model that actually answered.
 """
+import glob
 import os
 import time
 
@@ -25,15 +26,20 @@ def nightshift_token():
     """Find the Nightshift runtime token without ever printing it.
 
     Order: NIGHTSHIFT_API_KEY, METERLESS_TOKEN, then the token file the Windows
-    app keeps at %LOCALAPPDATA%\\ai.meterless.runtime\\proxy-token.
+    app keeps at %LOCALAPPDATA%\\ai.meterless.runtime\\proxy-token, then the
+    macOS app's ~/Library/Application Support/ai.meterless.nightshift*/runtime-token.
     """
     for var in ("NIGHTSHIFT_API_KEY", "METERLESS_TOKEN"):
         val = (os.getenv(var) or "").strip()
         if val not in PLACEHOLDER_KEYS:
             return val
+    paths = []
     local = os.getenv("LOCALAPPDATA")
     if local:
-        path = os.path.join(local, "ai.meterless.runtime", "proxy-token")
+        paths.append(os.path.join(local, "ai.meterless.runtime", "proxy-token"))
+    support = os.path.join(os.path.expanduser("~"), "Library", "Application Support")
+    paths += sorted(glob.glob(os.path.join(support, "ai.meterless.nightshift*", "runtime-token")))
+    for path in paths:
         if os.path.exists(path):
             with open(path, encoding="utf-8") as f:
                 return f.read().strip()

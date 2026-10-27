@@ -181,7 +181,9 @@ def find_nightshift_token() -> Path | None:
     for base in bases:
         if base and (Path(base) / "ai.meterless.runtime" / "proxy-token").is_file():
             return Path(base) / "ai.meterless.runtime" / "proxy-token"
-    return None
+    # The macOS app keeps runtime-token in a folder named after its build (ai.meterless.nightshift.m1m4).
+    mac = sorted((Path.home() / "Library" / "Application Support").glob("ai.meterless.nightshift*/runtime-token"))
+    return mac[0] if mac else None
 
 
 def nightshift_answers(token: str | None) -> bool:
