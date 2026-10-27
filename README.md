@@ -9,15 +9,7 @@
 
 <p align="center"><em>Decide before you go</em></p>
 
-Planning a family visit? Say where you are going, where from, when, and who is
-in the household. A planner agent asks four agents at once, all reading
-through Zetaris: COVID-19 and influenza A in wastewater, whooping cough counts,
-CDC guidance for the people you will be with, and the weather risk at the
-destination. A composer agent turns their findings into one travel plan: a
-verdict with its reason, a section per source, a precautions checklist and the
-best days to be outdoors. Rules decide the verdict and every risk level; the
-Meterless Nightshift models (NVIDIA Nemotron routes) write the prose, and every
-figure they write is checked against the data.
+Should I visit my Grandma in New York? This planner can help you.
 
 | | |
 |---|---|
@@ -27,6 +19,7 @@ figure they write is checked against the data.
 
 ## Contents
 
+- [Sponsor technology](#sponsor-technology)
 - [Setup](#setup) from a clean clone
   - [1. Before you start (once, by hand)](#1-before-you-start-once-by-hand)
   - [2. Run the setup script](#2-run-the-setup-script)
@@ -38,6 +31,42 @@ figure they write is checked against the data.
 - [Data sources](#data-sources)
 - [Future directions](#future-directions)
 - [Repository layout](#repository-layout)
+
+## Sponsor technology
+
+- **Zetaris is the data layer.** Every figure in a plan comes from SQL run
+  through Zetaris Lightning over JDBC; no agent calls a data source directly.
+  Zetaris holds the CDC wastewater exports for COVID-19 and influenza A as file
+  tables (`wastewater.*`), live CDC whooping cough counts as a REST table joined
+  with Census populations in views (`cdc_rest.*`, `visitplanner.*`,
+  `refdata.*`), the CDC guidance text (`refdata.cdc_guidance`), the National
+  Weather Service forecasts in a Postgres registered as a datasource
+  (`weather_pg`), and city lookup as REST tables (`geocoding.*`).
+  `install.py` registers all of them.
+- **Meterless H-MEM is the memory engine.** Each finding is stored as a
+  memory record with its place, virus and dates, kept in short-term, working,
+  long-term and archived tiers, with a ledger of every action. A newer finding
+  supersedes an older one, and a sleep cycle decays and archives what is no
+  longer used. H-MEM powers the "Earlier finding on record" line in wastewater
+  answers, recalled only for the same place and virus. It also lets the weather
+  agent remember household facts such as "Dad uses a walking frame". Test
+  result: the memory benchmark found the stored finding in 11 of 11 fresh
+  sessions, with the live record ranked first 11 of 11 (25 Oct). The weather
+  service's H-MEM tests pass as part of its 43 of 43.
+- **Meterless Nightshift is the AI provider.** Every model call goes to
+  Nightshift's OpenAI-compatible endpoint on `127.0.0.1:8088`, tagged with
+  the app name so its stream groups them. Each answer keeps Nightshift's
+  receipt, which names the model that handled it. A route that fails is
+  skipped and the next one answers, and `meterless/judge` scores the wastewater
+  benchmark.
+- **NVIDIA Nemotron does the language work, through Nightshift.**
+  `nemotron-3-ultra-550b-a55b` reads the question, writes the wastewater
+  answers, writes the plan's intro and checklist, and reviews each draft as the
+  evaluator. `nemotron-3.5-lightning-30b-a3b` writes the weather summary and is
+  the fallback route. Rules decide the verdict and every risk level, and every
+  figure the models write is checked against the data. Results: question
+  reading 14 of 14, judge fidelity 9.91 of 10, and Nemotron-written plans
+  passed the evaluator 3 of 3.
 
 ## Setup
 
