@@ -50,7 +50,8 @@ def nightshift_token():
 
 
 def llm_mode():
-    return os.getenv("LLM_MODE", "sample").strip().lower()
+    # An empty LLM_MODE (as in .env.example before install.py has run) means sample.
+    return (os.getenv("LLM_MODE") or "sample").strip().lower() or "sample"
 
 
 class Generator:
