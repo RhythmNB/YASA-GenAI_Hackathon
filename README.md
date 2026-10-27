@@ -101,7 +101,9 @@ cd YASA-GenAI_Hackathon
 python install.py
 ```
 
-It asks once for the Zetaris password and takes about 10 minutes the first
+It asks once for your Zetaris username (Enter keeps `admin@zetaris.com`)
+and password, the ones you sign in to http://localhost:3000 with, and saves
+them in the git-ignored `getting-started/.env.local`. It takes about 10 minutes the first
 time, most of it downloading the two CDC wastewater exports (about 0.5 GB).
 It is safe to run again: every step skips what is already in place, and
 values already in a `.env` file are kept. What it does:
@@ -123,7 +125,8 @@ weather service then reads an offline SQLite copy instead of Zetaris).
 If a step fails, the script names it and what to do; fix that and run it
 again. The usual causes: Docker or the Zetaris platform not started, the
 JDBC jar not beside the repository (`--jdbc-jar`), or a wrong Zetaris
-password (edit `ZETARIS_PASSWORD` in `getting-started/.env.local`).
+username or password (edit `ZETARIS_USERNAME` and `ZETARIS_PASSWORD` in
+`getting-started/.env.local`, or delete both lines to be asked again).
 
 ## Run
 

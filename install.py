@@ -225,10 +225,14 @@ def check_machine(a) -> dict:
         warn("Nightshift is not answering at 127.0.0.1:8088. Plans still work; the prose comes from templates. "
              "Open the Nightshift app and add an NVIDIA key under Setup > Providers to use the models.")
 
-    user = a.zetaris_user or env_local.get("ZETARIS_USERNAME") or "admin@zetaris.com"
+    user = a.zetaris_user or os.environ.get("ZETARIS_USERNAME") or env_local.get("ZETARIS_USERNAME") or ""
     password = os.environ.get("ZETARIS_PASSWORD") or env_local.get("ZETARIS_PASSWORD") or ""
+    if not user and not a.check:
+        default = "admin@zetaris.com"
+        user = input(f"   Zetaris username, the one you sign in to localhost:3000 with [{default}]: ").strip() or default
+    user = user or "admin@zetaris.com"
     if not password and not a.check:
-        password = getpass.getpass(f"   Zetaris password for {user} (the one you sign in to localhost:3000 with): ")
+        password = getpass.getpass(f"   Zetaris password for {user}: ")
     return {"gs": gs, "java": java, "jar": jar, "driver": driver, "network": nets[0] if nets else "zetaris_default",
             "token_file": token_file, "token": token, "user": user, "password": password}
 
@@ -375,17 +379,51 @@ class Zetaris:
             msg = str(e).lower()
             if "already exist" in msg or ("exists" in msg and "not exist" not in msg and "n't exist" not in msg):
                 return "exists"
-            raise SetupError(f"{' '.join(sql.split())[:120]}\n      {str(e).splitlines()[0][:300]}") from None
+            raise SetupError(f"{' '.join(sql.split())[:120]}\n      {short_error(e)}") from None
 
-    def answers(self, table: str) -> bool:
+    def drop_table(self, table: str) -> None:
+        """Drop a Lightning table that exists but does not answer, so it can be created again:
+        Zetaris accepts a filestore table whose file is missing and only fails when it is queried."""
+        try:
+            self.execute(f"DROP LIGHTNING DATABASE TABLE {table}")
+            info(f"dropped {table}, which existed but did not answer")
+        except Exception:  # noqa: BLE001 - it was not there
+            pass
+
+    def problem(self, table: str) -> str | None:
+        """None when the table answers a query, else Zetaris's reason in one line."""
         try:
             self.execute(f"SELECT 1 FROM {table} LIMIT 1")
-            return True
-        except Exception:  # noqa: BLE001
-            return False
+            return None
+        except Exception as e:  # noqa: BLE001
+            return short_error(e)
+
+    def answers(self, table: str) -> bool:
+        return self.problem(table) is None
 
     def close(self) -> None:
         self.conn.close()
+
+
+def short_error(e: Exception) -> str:
+    """The Lightning message between <<< >>>, without the Java exception chain."""
+    text = str(e)
+    m = re.search(r"<<<(.+?)>>>", text, re.S)
+    return " ".join((m.group(1) if m else text.splitlines()[0]).split())[:300]
+
+
+def hint(error: str) -> str:
+    if "PATH_NOT_FOUND" in error or "Path does not exist" in error:
+        return (f"the Zetaris container cannot read the file. install.py copies it into {SHARED} in the "
+                "container whose name contains 'driver'; if your Zetaris bundle reads customer files from another "
+                "container or folder, copy it there (docker cp) and run install.py again")
+    if "Permission denied" in error:
+        return f"the file is not readable by Zetaris; run: docker exec -u 0 <driver> chown -R zetaris:zetaris {SHARED}"
+    if "TABLE_OR_VIEW_NOT_FOUND" in error:
+        return "it was not created; run install.py again and look for the first error above"
+    if "onnect" in error:
+        return "Zetaris could not reach the source; check the container or the internet connection and run again"
+    return "run install.py again; if it repeats, send the team this output"
 
 
 def statements(sql_file: Path) -> list[str]:
@@ -418,12 +456,15 @@ def download(url: str, dest: Path) -> None:
 def wastewater_data(m: dict, z: Zetaris, check: bool) -> None:
     for table, label, dataset, sql_name in WASTEWATER_TABLES:
         name = f"wastewater.{table}"
-        if z.answers(name):
+        problem = z.problem(name)
+        if problem is None:
             ok(f"{name} answers")
             continue
         if check:
-            warn(f"{name} missing")
+            warn(f"{name}: {problem}")
             continue
+        if "TABLE_OR_VIEW_NOT_FOUND" not in problem:
+            z.drop_table(name)
         data = WASTEWATER / "data"
         data.mkdir(exist_ok=True)
         have = sorted(data.glob(f"CDC_Wastewater_Data_for_{label}_*.csv"))
@@ -437,22 +478,38 @@ def wastewater_data(m: dict, z: Zetaris, check: bool) -> None:
         for sql in statements(WASTEWATER / "sql" / sql_name):
             # The create scripts name the export they were written against; point them at this one.
             z.try_execute(re.sub(r"CDC_Wastewater_Data_for_\S+?_\d{8}\.csv", csv.name, sql))
+        problem = z.problem(name)
+        if problem:
+            raise SetupError(f"{name} was created from {csv.name} but does not answer:\n      {problem}\n"
+                             f"      Likely cause: {hint(problem)}")
         ok(f"{name} created from {csv.name}")
 
 
 def pertussis_data(m: dict, z: Zetaris, check: bool) -> None:
     targets = ("visitplanner.pertussis_state_rates", "refdata.cdc_guidance")
-    if all(z.answers(t) for t in targets):
+    problems = {t: z.problem(t) for t in targets}
+    if not any(problems.values()):
         ok("visitplanner.pertussis_state_rates and refdata.cdc_guidance answer")
         return
     if check:
-        warn("pertussis or guidance tables missing")
+        for t, problem in problems.items():
+            if problem:
+                warn(f"{t}: {problem}")
         return
+    # The views are rebuilt by name, so only the tables under them need dropping when they are broken.
+    for table in ("refdata.census_state_pop_2025", "refdata.cdc_guidance", "cdc_rest.nndss_pertussis_2026"):
+        problem = z.problem(table)
+        if problem and "TABLE_OR_VIEW_NOT_FOUND" not in problem:
+            z.drop_table(table)
     into_container(m, [PERTUSSIS / "data" / "census_state_pop_2025.csv"], "census")
     into_container(m, [PERTUSSIS / "data" / "cdc_guidance_2026-10-26.csv"], "guidance")
     for sql in statements(PERTUSSIS / "sql" / "setup.sql"):
         if not sql.upper().startswith("SELECT"):
             z.try_execute(sql)
+    for t in ("cdc_rest.nndss_pertussis_2026", "refdata.census_state_pop_2025", *targets):
+        problem = z.problem(t)
+        if problem:
+            raise SetupError(f"{t} does not answer:\n      {problem}\n      Likely cause: {hint(problem)}")
     ok("cdc_rest.nndss_pertussis_2026, refdata.census_state_pop_2025, refdata.cdc_guidance, visitplanner views")
 
 
@@ -460,11 +517,12 @@ def weather_data(m: dict, z: Zetaris, a) -> None:
     if a.no_weather_db:
         info("--no-weather-db: the weather service reads its offline SQLite copy")
         return
-    if z.answers("weather_pg.cities"):
+    problem = z.problem("weather_pg.cities")
+    if problem is None:
         ok("weather_pg answers")
         return
     if a.check:
-        warn("weather_pg missing")
+        warn(f"weather_pg: {problem}")
         return
     env = {**os.environ, "ZETARIS_NETWORK": m["network"]}
     run(["docker", "compose", "up", "-d"], cwd=WEATHER, env=env, quiet=True)
@@ -479,6 +537,10 @@ def weather_data(m: dict, z: Zetaris, a) -> None:
     info("downloading NWS forecasts and alerts for 217 cities")
     run([str(venv_py), "ingest_weather.py"], cwd=WEATHER)
     have = {r[0].lower() for r in z.execute("SHOW DATASOURCES")}
+    if "weather_pg" in have and z.problem("weather_pg.cities"):
+        z.execute("DROP DATASOURCE weather_pg")  # registered earlier but broken (old password, tables missing)
+        have.discard("weather_pg")
+        info("dropped weather_pg, which existed but did not answer")
     if "weather_pg" not in have:
         # Zetaris allows only letters, digits, _ . - and , in a description.
         z.try_execute(
@@ -488,6 +550,11 @@ def weather_data(m: dict, z: Zetaris, a) -> None:
             f'username "{wenv.get("POSTGRES_USER", "weather")}", password "{wenv["POSTGRES_PASSWORD"]}", '
             'fetchsize "1000")')
         z.try_execute('REGISTER DATASOURCE TABLES ("forecast_periods", "weather_alerts", "cities") FROM weather_pg')
+    problem = z.problem("weather_pg.cities")
+    if problem:
+        raise SetupError(f"weather_pg was registered but does not answer:\n      {problem}\n"
+                         f"      Likely cause: Zetaris reaches the database as weather-db:5432 on the Docker network "
+                         f"{m['network']}; check that `docker ps` shows weather-db, then run install.py again")
     ok("weather_pg registered: forecast_periods, weather_alerts, cities")
 
 
@@ -516,10 +583,12 @@ def verify(z: Zetaris, a) -> bool:
         checks.append(("weather_pg.forecast_periods", "NWS forecasts"))
     good = True
     for table, what in checks:
-        if z.answers(table):
+        problem = z.problem(table)
+        if problem is None:
             ok(f"{what}: {table}")
         else:
-            warn(f"{what}: {table} does not answer")
+            warn(f"{what}: {table} does not answer: {problem}")
+            info(f"likely cause: {hint(problem)}")
             good = False
     return good
 
@@ -530,7 +599,7 @@ def main() -> int:
     p.add_argument("--getting-started", help="where the getting-started checkout is or goes (default: next to this repo)")
     p.add_argument("--java-home", help="JDK folder, if it is not found")
     p.add_argument("--jdbc-jar", help="path to ndp-jdbc-driver-*.jar, if it is not found")
-    p.add_argument("--zetaris-user", help="Zetaris sign-in (default admin@zetaris.com)")
+    p.add_argument("--zetaris-user", help="Zetaris username; asked for when it is not saved yet (default admin@zetaris.com)")
     p.add_argument("--no-weather-db", action="store_true",
                    help="skip the weather Postgres; the weather service reads its offline copy instead of Zetaris")
     a = p.parse_args()
@@ -549,7 +618,8 @@ def main() -> int:
         print("\nReady. Start the planner with\n\n    python planner/frontend/server.py --port 8765\n\n"
               "and open http://127.0.0.1:8765/  (http://127.0.0.1:8765/?demo=1 needs no services at all).\n")
         return 0
-    print("\nSome tables do not answer; run `python install.py` again to finish them.\n")
+    print("\nSome tables do not answer; the reason is printed next to each. Fix that and run "
+          "`python install.py` again: it rebuilds any table that exists but does not answer.\n")
     return 1
 
 
