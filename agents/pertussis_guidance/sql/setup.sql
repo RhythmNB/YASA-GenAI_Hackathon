@@ -1,5 +1,5 @@
 -- Visit Planner: Zetaris setup. Run each statement on its own, in order, in the SQL Workspace.
--- Before 6 and 9: copy the CSV into the driver container (see HANDOFF.md, "Load the reference files").
+-- Before 6 and 9: copy the CSV into the driver container (install.py does this).
 
 -- 1. Database for web-API (REST) tables
 CREATE LIGHTNING DATABASE CDC_REST DESCRIBE BY "CDC open data REST source";

@@ -13,7 +13,8 @@ from pathlib import Path
 PACKAGE_DIR = Path(__file__).resolve().parent
 AGENT_ROOT = PACKAGE_DIR.parent
 
-DEFAULT_ZETARIS_ENV_FILE = Path(r"F:\Hackathon\getting-started\.env.local")
+# install.py clones getting-started next to this repository and writes ZETARIS_ENV_FILE.
+DEFAULT_ZETARIS_ENV_FILE = AGENT_ROOT.parents[2] / "getting-started" / ".env.local"
 DEFAULT_JAVA_HOME = r"F:\jdk-23.0.2"
 DEFAULT_JDBC_URL = "jdbc:zetaris:lightning@localhost:10000"
 DEFAULT_JDBC_JAR = r"F:\zetaris-platform\jdbc\ndp-jdbc-driver-2.4.3.1-7eff043-driver.jar"

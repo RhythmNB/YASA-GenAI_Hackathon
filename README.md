@@ -1,4 +1,4 @@
-# Visit Planner
+# Insightor
 
 <!-- TODO: one-paragraph pitch in your own words. Keep it to what the planner does for a person, not how it is built. -->
 Planning a family visit? Say where you are going, where from, when, and who is
@@ -59,83 +59,71 @@ Visit request (who, where from and to, dates, household)
 Each agent keeps its own data, rules and memory; the planner only normalises
 what they return. The design is in `docs/2026-10-27-trip-planner-design.md`.
 
+- **Location**: the destination city to its county and state, through the
+  Open-Meteo geocoding API registered in Zetaris as REST tables (`geocoding.*`).
+- **Wastewater agent**: COVID-19 and influenza A levels and trends from the CDC
+  NWSS exports, county level with a state fallback. It plans its SQL with a
+  Nightshift model, checks the answer against the rows, and keeps H-MEM memory
+  of earlier findings (`agents/wastewater/.hmem/`).
+- **Pertussis agent**: whooping cough cases this year against last year and the
+  national rate, per state, from CDC NNDSS through a Zetaris REST table joined
+  with Census populations.
+- **Guidance agent**: picks the CDC advice that fits who you will be with and
+  quotes it word for word with its source and date. Rules only, so medical
+  advice is never rewritten.
+- **Weather agent**: a separate service (port 8770) that reads NWS forecasts
+  and alerts from the `weather_pg` Postgres through Zetaris, rates each period
+  low, moderate or high with fixed rules (heat, cold, rain, wind, storms,
+  official alerts; stricter for older adults, infants, young children and
+  pregnancy), writes a summary with a Nightshift model and has it reviewed by a
+  critic. Data older than an hour is downloaded again before it answers.
+
 ## Setup
 
-Commands are run from the repository root unless a step says otherwise.
+Two parts: install four things by hand, then run one script that does the rest.
 
-### 1. Prerequisites
+### 1. Before you start (once, by hand)
 
-| Need | Why | Checked with |
-|---|---|---|
-| Python 3.11 or newer (developed on 3.13) | the planner, the agents, the frontend server | `python --version` |
-| A JDK (developed with JDK 23) | the Zetaris JDBC driver runs in a JVM started by JPype | `java -version` |
-| Zetaris Lightning platform running in Docker, JDBC on `localhost:10000` | all health data access | `python -m wastewater_agent status` from `agents/wastewater/` |
-| The Zetaris JDBC driver jar (`ndp-jdbc-driver-*.jar`, ships with the platform) | JDBC connection | path in `.env` files |
-| Meterless Nightshift runtime on `http://127.0.0.1:8088/v1` | the models for the wastewater agent, the composer and the weather agent | `python -m wastewater_agent status` |
-| The hackathon's `getting-started` repository cloned next to this one | the pertussis and guidance agents reuse its Zetaris client and `.env.local` | `agents/pertussis_guidance/getting-started` resolves |
+| Install | Notes |
+|---|---|
+| **Python 3.11 or newer** | [python.org](https://www.python.org/downloads/); on Windows tick "Add python.exe to PATH". Developed on 3.13. |
+| **A JDK, 17 or newer** | For example [Eclipse Temurin](https://adoptium.net/). The Zetaris JDBC driver runs in it. `install.py` finds it through `JAVA_HOME` or `java` on the PATH; developed with JDK 23. |
+| **Docker Desktop**, running | [docker.com](https://www.docker.com/products/docker-desktop/). |
+| **The Zetaris Lightning platform** | The hackathon's Docker bundle from Zetaris Cloud. In the bundle folder: `docker login`, `docker compose pull`, `docker compose up -d`, then sign in once at http://localhost:3000 and note the admin password. Put the bundle folder (it holds `jdbc/ndp-jdbc-driver-*.jar`) next to this repository, or pass `--jdbc-jar` to the script. |
+| **Meterless Nightshift** (recommended) | Install the app, add an NVIDIA API key from [build.nvidia.com](https://build.nvidia.com/) under Setup > Providers, and keep it open. Without it everything still runs, but the prose comes from templates instead of the Nemotron models. |
+| **git** | To clone this repository and `zetaris/getting-started`. |
 
-Zetaris and Nightshift are installed as described in the getting-started
-repository; this project only connects to them.
-
-### 2. Wastewater agent (`agents/wastewater/`)
+### 2. Run the setup script
 
 ```bash
-cd agents/wastewater
-pip install -r requirements.txt
-copy .env.example .env
+git clone <this repository's URL> YASA-GenAI_Hackathon
+cd YASA-GenAI_Hackathon
+python install.py
 ```
 
-Edit `.env`: the JDBC URL and jar path, `JAVA_HOME` if it is not set globally,
-and either `ZETARIS_ENV_FILE` (a file holding `ZETARIS_USERNAME` and
-`ZETARIS_PASSWORD`) or those two values directly. The Nightshift token is read
-from the runtime's own `proxy-token` file by default.
+It asks once for the Zetaris password and takes about 10 minutes the first
+time, most of it downloading the two CDC wastewater exports (about 0.5 GB).
+It is safe to run again: every step skips what is already in place, and
+values already in a `.env` file are kept. What it does:
 
-Load the two CDC NWSS exports, each a Lightning filestore table from a file
-inside the Zetaris container:
+| Step | What happens |
+|---|---|
+| 1. Look around | finds Python, the JDK, the JDBC jar, the running Zetaris driver container and Nightshift's token; stops with a clear message if something is missing |
+| 2. getting-started | clones [zetaris/getting-started](https://github.com/zetaris/getting-started) next to this repository (the pertussis and guidance agents use its Zetaris client) and links it into `agents/pertussis_guidance/` |
+| 3. Settings | writes `getting-started/.env.local`, `agents/wastewater/.env` and `agents/weather/.env` (all git-ignored; secrets are never printed) |
+| 4. Packages | `pip install` of the planner's packages (`jaydebeapi`, `JPype1`, `httpx`) and a separate `.venv` for the weather service |
+| 5. Data in Zetaris | downloads the CDC NWSS SARS-CoV-2 and influenza A exports and creates `wastewater.sars_cov_2` and `wastewater.influenza_a`; creates the pertussis REST table, the census and CDC guidance tables and the `visitplanner` views; starts the weather Postgres (`weather-db`), loads the NWS forecasts and alerts, and registers it as the datasource `weather_pg` |
+| 6. Check | queries every table through Zetaris and prints the command to start the planner |
 
-| Table | Dataset | Download |
-|---|---|---|
-| `wastewater.sars_cov_2` | NWSS SARS-CoV-2 wastewater concentration (data.cdc.gov `g653-rqe2`) <!-- TODO: confirm the dataset id --> | `https://data.cdc.gov/api/views/g653-rqe2/rows.csv?accessType=DOWNLOAD` |
-| `wastewater.influenza_a` | NWSS influenza A wastewater data (data.cdc.gov `ymmh-divb`) | `https://data.cdc.gov/api/views/ymmh-divb/rows.csv?accessType=DOWNLOAD` |
+`python install.py --check` reports what is in place without changing
+anything. Other options: `--java-home`, `--jdbc-jar`, `--zetaris-user`,
+`--getting-started <folder>`, and `--no-weather-db` (no weather Postgres; the
+weather service then reads an offline SQLite copy instead of Zetaris).
 
-```bash
-# from agents/wastewater/
-# 1. download both CSVs into data/ (git-ignored; ~0.5 GB together)
-curl -L -o data/CDC_Wastewater_Data_for_SARS-CoV-2_20261023.csv "https://data.cdc.gov/api/views/g653-rqe2/rows.csv?accessType=DOWNLOAD"
-curl -L -o data/CDC_Wastewater_Data_for_Influenza_A_20261026.csv "https://data.cdc.gov/api/views/ymmh-divb/rows.csv?accessType=DOWNLOAD"
-# 2. copy them into the Zetaris driver container (one-off)
-docker exec zetaris-driver-1 mkdir -p /home/zetaris/customer-data/shared/wastewater
-docker cp data/CDC_Wastewater_Data_for_SARS-CoV-2_20261023.csv zetaris-driver-1:/home/zetaris/customer-data/shared/wastewater/
-docker cp data/CDC_Wastewater_Data_for_Influenza_A_20261026.csv zetaris-driver-1:/home/zetaris/customer-data/shared/wastewater/
-# 3. create the tables: run sql/01_wastewater_create.sql and sql/02_influenza_a_create.sql
-#    (Zetaris SQL editor, or the getting-started repo's scripts/run_sql.py)
-# 4. verify with sql/01_wastewater_select.sql and sql/02_influenza_a_select.sql
-python -m wastewater_agent status
-```
-
-If the file names differ (CDC stamps the export date into the name), change the
-`PATH` in the two create scripts to match.
-
-### 3. Pertussis and guidance agents (`agents/pertussis_guidance/`)
-
-Follow `agents/pertussis_guidance/HANDOFF.md`, with the Windows notes in
-`agents/pertussis_guidance/SETUP-NOTES.md`: link or clone `getting-started`
-into that folder, add the keys from `env.example` to `getting-started/.env.local`,
-copy the census and guidance CSVs into the Zetaris container, and run
-`sql/setup.sql` (or `sql/run_setup_jdbc.py` over JDBC). Check:
-
-```bash
-cd agents/pertussis_guidance/agents
-python pertussis_agent.py AZ CA --no-llm --channel jdbc     # Arizona at 1019 cases, 13.37 per 100k
-python guidance_agent.py newborn --priority pertussis --channel jdbc
-```
-
-### 4. Weather agent (`agents/weather/`)
-
-Follow `agents/weather/INTEGRATION.md`, with the notes in
-`agents/weather/SETUP-NOTES.md`: `setup_laptop.bat` (or its steps by hand)
-creates `.venv`, writes `.env`, downloads the NWS forecast for its 217 cities
-and runs its 43 tests. No Zetaris is needed for it in sample mode.
+If a step fails, the script names it and what to do; fix that and run it
+again. The usual causes: Docker or the Zetaris platform not started, the
+JDBC jar not beside the repository (`--jdbc-jar`), or a wrong Zetaris
+password (edit `ZETARIS_PASSWORD` in `getting-started/.env.local`).
 
 ## Run
 
@@ -164,8 +152,9 @@ then **Plan this visit**. The progress card names each agent and the model
 that handled it as they report; "Your plan" then shows the verdict, the intro,
 one section per source, the "Before you go" checklist and the best days, with
 sources and models in a disclosure at the end. **Add to calendar** writes the
-verdict and precautions into the event. `planner/frontend/README.md` documents
-the page and its API.
+verdict and precautions into the event. **Download** saves the plan as
+Markdown, text, JSON or PDF. The last plan survives a page refresh, and the
+"Before you go" boxes you tick are remembered per plan.
 
 ### The planner on the command line
 
@@ -189,18 +178,37 @@ python -m wastewater_agent ask "was covid detected in Texas in September?" --jso
 python -m wastewater_agent status | memory list | memory show <id> | feedback <id> helpful | audit <id> | sleep | benchmark
 ```
 
-The pertussis and guidance commands are under Setup step 3; the weather
-service's own page is http://127.0.0.1:8770/ and its API is `POST /api/weather`.
+```bash
+cd agents/pertussis_guidance
+python agents/pertussis_agent.py AZ CA --no-llm --channel jdbc     # whooping cough, two states
+python agents/guidance_agent.py newborn --priority pertussis --channel jdbc
+```
+
+The weather service's own page is http://127.0.0.1:8770/ and its API is
+`POST /api/weather` (the planner server starts it; see Run).
+
+### The page's API
+
+| Method | Path | Purpose |
+|---|---|---|
+| POST | `/api/plan` `{toCity, toState, fromCity, fromState, start, end, adults, children, with[], stream?}` | run the planner; with `stream: true` the reply is one JSON line per progress event, ending in `{"stage": "plan", "plan": ...}` |
+| GET | `/api/plans`, `/api/plans/<id>`, `/api/plans/<id>/report.md` | plans made by this server process, one record, a Markdown report |
+| GET | `/api/geocode?q=` | a typed city to candidates with county, state and coordinates (the page's type-ahead) |
+| GET | `/api/status` | Zetaris, Nightshift, the weather service and memory counts |
+| POST | `/api/ask` `{question, county?, pathogen?}` | the wastewater agent alone |
+
+The server binds to 127.0.0.1 with no authentication. One planner runs per
+server process (the JVM starts once), and plans are run one at a time.
 
 ## Dependencies
 
 | Dependency | Role | Where it is configured |
 |---|---|---|
-| Zetaris Lightning (Docker, JDBC port 10000) | holds the wastewater tables (`wastewater.*`), the pertussis REST table and views (`cdc_rest.*`, `visitplanner.*`) and the reference tables (`refdata.*`); every health figure comes from SQL run here | `agents/wastewater/.env`, `getting-started/.env.local` |
+| Zetaris Lightning (Docker, JDBC port 10000) | holds the wastewater tables (`wastewater.*`), the pertussis REST table and views (`cdc_rest.*`, `visitplanner.*`) and the reference tables (`refdata.*`), the geocoding REST tables (`geocoding.*`) and the weather datasource (`weather_pg`, the weather Postgres); every health and weather figure comes from SQL run here | `agents/wastewater/.env`, `getting-started/.env.local` |
 | Meterless Nightshift runtime (`127.0.0.1:8088`) | plans and writes for the wastewater agent, writes the composer's intro and precautions, writes the weather summary; `meterless/judge` scores the wastewater benchmark | `NIGHTSHIFT_MODELS` (wastewater and composer), `METERLESS_MODEL` (pertussis), `NIGHTSHIFT_MODEL` (weather) |
 | NVIDIA Nemotron models (through Nightshift) | named directly, no `meterless/auto` or `meterless/fast` aliases: `nvidia/nemotron-3-ultra-550b-a55b`, then `nvidia/nemotron-3.5-lightning-30b-a3b`; the weather and pertussis agents use the lightning model | as above |
 | CDC data.cdc.gov (NWSS exports, NNDSS pertussis REST), US Census populations, CDC guidance pages | the data behind every section | `agents/*/sql`, `agents/pertussis_guidance/data` |
-| National Weather Service (api.weather.gov) | forecasts and alerts for the weather agent, refreshed when older than an hour | `agents/weather/.env` |
+| National Weather Service (api.weather.gov) | forecasts and alerts for the weather agent, loaded into the `weather-db` Postgres and read through Zetaris; refreshed when older than an hour | `agents/weather/.env`, `agents/weather/docker-compose.yml` |
 | Python packages: `jaydebeapi`, `JPype1`, `httpx` (planner and wastewater); the weather service's own `requirements.txt` in its venv | JDBC bridge, HTTP clients | `agents/wastewater/requirements.txt`, `agents/weather/requirements.txt` |
 | A JDK | runs the JDBC driver | `JAVA_HOME` |
 | Open-Meteo (no key) and Lucide icons (CDN with a local fallback) | the page's weather card and icons; optional | none |
@@ -216,8 +224,7 @@ project.
   with no services.
 - `agents/wastewater/samples/README.md`: three wastewater questions with the
   full CLI output, SQL and receipts, plus the JSON traces in `samples/traces/`.
-- `agents/pertussis_guidance/HANDOFF.md` and `agents/weather/INTEGRATION.md`:
-  each agent's own sample calls and outputs.
+- The single-agent commands under Usage, each with the output it prints.
 
 ## Traces: which model handled each request
 
@@ -244,6 +251,20 @@ the weather service's venv. The wastewater benchmark's plan layer
 (`python -m wastewater_agent benchmark --layers plan`) is the functional check:
 every question must be planned by a Nightshift route.
 
+## Data notes
+
+- Wastewater exports are CDC's weekly NWSS files; a county with no recent
+  samples is answered at state level and labelled so.
+- Pertussis counts are state level only (New York City is the exception),
+  provisional and often revised. Missouri, Delaware and DC have no complete
+  2026 count: a reporting gap, not zero.
+- CDC guidance rows are a snapshot from 2026-10-26. Infant RSV immunization is
+  no longer routine since the 5 January 2026 schedule change, but CDC's RSV page
+  predates it, so that advice carries a "check with a healthcare provider"
+  caveat; the COVID rows cover the 2025-26 vaccine.
+- Weather covers the 217 US cities in `agents/weather/cities.py` and the
+  7-day NWS forecast.
+
 ## Fallbacks when a service is down
 
 | Situation | What happens |
@@ -264,7 +285,8 @@ every question must be planned by a Nightshift route.
 ## Secrets
 
 Nothing secret is in the repository. Every `.env` is git-ignored and every
-`.env.example` has placeholders only. Zetaris credentials are read from the
+`.env.example` has placeholders only; `install.py` writes the real values into
+the git-ignored files and never prints them. Zetaris credentials are read from the
 getting-started checkout's `.env.local`, and the Nightshift token from the
 Meterless runtime's own token file.
 
@@ -280,8 +302,9 @@ planner/                  the orchestration layer (Python package `planner`)
   frontend/               server.py (stdlib HTTP server and API) and static/ (the planner page)
 agents/
   wastewater/             wastewater_agent/ (cli, planner, executor, evaluator, writer, memory), sql/, benchmark/, samples/, docs/
-  pertussis_guidance/     the pertussis and guidance agents, their data and SQL, setup notes
+  pertussis_guidance/     the pertussis and guidance agents, their data and SQL
   weather/                the weather service: agent, risk rules, critic, web app, tests
+install.py                one-command setup (see Setup)
 docs/                     design and plan for the trip planner, the submission checklist
 .claude/launch.json       preview configs for the two servers
 ```

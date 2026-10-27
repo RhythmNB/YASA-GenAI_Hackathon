@@ -1,5 +1,5 @@
 # Weather Postgres for the visit planner.
-# It joins Zetaris's Docker network (zetaris_default), so in the Zetaris UI the
+# It joins Zetaris's Docker network (ZETARIS_NETWORK in .env, default zetaris_default), so in Zetaris the
 # data source host is `weather-db` and the port is 5432. Start Zetaris first.
 services:
   weather-db:
@@ -20,7 +20,7 @@ services:
 
 networks:
   zetaris:
-    name: zetaris_default
+    name: ${ZETARIS_NETWORK:-zetaris_default}
     external: true
 
 volumes:

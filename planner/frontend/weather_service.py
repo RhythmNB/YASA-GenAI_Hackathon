@@ -65,7 +65,7 @@ class WeatherSupervisor:
                 return "running"
             py = _venv_python()
             if py is None:
-                return f"not running: no venv at {WEATHER_DIR / '.venv'} (see agents/weather/SETUP-NOTES.md)"
+                return f"not running: no venv at {WEATHER_DIR / '.venv'} (run python install.py)"
             if self.proc is not None and self.proc.poll() is None:
                 self.proc.kill()  # ours, but not answering: replace it
             (WEATHER_DIR / "logs").mkdir(exist_ok=True)
