@@ -1,0 +1,550 @@
+{
+ "name": "austin-richmond",
+ "expectedLevel": "high",
+ "capturedAt": "2026-10-27T10:59:36+00:00",
+ "trip": {
+  "toCity": "Richmond",
+  "toState": "va",
+  "toCounty": "Richmond City",
+  "fromCity": "Austin",
+  "fromState": "tx",
+  "start": "2026-11-10",
+  "end": "2026-11-17",
+  "adults": 2,
+  "children": 1,
+  "with": [
+   "older_adult"
+  ]
+ },
+ "findings": [
+  {
+   "source": "covid",
+   "title": "COVID-19 in wastewater",
+   "status": "ok",
+   "level": "high",
+   "headline": "100% of 2 samples positive, rising in Virginia",
+   "meaning": "A lot of COVID-19 in Virginia's wastewater, and it is rising.",
+   "text": "In Virginia during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-13. In the requested window, 2 samples from 2 sites were all positive (100.0%) with a mean concentration of 6,807.0 copies/g dry sludge. Compared with the preceding window 2026-09-29 to 2026-10-12 (23 samples, 60.9% positive, mean 30,912.5), the positive share rose by 39.1 percentage points while the mean concentration fell by 24,105.4. Earlier finding on record (mem_88d82b2fb7e4, 2026-10-27): SARS-CoV-2 detected in Virginia 2026-10-13..2026-10-26: 2/2 positive (100.0%), 2 sites, mean conc 6,807 (partial coverage, latest sample 2026-10-13); vs preceding window positive share rising (+39.1 pp).",
+   "facts": [
+    "100% of 2 samples were positive between 13 Oct and 26 Oct, from 2 sites",
+    "Latest sample 13 Oct (the data lags the end of the period)",
+    "Two weeks before: 61% positive, so the share is rising (+39 points)"
+   ],
+   "caveats": [
+    "No recent samples for Richmond City, so this is the state-wide reading, asked for again at the evaluator's request.",
+    "data lag: latest sample 2026-10-13 is before window end 2026-10-26"
+   ],
+   "sources": [
+    {
+     "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+     "url": "https://www.cdc.gov/nwss/"
+    }
+   ],
+   "model": "nvidia/nemotron-3-ultra-550b-a55b",
+   "trace": "mem_1ff2c6b70aea",
+   "seconds": 20.183703099999548,
+   "error": null,
+   "raw": {
+    "question": "is sars-cov-2 rising in Virginia over the last 2 weeks?",
+    "facts": {
+     "intent": "trend",
+     "state": "va",
+     "county": null,
+     "region": "Virginia",
+     "pathogen": "sars-cov-2",
+     "pathogen_name": "SARS-CoV-2",
+     "window": {
+      "start": "2026-10-13",
+      "end": "2026-10-26",
+      "label": "last 2 weeks (ending yesterday)"
+     },
+     "samples": 2,
+     "positives": 2,
+     "positive_share": 1.0,
+     "sites": 2,
+     "mean_conc": 6807.0,
+     "units": [
+      [
+       "copies/g dry sludge",
+       2
+      ]
+     ],
+     "latest_sample_date": "2026-10-13",
+     "coverage": "partial",
+     "prior_window": {
+      "start": "2026-09-29",
+      "end": "2026-10-12",
+      "label": "preceding window"
+     },
+     "prior_samples": 23,
+     "prior_positives": 14,
+     "prior_positive_share": 0.6087,
+     "prior_sites": 14,
+     "prior_mean_conc": 30912.5,
+     "delta_share": 39.1,
+     "delta_conc": -24105.4,
+     "direction": "rising",
+     "fallback_window": null,
+     "fallback_samples": null,
+     "fallback_positives": null,
+     "fallback_positive_share": null,
+     "fallback_sites": null,
+     "fallback_mean_conc": null,
+     "fallback_units": null,
+     "notes": [
+      "data lag: latest sample 2026-10-13 is before window end 2026-10-26"
+     ],
+     "state_note": null
+    },
+    "factSheet": "virus: SARS-CoV-2\nregion: Virginia\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-13 to 2026-10-26 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-13)\nsamples: 2; positives: 2; positive share: 100.0%; sites: 2; mean concentration: 6,807.0 copies/g dry sludge\npreceding window: 2026-09-29 to 2026-10-12\npreceding samples: 23; positives: 14; positive share: 60.9%; sites: 14; mean concentration: 30,912.5\ndirection of positive share: rising (+39.1 percentage points)\nchange in mean concentration: -24,105.4",
+    "statements": [
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2'",
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'va'",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC"
+    ],
+    "receipts": [
+     {
+      "receiptId": "rcpt_req_y6x5usfu",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     {
+      "receiptId": "rcpt_req_k0tnreqj",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     }
+    ],
+    "coverage": "partial",
+    "positiveShare": 1.0,
+    "direction": "rising"
+   }
+  },
+  {
+   "source": "flu",
+   "title": "Flu (influenza A) in wastewater",
+   "status": "ok",
+   "level": "moderate",
+   "headline": "7% of 30 samples positive, rising in Virginia",
+   "meaning": "flu is showing up in a fair share of samples in Virginia, and the trend is rising.",
+   "text": "In Virginia during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-20. The window had 30 samples from 22 sites, with 2 positives (6.7% positive share) and a mean concentration of 1,907.7 copies/l wastewater (mixed units, indicative only). Compared with the preceding window 2026-09-29 to 2026-10-12 (81 samples, 0.0% positive, mean 1,682.4), the positive share rose by 6.7 percentage points and the mean concentration increased by 225.2. Earlier finding on record (mem_615ca91b46ed, 2026-10-27): influenza A detected in Virginia 2026-10-13..2026-10-26: 2/30 positive (6.7%), 22 sites, mean conc 1,908 (partial coverage, latest sample 2026-10-20); vs preceding window positive share rising (+6.7 pp).",
+   "facts": [
+    "7% of 30 samples were positive between 13 Oct and 26 Oct, from 22 sites",
+    "Latest sample 20 Oct (the data lags the end of the period)",
+    "Two weeks before: 0% positive, so the share is rising (+7 points)"
+   ],
+   "caveats": [
+    "No recent samples for Richmond City, so this is the state-wide reading, asked for again at the evaluator's request.",
+    "data lag: latest sample 2026-10-20 is before window end 2026-10-26",
+    "mean concentration averages mixed units; treat as indicative only"
+   ],
+   "sources": [
+    {
+     "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+     "url": "https://www.cdc.gov/nwss/"
+    }
+   ],
+   "model": "nvidia/nemotron-3-ultra-550b-a55b",
+   "trace": "mem_f94af4166ebd",
+   "seconds": 15.012355599999864,
+   "error": null,
+   "raw": {
+    "question": "is flu rising in Virginia over the last 2 weeks?",
+    "facts": {
+     "intent": "trend",
+     "state": "va",
+     "county": null,
+     "region": "Virginia",
+     "pathogen": "flu-a",
+     "pathogen_name": "influenza A",
+     "window": {
+      "start": "2026-10-13",
+      "end": "2026-10-26",
+      "label": "last 2 weeks (ending yesterday)"
+     },
+     "samples": 30,
+     "positives": 2,
+     "positive_share": 0.0667,
+     "sites": 22,
+     "mean_conc": 1907.7,
+     "units": [
+      [
+       "copies/l wastewater",
+       23
+      ],
+      [
+       "copies/g dry sludge",
+       7
+      ]
+     ],
+     "latest_sample_date": "2026-10-20",
+     "coverage": "partial",
+     "prior_window": {
+      "start": "2026-09-29",
+      "end": "2026-10-12",
+      "label": "preceding window"
+     },
+     "prior_samples": 81,
+     "prior_positives": 0,
+     "prior_positive_share": 0.0,
+     "prior_sites": 28,
+     "prior_mean_conc": 1682.4,
+     "delta_share": 6.7,
+     "delta_conc": 225.2,
+     "direction": "rising",
+     "fallback_window": null,
+     "fallback_samples": null,
+     "fallback_positives": null,
+     "fallback_positive_share": null,
+     "fallback_sites": null,
+     "fallback_mean_conc": null,
+     "fallback_units": null,
+     "notes": [
+      "data lag: latest sample 2026-10-20 is before window end 2026-10-26",
+      "mean concentration averages mixed units; treat as indicative only"
+     ],
+     "state_note": null
+    },
+    "factSheet": "virus: influenza A\nregion: Virginia\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-13 to 2026-10-26 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-20)\nsamples: 30; positives: 2; positive share: 6.7%; sites: 22; mean concentration: 1,907.7 copies/l wastewater (mixed units: copies/l wastewater x23, copies/g dry sludge x7)\npreceding window: 2026-09-29 to 2026-10-12\npreceding samples: 81; positives: 0; positive share: 0.0%; sites: 28; mean concentration: 1,682.4\ndirection of positive share: rising (+6.7 percentage points)\nchange in mean concentration: +225.2\nnote: mean concentration averages mixed units; call it indicative only",
+    "statements": [
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav'",
+     "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'va'",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC",
+     "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va'",
+     "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC"
+    ],
+    "receipts": [
+     {
+      "receiptId": "rcpt_req_cajdybg6",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     {
+      "receiptId": "rcpt_req_36xkhn6c",
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+     }
+    ],
+    "coverage": "partial",
+    "positiveShare": 0.06666666666666667,
+    "direction": "rising"
+   }
+  },
+  {
+   "source": "pertussis",
+   "title": "Whooping cough",
+   "status": "ok",
+   "level": "low",
+   "headline": "200 cases this year in Virginia (2.25 per 100,000), lower than at this point last year; below the national rate",
+   "meaning": "Whooping cough in Virginia is lower than at this point last year and below the national rate.",
+   "text": "Texas has reported 1212 whooping cough cases so far this year (3.82 per 100,000 people), lower than at this point last year (3415 cases) [1][2]. That is close to the national rate of 3.47 per 100,000 [1][2]. Virginia has reported 200 whooping cough cases so far this year (2.25 per 100,000 people), lower than at this point last year (504 cases) [1][2]. That is below the national rate of 3.47 per 100,000 [1][2]. Figures are provisional CDC counts up to week 41 of 2026 and are often revised as late reports arrive [1].",
+   "facts": [
+    "Texas: 1212 cases so far this year (3.82 per 100,000), lower than at this point last year, close to the national rate",
+    "Virginia: 200 cases so far this year (2.25 per 100,000), lower than at this point last year, below the national rate",
+    "National rate 3.47 per 100,000, data to CDC week 41"
+   ],
+   "caveats": [
+    "Counts are provisional and reported by state; recent weeks are often revised upward as late reports arrive.",
+    "These are state-wide figures and do not describe a particular city, household or person."
+   ],
+   "sources": [
+    {
+     "title": "CDC NNDSS Weekly Data (provisional), pertussis",
+     "url": "https://data.cdc.gov/Public-Health-Surveillance/NNDSS-Weekly-Data/x9gk-5huc"
+    },
+    {
+     "title": "US Census Bureau, Vintage 2025 state population estimates",
+     "url": "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-total.html"
+    }
+   ],
+   "model": "template",
+   "trace": "template",
+   "seconds": 5.076787699999841,
+   "error": null,
+   "raw": {
+    "facts": {
+     "pathogen": "pertussis (whooping cough)",
+     "as_of_mmwr_week": 41,
+     "national": {
+      "ytd_cases": 11567,
+      "prev_ytd_cases": 27616,
+      "ytd_rate_per_100k": 3.47,
+      "ratio_vs_last_year": 0.42,
+      "states_included": 48
+     },
+     "states": [
+      {
+       "state": "Texas",
+       "mmwr_week": 41,
+       "data_ok": true,
+       "notes": [],
+       "ytd_cases": 1212,
+       "prev_ytd_cases": 3415,
+       "ytd_rate_per_100k": 3.82,
+       "ratio_vs_last_year": 0.35,
+       "trend": "lower than at this point last year",
+       "rate_vs_national_x": 1.1,
+       "vs_national": "close to the national rate"
+      },
+      {
+       "state": "Virginia",
+       "mmwr_week": 41,
+       "data_ok": true,
+       "notes": [],
+       "ytd_cases": 200,
+       "prev_ytd_cases": 504,
+       "ytd_rate_per_100k": 2.25,
+       "ratio_vs_last_year": 0.4,
+       "trend": "lower than at this point last year",
+       "rate_vs_national_x": 0.6,
+       "vs_national": "below the national rate"
+      }
+     ],
+     "general_caveats": [
+      "Counts are provisional and reported by state; recent weeks are often revised upward as late reports arrive.",
+      "These are state-wide figures and do not describe a particular city, household or person."
+     ]
+    },
+    "method": "template",
+    "destination": {
+     "state": "Virginia",
+     "mmwr_week": 41,
+     "data_ok": true,
+     "notes": [],
+     "ytd_cases": 200,
+     "prev_ytd_cases": 504,
+     "ytd_rate_per_100k": 2.25,
+     "ratio_vs_last_year": 0.4,
+     "trend": "lower than at this point last year",
+     "rate_vs_national_x": 0.6,
+     "vs_national": "below the national rate"
+    }
+   }
+  },
+  {
+   "source": "weather",
+   "title": "Weather",
+   "status": "ok",
+   "level": "low",
+   "headline": "Weather risk low (Good to go) for the next 14 forecast periods",
+   "meaning": "Good to go. No weather risk flagged for the forecast days.",
+   "text": "Weather risk: low (Good to go). Richmond, VA will enjoy mild, mostly sunny days with highs in the low to upper 70s and cool evenings in the 40s‑50s. Rain chances remain minimal through Saturday, with only a slight chance of showers Sunday and Monday.",
+   "facts": [
+    "Low-risk times outdoors: Today, Wednesday, Thursday, Friday, Saturday, Sunday, Monday",
+    "Dress in layers with a warm coat, hat and gloves for cool evenings in the 40s‑50s to protect older joints from stiffness.",
+    "Wear non-slip, supportive footwear and use an umbrella or rain‑gear with a sturdy handle to prevent falls on potentially wet surfaces during the slight Sunday‑Monday showers.",
+    "Keep medications at a stable temperature and schedule regular indoor breaks to rest and avoid prolonged exposure to cool, damp conditions.",
+    "Confidence high, data 0.3 h old"
+   ],
+   "caveats": [
+    "The forecast covers only the next 7 days; your trip starts 2026-11-10. This is the current outlook for the city; check again nearer the date."
+   ],
+   "sources": [
+    {
+     "title": "National Weather Service forecast and alerts (api.weather.gov)",
+     "url": "https://api.weather.gov"
+    }
+   ],
+   "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+   "trace": "run_20261027T105701Z-84058a.jsonl",
+   "seconds": 35.64156159999766,
+   "error": null,
+   "raw": {
+    "goodOutdoorWindows": [
+     "Today",
+     "Wednesday",
+     "Thursday",
+     "Friday",
+     "Saturday",
+     "Sunday",
+     "Monday"
+    ],
+    "reasons": [],
+    "profile": "sensitive",
+    "travellers": {
+     "groups": [
+      "older_adult"
+     ],
+     "stated": [
+      "older_adult"
+     ],
+     "from_memory": []
+    },
+    "evaluator": {
+     "ok": false,
+     "issues": [
+      "outcome review: answer contains medical advice; it should point to a GP instead",
+      "outcome review: (model) RISKS list is empty, making it unclear what specific risks (e.g., falls, hypothermia, medication storage) the advice is intended to address.",
+      "outcome review: (model) Advice includes specific recommendations for older joints, non-slip footwear, and medication temperature, but these are not explicitly tied to defined risks.",
+      "outcome review: (model) The answer assumes the traveller is an older adult and provides age-specific guidance, but does not explicitly state this alignment in a way that satisfies the requirement to address the stated travellers without inventing others."
+     ]
+    },
+    "outcomeReview": {
+     "verdict": "revise",
+     "issues": [
+      "answer contains medical advice; it should point to a GP instead",
+      "(model) RISKS list is empty, making it unclear what specific risks (e.g., falls, hypothermia, medication storage) the advice is intended to address.",
+      "(model) Advice includes specific recommendations for older joints, non-slip footwear, and medication temperature, but these are not explicitly tied to defined risks.",
+      "(model) The answer assumes the traveller is an older adult and provides age-specific guidance, but does not explicitly state this alignment in a way that satisfies the requirement to address the stated travellers without inventing others."
+     ],
+     "rule_issues": [
+      "answer contains medical advice; it should point to a GP instead"
+     ],
+     "model_issues": [
+      "RISKS list is empty, making it unclear what specific risks (e.g., falls, hypothermia, medication storage) the advice is intended to address.",
+      "Advice includes specific recommendations for older joints, non-slip footwear, and medication temperature, but these are not explicitly tied to defined risks.",
+      "The answer assumes the traveller is an older adult and provides age-specific guidance, but does not explicitly state this alignment in a way that satisfies the requirement to address the stated travellers without inventing others."
+     ],
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       "data 0.3 h old"
+      ]
+     },
+     "reviewer_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+     "round": 2
+    },
+    "periodsCovered": [
+     "Today",
+     "Tonight",
+     "Wednesday",
+     "Wednesday Night",
+     "Thursday",
+     "Thursday Night",
+     "Friday",
+     "Friday Night",
+     "Saturday",
+     "Saturday Night",
+     "Sunday",
+     "Sunday Night",
+     "Monday",
+     "Monday Night"
+    ]
+   }
+  },
+  {
+   "source": "guidance",
+   "title": "CDC guidance",
+   "status": "ok",
+   "level": "unknown",
+   "headline": "CDC advice for visiting older adult",
+   "meaning": "What CDC recommends when visiting an older adult (65+)",
+   "text": "What CDC recommends when visiting an older adult (65+):\n- People 65 and older face higher risk of serious flu complications (about 70-85% of flu deaths in recent seasons). CDC prefers high-dose, recombinant or adjuvanted flu vaccines for this age group, ideally by the end of October. Anyone 65+ who develops flu symptoms should contact a healthcare provider promptly, as antiviral treatment is recommended for higher-risk people. [1]\n- CDC recommends the 2025-2026 COVID-19 vaccine for people 6 months and older through individual-based decision-making, and says vaccination is especially important for people 65 and older, nursing-home residents and people at high risk of severe COVID-19. [2] (CDC's advice on this may have changed recently; check with a healthcare provider about what applies.)\n- CDC recommends one RSV vaccine dose for everyone 75 and older, and for adults 50-74 at increased risk (e.g. chronic heart or lung disease, weakened immune system, living in a nursing home). It is a single dose, not yearly; late summer to early fall (August-October) is the best time. [3]\n- If you have respiratory symptoms (fever, cough, runny nose), stay home and away from others. Resume normal activities only after at least 24 hours of improving symptoms with no fever (without fever-reducing medicine), then take extra care for 5 days: cleaner air, hand hygiene, a well-fitted mask, distance and testing, especially around people at higher risk. [4]\n- CDC's core prevention steps are staying up to date on vaccines, washing hands, and cleaner air where people gather. Masks, distance and testing add protection when illness is rising in the community or when you are with someone at higher risk. [5]\nThis summarises CDC guidance (pages retrieved 2026-10-26); it is not personal medical advice.",
+   "facts": [],
+   "caveats": [
+    "COV-01: CHECK: refers to the 2025-2026 vaccine; look for a 2026-2027 update before the demo."
+   ],
+   "sources": [
+    {
+     "title": "CDC: Flu and people 65 years and older",
+     "url": "https://www.cdc.gov/flu/highrisk/65over.htm"
+    },
+    {
+     "title": "CDC: Staying up to date with COVID-19 vaccines",
+     "url": "https://www.cdc.gov/covid/vaccines/stay-up-to-date.html"
+    },
+    {
+     "title": "CDC: RSV vaccines for adults",
+     "url": "https://www.cdc.gov/rsv/vaccines/adults.html"
+    },
+    {
+     "title": "CDC: Preventing spread of respiratory viruses when you're sick",
+     "url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html"
+    },
+    {
+     "title": "CDC: Preventing respiratory illnesses",
+     "url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html"
+    }
+   ],
+   "model": null,
+   "trace": null,
+   "seconds": 1.5046199000025808,
+   "error": null,
+   "raw": {
+    "facts": {
+     "visited": "older_adult",
+     "audiences": [
+      "older_adult",
+      "visitor_any"
+     ],
+     "pathogens": [
+      "influenza",
+      "covid",
+      "rsv",
+      "respiratory"
+     ],
+     "priority": [],
+     "guidance_ids": [
+      "FLU-02",
+      "COV-01",
+      "RSV-03",
+      "GEN-01",
+      "GEN-02"
+     ],
+     "rows": [
+      {
+       "guidance_id": "FLU-02",
+       "pathogen": "influenza",
+       "audience": "older_adult",
+       "advice": "People 65 and older face higher risk of serious flu complications (about 70-85% of flu deaths in recent seasons). CDC prefers high-dose, recombinant or adjuvanted flu vaccines for this age group, ideally by the end of October. Anyone 65+ who develops flu symptoms should contact a healthcare provider promptly, as antiviral treatment is recommended for higher-risk people.",
+       "source_title": "CDC: Flu and people 65 years and older",
+       "source_url": "https://www.cdc.gov/flu/highrisk/65over.htm",
+       "cdc_last_reviewed": "2024-09-05",
+       "cdc_last_updated": "2026-09-04",
+       "retrieved": "2026-10-26",
+       "status_note": ""
+      },
+      {
+       "guidance_id": "COV-01",
+       "pathogen": "covid",
+       "audience": "older_adult",
+       "advice": "CDC recommends the 2025-2026 COVID-19 vaccine for people 6 months and older through individual-based decision-making, and says vaccination is especially important for people 65 and older, nursing-home residents and people at high risk of severe COVID-19.",
+       "source_title": "CDC: Staying up to date with COVID-19 vaccines",
+       "source_url": "https://www.cdc.gov/covid/vaccines/stay-up-to-date.html",
+       "cdc_last_reviewed": "2024-09-06",
+       "cdc_last_updated": "2025-11-20",
+       "retrieved": "2026-10-26",
+       "status_note": "CHECK: refers to the 2025-2026 vaccine; look for a 2026-2027 update before the demo."
+      },
+      {
+       "guidance_id": "RSV-03",
+       "pathogen": "rsv",
+       "audience": "older_adult",
+       "advice": "CDC recommends one RSV vaccine dose for everyone 75 and older, and for adults 50-74 at increased risk (e.g. chronic heart or lung disease, weakened immune system, living in a nursing home). It is a single dose, not yearly; late summer to early fall (August-October) is the best time.",
+       "source_title": "CDC: RSV vaccines for adults",
+       "source_url": "https://www.cdc.gov/rsv/vaccines/adults.html",
+       "cdc_last_reviewed": "2026-02-20",
+       "cdc_last_updated": "2026-02-20",
+       "retrieved": "2026-10-26",
+       "status_note": ""
+      },
+      {
+       "guidance_id": "GEN-01",
+       "pathogen": "respiratory",
+       "audience": "visitor_any",
+       "advice": "If you have respiratory symptoms (fever, cough, runny nose), stay home and away from others. Resume normal activities only after at least 24 hours of improving symptoms with no fever (without fever-reducing medicine), then take extra care for 5 days: cleaner air, hand hygiene, a well-fitted mask, distance and testing, especially around people at higher risk.",
+       "source_title": "CDC: Preventing spread of respiratory viruses when you're sick",
+       "source_url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html",
+       "cdc_last_reviewed": "2025-08-18",
+       "cdc_last_updated": "2025-08-18",
+       "retrieved": "2026-10-26",
+       "status_note": ""
+      },
+      {
+       "guidance_id": "GEN-02",
+       "pathogen": "respiratory",
+       "audience": "visitor_any",
+       "advice": "CDC's core prevention steps are staying up to date on vaccines, washing hands, and cleaner air where people gather. Masks, distance and testing add protection when illness is rising in the community or when you are with someone at higher risk.",
+       "source_title": "CDC: Preventing respiratory illnesses",
+       "source_url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html",
+       "cdc_last_reviewed": "2025-08-18",
+       "cdc_last_updated": "2025-08-18",
+       "retrieved": "2026-10-26",
+       "status_note": ""
+      }
+     ]
+    },
+    "priority": []
+   }
+  }
+ ]
+}

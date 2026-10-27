@@ -1,0 +1,3 @@
+# the getting-started checkout is linked in (junction), not vendored
+getting-started/
+__pycache__/

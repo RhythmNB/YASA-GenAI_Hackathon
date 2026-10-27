@@ -1,0 +1,41 @@
+{
+  "id": "ans_sample",
+  "askedAt": "2026-10-25T01:55:00+00:00",
+  "question": "is sars-cov-2 rising in virginia over the last 2 weeks?",
+  "text": "In Virginia during 2026-10-10 to 2026-10-23, data are partial with the latest sample on 2026-10-13. In the requested window, 2 samples from 2 sites were all positive (100.0%) with a mean concentration of 6,807.0 copies/g dry sludge. Compared with the preceding window 2026-09-26 to 2026-10-09, the positive share rose by 35.3 percentage points while the mean concentration fell by 23,050.6. (Sample answer for demo mode, taken from a real run on 2026-10-25.)",
+  "provider": "nightshift",
+  "elapsedSeconds": 17.0,
+  "plan": {"intent": "trend", "state": "va", "window": {"start": "2026-10-10", "end": "2026-10-23", "label": "last 2 weeks (ending yesterday)"}, "source": "nightshift", "notes": []},
+  "region": "Virginia",
+  "facts": {
+    "intent": "trend", "state": "va",
+    "window": {"start": "2026-10-10", "end": "2026-10-23", "label": "last 2 weeks (ending yesterday)"},
+    "samples": 2, "positives": 2, "positive_share": 1.0, "sites": 2, "mean_conc": 6807.0,
+    "units": [["copies/g dry sludge", 2]],
+    "latest_sample_date": "2026-10-13", "coverage": "partial",
+    "prior_window": {"start": "2026-09-26", "end": "2026-10-09", "label": "preceding window"},
+    "prior_samples": 51, "prior_positives": 33, "prior_positive_share": 0.6471, "prior_sites": 28, "prior_mean_conc": 29857.6,
+    "delta_share": 35.3, "delta_conc": -23050.6, "direction": "rising",
+    "fallback_window": null, "fallback_samples": null, "fallback_positives": null, "fallback_positive_share": null, "fallback_sites": null, "fallback_mean_conc": null, "fallback_units": null,
+    "notes": ["data lag: latest sample 2026-10-13 is before window end 2026-10-23"], "state_note": null
+  },
+  "factSheet": "region: Virginia\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-10 to 2026-10-23 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-13)\nsamples: 2; positives: 2; positive share: 100.0%; sites: 2; mean concentration: 6,807.0 copies/g dry sludge\npreceding window: 2026-09-26 to 2026-10-09\npreceding samples: 51; positives: 33; positive share: 64.7%; sites: 28; mean concentration: 29,857.6\ndirection of positive share: rising (+35.3 percentage points)\nchange in mean concentration: -23,050.6",
+  "statements": [
+    "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2'",
+    "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'va'",
+    "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-10' AND sample_collect_date <= '2026-10-23' AND state_territory = 'va'",
+    "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-10' AND sample_collect_date <= '2026-10-23' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC",
+    "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-26' AND sample_collect_date <= '2026-10-09' AND state_territory = 'va'",
+    "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-26' AND sample_collect_date <= '2026-10-09' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC"
+  ],
+  "memoriesUsed": [],
+  "memoryStored": "mem_sample",
+  "conflicts": [],
+  "receipts": [
+    {"receiptId": "rcpt_req_z9uh56p6", "routedModel": "nvidia/nemotron-3-ultra-550b-a55b", "cache": "miss", "reclaimed": 1},
+    {"receiptId": "rcpt_req_yrem8sv0", "routedModel": "nvidia/nemotron-3.5-lightning-30b-a3b", "cache": "miss", "reclaimed": 1}
+  ],
+  "notes": [],
+  "retrieval": "sample",
+  "disclaimer": "Wastewater surveillance is a population-level signal from the CDC NWSS export loaded in Zetaris. It is not medical or travel advice and does not describe any individual's risk."
+}

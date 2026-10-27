@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Insightor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="styles.css?v=58">
+</head>
+<body>
+<header class="topbar">
+  <span class="brand"><img class="pin" src="pin.png?v=2" alt=""><span class="wordmark">Insight<span class="accent">or</span></span><span class="brand-rule" aria-hidden="true"></span><span class="tagline">Decide before you go</span></span>
+  <div class="topbar-right">
+    <button class="icon-round" id="theme" title="Toggle theme"><i data-lucide="sun-moon"></i></button>
+  </div>
+</header>
+
+<main class="board">
+  <!-- PLAN -->
+  <div class="panel active" data-panel="overview">
+    <aside class="side" aria-label="Trip details">
+      <!-- 1. the trip: what you tell the planner -->
+      <section class="side-sec" id="trip-card">
+        <h2 class="side-title">Your trip</h2>
+        <form class="trip-form" id="trip-form" aria-label="Your trip">
+          <label class="lbl" for="trip-from">Location</label>
+          <div class="fields">
+            <span class="place"><input type="text" id="trip-from" aria-label="Home city" placeholder="home city" autocomplete="off" spellcheck="false"><ul class="suggest hidden" id="sug-from" role="listbox"></ul></span>
+            <span class="w">to</span>
+            <span class="place"><input type="text" id="trip-to" aria-label="Destination city" placeholder="destination city" autocomplete="off" spellcheck="false"><ul class="suggest hidden" id="sug-to" role="listbox"></ul></span>
+          </div>
+          <label class="lbl" for="trip-start">Dates</label>
+          <div class="fields">
+            <input type="date" id="trip-start" aria-label="Arrival date">
+            <span class="w">to</span>
+            <input type="date" id="trip-end" aria-label="Departure date">
+          </div>
+          <span class="lbl">Travellers</span>
+          <div class="fields">
+            <span class="count">
+              <button type="button" class="step" data-for="trip-adults" data-d="-1" aria-label="Fewer adults"><i data-lucide="minus"></i></button>
+              <input type="number" id="trip-adults" min="1" max="20" value="2" aria-label="Number of adults" readonly tabindex="-1">
+              <button type="button" class="step" data-for="trip-adults" data-d="1" aria-label="More adults"><i data-lucide="plus"></i></button>
+            </span>
+            <span class="w" id="w-adults">adults</span>
+            <span class="count">
+              <button type="button" class="step" data-for="trip-children" data-d="-1" aria-label="Fewer children"><i data-lucide="minus"></i></button>
+              <input type="number" id="trip-children" min="0" max="20" value="1" aria-label="Number of children" readonly tabindex="-1">
+              <button type="button" class="step" data-for="trip-children" data-d="1" aria-label="More children"><i data-lucide="plus"></i></button>
+            </span>
+            <span class="w" id="w-children">child</span>
+          </div>
+          <span class="lbl">Visiting</span>
+          <div class="fields who" role="group" aria-label="Who you will be with">
+            <button type="button" class="tog" id="who-elderly" data-group="older_adult" aria-pressed="false"><i data-lucide="check"></i> elderly</button>
+            <button type="button" class="tog" id="who-kids" data-group="young_child" aria-pressed="false"><i data-lucide="check"></i> kids</button>
+            <button type="button" class="tog" id="who-newborn" data-group="newborn" aria-pressed="false"><i data-lucide="check"></i> newborn</button>
+            <button type="button" class="tog" id="who-pregnant" data-group="pregnant" aria-pressed="false"><i data-lucide="check"></i> pregnant</button>
+          </div>
+        </form>
+        <div class="trip-actions">
+          <button type="button" class="btn-primary" id="visit-submit"><i data-lucide="route"></i> Plan this visit</button>
+          <button type="button" class="btn" id="cal-ics"><i data-lucide="calendar-plus"></i> Add to calendar</button>
+        </div>
+      </section>
+
+      <!-- 2. the destination: where you are going -->
+      <section class="side-sec dest" id="hero">
+        <h1 id="hero-title">Visiting Richmond</h1>
+        <div class="float-meta"><i data-lucide="calendar"></i> <span id="hero-dates">9 Nov – 16 Nov</span><span class="dot-sep"></span><i data-lucide="users"></i> <span id="hero-party">2 adults, 1 child</span></div>
+        <div class="map-wrap"><div id="map" aria-label="Map of the destination"></div></div>
+      </section>
+
+      <!-- 3. the weather for the dates -->
+      <section class="side-sec wx-card" id="weather-card">
+        <div class="card-head"><span class="tile-ic"><i data-lucide="cloud-sun"></i></span><h2>Weather</h2><span class="head-right" id="wx-where"></span></div>
+        <div class="wx-row" id="wx-to">
+          <div class="wx-icon" id="wx-to-icon"><i data-lucide="cloud-sun"></i></div>
+          <div class="wx-main">
+            <div class="big" id="wx-to-temp">—</div>
+            <div class="line" id="wx-to-sub"></div>
+          </div>
+          <div class="wx-strip" id="wx-to-strip"></div>
+        </div>
+        <div class="wx-row home" id="wx-from">
+          <div class="wx-icon small" id="wx-from-icon"><i data-lucide="house"></i></div>
+          <div class="wx-main">
+            <div class="wx-home-temp" id="wx-from-temp">—</div>
+            <div class="line" id="wx-from-sub"></div>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- the plan: the main display -->
+    <section class="card plan-card plan-main" id="plan-card">
+        <div class="card-head"><span class="tile-ic"><i data-lucide="clipboard-list"></i></span><h2>Your plan</h2>
+          <div class="dl hidden" id="plan-dl">
+            <button type="button" class="btn dl-btn" id="plan-dl-btn" aria-haspopup="menu" aria-expanded="false"><i data-lucide="download"></i> Download <i data-lucide="chevron-down"></i></button>
+            <ul class="dl-list hidden" id="plan-dl-list" role="menu">
+              <li><button type="button" role="menuitem" data-fmt="md"><i data-lucide="file-text"></i> Report, Markdown (.md)</button></li>
+              <li><button type="button" role="menuitem" data-fmt="txt"><i data-lucide="file"></i> Report, plain text (.txt)</button></li>
+              <li><button type="button" role="menuitem" data-fmt="json"><i data-lucide="braces"></i> Plan data (.json)</button></li>
+              <li><button type="button" role="menuitem" data-fmt="pdf"><i data-lucide="printer"></i> PDF, via print</button></li>
+            </ul>
+          </div>
+        </div>
+        <p class="plan-empty" id="plan-empty">Plan this visit to get a recommendation for the trip.</p>
+        <div class="verdict hidden" id="plan-verdict">
+          <div class="verdict-head"><span class="verdict-dot"></span><strong id="verdict-label"></strong></div>
+          <p class="verdict-reason" id="verdict-reason"></p>
+        </div>
+        <p class="plan-text hidden" id="plan-intro"></p>
+        <div id="plan-sections"></div>
+        <div class="plan-block hidden" id="plan-precautions">
+          <div class="plan-block-head"><span class="virus"><i data-lucide="list-checks"></i> Before you go</span></div>
+          <ul class="checklist" id="precautions-list"></ul>
+        </div>
+        <div class="plan-block hidden" id="plan-best">
+          <div class="plan-block-head"><span class="virus"><i data-lucide="sun"></i> Best days outdoors</span></div>
+          <p class="plan-text" id="best-days"></p>
+        </div>
+        <details class="plan-sources hidden" id="plan-sources">
+          <summary>Sources and models</summary>
+          <ul class="plain" id="sources-list"></ul>
+          <p class="muted" id="models-line"></p>
+          <p class="muted" id="eval-line"></p>
+        </details>
+        <div class="plan-error hidden" id="plan-error" role="alert"></div>
+      </section>
+  </div>
+
+</main>
+
+<div class="progress hidden" id="answer-progress" role="status" aria-live="polite">
+  <div class="progress-head">
+    <div class="spinner" id="progress-spinner"></div>
+    <div class="progress-text">
+      <strong id="progress-title">Planning the visit…</strong>
+      <div class="steps-line" id="progress-step">Starting</div>
+    </div>
+    <button type="button" class="progress-toggle" id="progress-toggle" aria-expanded="false" aria-controls="progress-trail">Details <i data-lucide="chevron-up"></i></button>
+  </div>
+  <ul class="progress-trail" id="progress-trail"></ul>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin=""></script>
+<script>if (!window.lucide) document.write('<script src="vendor/lucide.min.js"><\/script>');</script>
+<script src="app.js?v=58"></script>
+</body>
+</html>

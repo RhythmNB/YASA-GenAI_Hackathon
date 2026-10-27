@@ -1,0 +1,771 @@
+{
+  "id": "plan_sample",
+  "createdAt": "2026-10-27T06:49:30+00:00",
+  "elapsedSeconds": 188.4,
+  "partial": false,
+  "trip": {
+    "toCity": "Richmond",
+    "toState": "va",
+    "toCounty": "Richmond City",
+    "fromCity": "Austin",
+    "fromState": "tx",
+    "start": "2026-11-10",
+    "end": "2026-11-17",
+    "adults": 2,
+    "children": 1,
+    "with": [
+      "newborn"
+    ],
+    "location": {
+      "name": "Richmond",
+      "state": "Virginia",
+      "county": "Richmond City",
+      "lat": 37.55376,
+      "lon": -77.46026,
+      "population": 226610,
+      "table": "geocoding.city_richmond",
+      "seconds": 6.7
+    }
+  },
+  "verdict": {
+    "level": "high",
+    "label": "Stop",
+    "reason": "A lot of COVID-19 in Virginia's wastewater, and it is rising. Flu is showing up in a fair share of samples in Virginia, and the trend is rising. Counted as high because the household includes a newborn.",
+    "tagline": "Reconsider, or go with full precautions"
+  },
+  "intro": "A lot of COVID-19 in Virginia's wastewater, and it is rising. Flu is showing up in a fair share of samples in Virginia, and the trend is rising. Counted as high because the household includes a newborn.",
+  "sections": [
+    {
+      "source": "covid",
+      "title": "COVID-19 in wastewater",
+      "status": "ok",
+      "level": "high",
+      "headline": "100% of 2 samples positive, rising in Virginia",
+      "meaning": "A lot of COVID-19 in Virginia's wastewater, and it is rising.",
+      "text": "In Virginia during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-13. In the requested window, 2 samples from 2 sites were all positive (100.0%) with a mean concentration of 6,807.0 copies/g dry sludge. Compared with the preceding window 2026-09-29 to 2026-10-12 (23 samples, 60.9% positive, mean 30,912.5), the positive share rose by 39.1 percentage points while the mean concentration fell by 24,105.4. Earlier finding on record (mem_89393c8d421d, 2026-10-27): SARS-CoV-2 detected in Virginia 2026-10-13..2026-10-26: 2/2 positive (100.0%), 2 sites, mean conc 6,807 (partial coverage, latest sample 2026-10-13); vs preceding window positive share rising (+39.1 pp).",
+      "facts": [
+        "100% of 2 samples were positive between 13 Oct and 26 Oct, from 2 sites",
+        "Latest sample 13 Oct (the data lags the end of the period)",
+        "Two weeks before: 61% positive, so the share is rising (+39 points)"
+      ],
+      "caveats": [
+        "No recent samples for Richmond City, so this is the state-wide reading, asked for again at the evaluator's request.",
+        "data lag: latest sample 2026-10-13 is before window end 2026-10-26"
+      ],
+      "sources": [
+        {
+          "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+          "url": "https://www.cdc.gov/nwss/"
+        }
+      ],
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "trace": "mem_57876b58ff0c",
+      "seconds": 22.082570900000064,
+      "error": null,
+      "raw": {
+        "question": "is sars-cov-2 rising in Virginia over the last 2 weeks?",
+        "facts": {
+          "intent": "trend",
+          "state": "va",
+          "county": null,
+          "region": "Virginia",
+          "pathogen": "sars-cov-2",
+          "pathogen_name": "SARS-CoV-2",
+          "window": {
+            "start": "2026-10-13",
+            "end": "2026-10-26",
+            "label": "last 2 weeks (ending yesterday)"
+          },
+          "samples": 2,
+          "positives": 2,
+          "positive_share": 1.0,
+          "sites": 2,
+          "mean_conc": 6807.0,
+          "units": [
+            [
+              "copies/g dry sludge",
+              2
+            ]
+          ],
+          "latest_sample_date": "2026-10-13",
+          "coverage": "partial",
+          "prior_window": {
+            "start": "2026-09-29",
+            "end": "2026-10-12",
+            "label": "preceding window"
+          },
+          "prior_samples": 23,
+          "prior_positives": 14,
+          "prior_positive_share": 0.6087,
+          "prior_sites": 14,
+          "prior_mean_conc": 30912.5,
+          "delta_share": 39.1,
+          "delta_conc": -24105.4,
+          "direction": "rising",
+          "fallback_window": null,
+          "fallback_samples": null,
+          "fallback_positives": null,
+          "fallback_positive_share": null,
+          "fallback_sites": null,
+          "fallback_mean_conc": null,
+          "fallback_units": null,
+          "notes": [
+            "data lag: latest sample 2026-10-13 is before window end 2026-10-26"
+          ],
+          "state_note": null
+        },
+        "factSheet": "virus: SARS-CoV-2\nregion: Virginia\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-13 to 2026-10-26 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-13)\nsamples: 2; positives: 2; positive share: 100.0%; sites: 2; mean concentration: 6,807.0 copies/g dry sludge\npreceding window: 2026-09-29 to 2026-10-12\npreceding samples: 23; positives: 14; positive share: 60.9%; sites: 14; mean concentration: 30,912.5\ndirection of positive share: rising (+39.1 percentage points)\nchange in mean concentration: -24,105.4",
+        "statements": [
+          "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2'",
+          "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND state_territory = 'va'",
+          "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va'",
+          "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC",
+          "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va'",
+          "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.sars_cov_2 WHERE pcr_target = 'sars-cov-2' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC"
+        ],
+        "receipts": [
+          {
+            "receiptId": "rcpt_req_c5d96flo",
+            "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+          },
+          {
+            "receiptId": "rcpt_req_vltq4f3o",
+            "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+          }
+        ],
+        "coverage": "partial",
+        "positiveShare": 1.0,
+        "direction": "rising"
+      }
+    },
+    {
+      "source": "flu",
+      "title": "Flu (influenza A) in wastewater",
+      "status": "ok",
+      "level": "moderate",
+      "headline": "7% of 30 samples positive, rising in Virginia",
+      "meaning": "flu is showing up in a fair share of samples in Virginia, and the trend is rising.",
+      "text": "In Virginia during 2026-10-13 to 2026-10-26, data are partial with the latest sample on 2026-10-20. The window had 30 samples from 22 sites, with 2 positives (6.7% positive share) and a mean concentration of 1,907.7 copies/l wastewater (mixed units, indicative only). Compared with the preceding window 2026-09-29 to 2026-10-12 (81 samples, 0.0% positive, mean 1,682.4), the positive share rose by 6.7 percentage points and the mean concentration increased by 225.2. Earlier finding on record (mem_fa681b720dae, 2026-10-27): influenza A detected in Virginia 2026-10-13..2026-10-26: 2/30 positive (6.7%), 22 sites, mean conc 1,908 (partial coverage, latest sample 2026-10-20); vs preceding window positive share rising (+6.7 pp).",
+      "facts": [
+        "7% of 30 samples were positive between 13 Oct and 26 Oct, from 22 sites",
+        "Latest sample 20 Oct (the data lags the end of the period)",
+        "Two weeks before: 0% positive, so the share is rising (+7 points)"
+      ],
+      "caveats": [
+        "No recent samples for Richmond City, so this is the state-wide reading, asked for again at the evaluator's request.",
+        "data lag: latest sample 2026-10-20 is before window end 2026-10-26",
+        "mean concentration averages mixed units; treat as indicative only"
+      ],
+      "sources": [
+        {
+          "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+          "url": "https://www.cdc.gov/nwss/"
+        }
+      ],
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "trace": "mem_cfc03086d6c5",
+      "seconds": 21.24580590000005,
+      "error": null,
+      "raw": {
+        "question": "is flu rising in Virginia over the last 2 weeks?",
+        "facts": {
+          "intent": "trend",
+          "state": "va",
+          "county": null,
+          "region": "Virginia",
+          "pathogen": "flu-a",
+          "pathogen_name": "influenza A",
+          "window": {
+            "start": "2026-10-13",
+            "end": "2026-10-26",
+            "label": "last 2 weeks (ending yesterday)"
+          },
+          "samples": 30,
+          "positives": 2,
+          "positive_share": 0.0667,
+          "sites": 22,
+          "mean_conc": 1907.7,
+          "units": [
+            [
+              "copies/l wastewater",
+              23
+            ],
+            [
+              "copies/g dry sludge",
+              7
+            ]
+          ],
+          "latest_sample_date": "2026-10-20",
+          "coverage": "partial",
+          "prior_window": {
+            "start": "2026-09-29",
+            "end": "2026-10-12",
+            "label": "preceding window"
+          },
+          "prior_samples": 81,
+          "prior_positives": 0,
+          "prior_positive_share": 0.0,
+          "prior_sites": 28,
+          "prior_mean_conc": 1682.4,
+          "delta_share": 6.7,
+          "delta_conc": 225.2,
+          "direction": "rising",
+          "fallback_window": null,
+          "fallback_samples": null,
+          "fallback_positives": null,
+          "fallback_positive_share": null,
+          "fallback_sites": null,
+          "fallback_mean_conc": null,
+          "fallback_units": null,
+          "notes": [
+            "data lag: latest sample 2026-10-20 is before window end 2026-10-26",
+            "mean concentration averages mixed units; treat as indicative only"
+          ],
+          "state_note": null
+        },
+        "factSheet": "virus: influenza A\nregion: Virginia\nquestion type: trend (compare with the preceding window)\nwindow: 2026-10-13 to 2026-10-26 (last 2 weeks (ending yesterday))\ncoverage: partial (latest sample date in the data: 2026-10-20)\nsamples: 30; positives: 2; positive share: 6.7%; sites: 22; mean concentration: 1,907.7 copies/l wastewater (mixed units: copies/l wastewater x23, copies/g dry sludge x7)\npreceding window: 2026-09-29 to 2026-10-12\npreceding samples: 81; positives: 0; positive share: 0.0%; sites: 28; mean concentration: 1,682.4\ndirection of positive share: rising (+6.7 percentage points)\nchange in mean concentration: +225.2\nnote: mean concentration averages mixed units; call it indicative only",
+        "statements": [
+          "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav'",
+          "SELECT MAX(sample_collect_date) AS latest_sample_date FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND state_territory = 'va'",
+          "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va'",
+          "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-10-13' AND sample_collect_date <= '2026-10-26' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC",
+          "SELECT COUNT(*) AS samples, SUM(CASE WHEN pcr_target_detect = 'yes' THEN 1 ELSE 0 END) AS positives, COUNT(DISTINCT site) AS sites, AVG(CAST(REPLACE(pcr_target_avg_conc, ',', '') AS DOUBLE)) AS mean_conc FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va'",
+          "SELECT pcr_target_units AS units, COUNT(*) AS samples FROM wastewater.influenza_a WHERE pcr_target = 'fluav' AND sample_collect_date >= '2026-09-29' AND sample_collect_date <= '2026-10-12' AND state_territory = 'va' GROUP BY pcr_target_units ORDER BY samples DESC"
+        ],
+        "receipts": [
+          {
+            "receiptId": "rcpt_req_45igfgxe",
+            "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+          },
+          {
+            "receiptId": "rcpt_req_79iqv83x",
+            "routedModel": "nvidia/nemotron-3-ultra-550b-a55b"
+          }
+        ],
+        "coverage": "partial",
+        "positiveShare": 0.06666666666666667,
+        "direction": "rising"
+      }
+    },
+    {
+      "source": "pertussis",
+      "title": "Whooping cough",
+      "status": "ok",
+      "level": "low",
+      "headline": "200 cases this year in Virginia (2.25 per 100,000), lower than at this point last year; below the national rate",
+      "meaning": "Whooping cough in Virginia is lower than at this point last year and below the national rate.",
+      "text": "Texas has reported 1212 whooping cough cases so far this year (3.82 per 100,000 people), lower than at this point last year (3415 cases) [1][2]. That is close to the national rate of 3.47 per 100,000 [1][2]. Virginia has reported 200 whooping cough cases so far this year (2.25 per 100,000 people), lower than at this point last year (504 cases) [1][2]. That is below the national rate of 3.47 per 100,000 [1][2]. Figures are provisional CDC counts up to week 41 of 2026 and are often revised as late reports arrive [1].",
+      "facts": [
+        "Texas: 1212 cases so far this year (3.82 per 100,000), lower than at this point last year, close to the national rate",
+        "Virginia: 200 cases so far this year (2.25 per 100,000), lower than at this point last year, below the national rate",
+        "National rate 3.47 per 100,000, data to CDC week 41"
+      ],
+      "caveats": [
+        "Counts are provisional and reported by state; recent weeks are often revised upward as late reports arrive.",
+        "These are state-wide figures and do not describe a particular city, household or person."
+      ],
+      "sources": [
+        {
+          "title": "CDC NNDSS Weekly Data (provisional), pertussis",
+          "url": "https://data.cdc.gov/Public-Health-Surveillance/NNDSS-Weekly-Data/x9gk-5huc"
+        },
+        {
+          "title": "US Census Bureau, Vintage 2025 state population estimates",
+          "url": "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-total.html"
+        }
+      ],
+      "model": "template",
+      "trace": "template",
+      "seconds": 6.556884799999807,
+      "error": null,
+      "raw": {
+        "facts": {
+          "pathogen": "pertussis (whooping cough)",
+          "as_of_mmwr_week": 41,
+          "national": {
+            "ytd_cases": 11567,
+            "prev_ytd_cases": 27616,
+            "ytd_rate_per_100k": 3.47,
+            "ratio_vs_last_year": 0.42,
+            "states_included": 48
+          },
+          "states": [
+            {
+              "state": "Texas",
+              "mmwr_week": 41,
+              "data_ok": true,
+              "notes": [],
+              "ytd_cases": 1212,
+              "prev_ytd_cases": 3415,
+              "ytd_rate_per_100k": 3.82,
+              "ratio_vs_last_year": 0.35,
+              "trend": "lower than at this point last year",
+              "rate_vs_national_x": 1.1,
+              "vs_national": "close to the national rate"
+            },
+            {
+              "state": "Virginia",
+              "mmwr_week": 41,
+              "data_ok": true,
+              "notes": [],
+              "ytd_cases": 200,
+              "prev_ytd_cases": 504,
+              "ytd_rate_per_100k": 2.25,
+              "ratio_vs_last_year": 0.4,
+              "trend": "lower than at this point last year",
+              "rate_vs_national_x": 0.6,
+              "vs_national": "below the national rate"
+            }
+          ],
+          "general_caveats": [
+            "Counts are provisional and reported by state; recent weeks are often revised upward as late reports arrive.",
+            "These are state-wide figures and do not describe a particular city, household or person."
+          ]
+        },
+        "method": "template",
+        "destination": {
+          "state": "Virginia",
+          "mmwr_week": 41,
+          "data_ok": true,
+          "notes": [],
+          "ytd_cases": 200,
+          "prev_ytd_cases": 504,
+          "ytd_rate_per_100k": 2.25,
+          "ratio_vs_last_year": 0.4,
+          "trend": "lower than at this point last year",
+          "rate_vs_national_x": 0.6,
+          "vs_national": "below the national rate"
+        }
+      }
+    },
+    {
+      "source": "weather",
+      "title": "Weather",
+      "status": "ok",
+      "level": "low",
+      "headline": "Weather risk low (Good to go) for the next 14 forecast periods",
+      "meaning": "Good to go. No weather risk flagged for the forecast days.",
+      "text": "Weather risk: Low (Good to go). Richmond will have mild, mostly sunny days with highs in the low 70s to upper 70s and cool nights in the 40s‑50s. Rain chances stay minimal through Saturday, rising to a slight chance Sunday and Monday.",
+      "facts": [
+        "Low-risk times outdoors: Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, Monday",
+        "Keep the infant warm and dry with layered clothing including a hat and footies, and monitor for signs of overheating or chill.",
+        "Use a stroller or carrier with a rain cover or shade shield; avoid prolonged outdoor exposure during the slight rain chance Sunday–Monday and ensure the infant stays dry and warm.",
+        "Feed the infant on schedule and keep them hydrated with breast milk or formula; apply baby-safe sunscreen to exposed skin on sunny days and protect from wind chill during cool evenings.",
+        "Confidence high, data 1.0 h old"
+      ],
+      "caveats": [
+        "The forecast covers only the next 7 days; your trip starts 2026-11-10. This is the current outlook for the city; check again nearer the date."
+      ],
+      "sources": [
+        {
+          "title": "National Weather Service forecast and alerts (api.weather.gov)",
+          "url": "https://api.weather.gov"
+        }
+      ],
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "trace": "run_20261027T064632Z-bff170.jsonl",
+      "seconds": 24.243371399999887,
+      "error": null,
+      "raw": {
+        "goodOutdoorWindows": [
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+          "Monday"
+        ],
+        "reasons": [],
+        "profile": "sensitive",
+        "travellers": {
+          "groups": [
+            "infant"
+          ],
+          "stated": [
+            "infant"
+          ],
+          "from_memory": []
+        },
+        "evaluator": {
+          "ok": true,
+          "issues": []
+        },
+        "outcomeReview": {
+          "verdict": "pass",
+          "issues": [],
+          "rule_issues": [],
+          "model_issues": [],
+          "confidence": {
+            "level": "high",
+            "reasons": [
+              "data 1.0 h old"
+            ]
+          },
+          "reviewer_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "round": 2
+        },
+        "periodsCovered": [
+          "Tonight",
+          "Tuesday",
+          "Tuesday Night",
+          "Wednesday",
+          "Wednesday Night",
+          "Thursday",
+          "Thursday Night",
+          "Friday",
+          "Friday Night",
+          "Saturday",
+          "Saturday Night",
+          "Sunday",
+          "Sunday Night",
+          "Monday"
+        ]
+      }
+    },
+    {
+      "source": "guidance",
+      "title": "CDC guidance",
+      "status": "ok",
+      "level": "unknown",
+      "headline": "CDC advice for visiting newborn",
+      "meaning": "What CDC recommends when visiting a newborn baby",
+      "text": "What CDC recommends when visiting a newborn baby:\n- Babies under 1 year are at greatest risk of whooping cough and its severe complications. DTaP is a routine childhood vaccine: doses at 2, 4 and 6 months, with boosters at 15-18 months and 4-6 years. [1]\n- Everyone around a new baby (parents, siblings, grandparents, babysitters) should be up to date on whooping cough vaccines; teens and adults who have never had Tdap should get one. Get it at least 2 weeks before meeting the baby, as antibodies take about 2 weeks to develop. Siblings and parents are the most common source of whooping cough in young babies. [2]\n- The other option is an RSV antibody for the baby (nirsevimab or clesrovimab), for babies under 8 months whose mother did not get the RSV vaccine. Babies born October to March get it within a week of birth; others shortly before RSV season. Most babies need one option, not both. [3] (CDC's advice on this may have changed recently; check with a healthcare provider about what applies.)\n- Anyone who cares for a new baby should get a flu vaccine each flu season, at least 2 weeks before meeting the baby. A flu shot during pregnancy also helps protect the baby in its first months. [2]\n- If you have respiratory symptoms (fever, cough, runny nose), stay home and away from others. Resume normal activities only after at least 24 hours of improving symptoms with no fever (without fever-reducing medicine), then take extra care for 5 days: cleaner air, hand hygiene, a well-fitted mask, distance and testing, especially around people at higher risk. [4]\n- CDC's core prevention steps are staying up to date on vaccines, washing hands, and cleaner air where people gather. Masks, distance and testing add protection when illness is rising in the community or when you are with someone at higher risk. [5]\nThis summarises CDC guidance (pages retrieved 2026-10-26); it is not personal medical advice.",
+      "facts": [],
+      "caveats": [
+        "RSV-02: CHECK: the 5 Jan 2026 childhood schedule revision moved infant RSV immunization out of the routine list (high-risk groups / shared decision with a clinician). This CDC page predates that change. Briefing should say: talk to the baby's healthcare provider."
+      ],
+      "sources": [
+        {
+          "title": "CDC: Whooping cough vaccines; CDC child and adolescent schedule notes",
+          "url": "https://www.cdc.gov/pertussis/vaccines/index.html"
+        },
+        {
+          "title": "CDC: Vaccines for family and caregivers",
+          "url": "https://www.cdc.gov/pertussis/pregnant/mom/protection.html"
+        },
+        {
+          "title": "CDC: Immunizations to protect infants from RSV",
+          "url": "https://www.cdc.gov/rsv/vaccines/protect-infants.html"
+        },
+        {
+          "title": "CDC: Preventing spread of respiratory viruses when you're sick",
+          "url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html"
+        },
+        {
+          "title": "CDC: Preventing respiratory illnesses",
+          "url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html"
+        }
+      ],
+      "model": null,
+      "trace": null,
+      "seconds": 0.4492608000000473,
+      "error": null,
+      "raw": {
+        "facts": {
+          "visited": "newborn",
+          "audiences": [
+            "infant",
+            "visitor_newborn",
+            "visitor_any"
+          ],
+          "pathogens": [
+            "pertussis",
+            "rsv",
+            "influenza",
+            "covid",
+            "respiratory"
+          ],
+          "priority": [],
+          "guidance_ids": [
+            "PER-02",
+            "PER-03",
+            "RSV-02",
+            "FLU-01",
+            "GEN-01",
+            "GEN-02"
+          ],
+          "rows": [
+            {
+              "guidance_id": "PER-02",
+              "pathogen": "pertussis",
+              "audience": "infant",
+              "advice": "Babies under 1 year are at greatest risk of whooping cough and its severe complications. DTaP is a routine childhood vaccine: doses at 2, 4 and 6 months, with boosters at 15-18 months and 4-6 years.",
+              "source_title": "CDC: Whooping cough vaccines; CDC child and adolescent schedule notes",
+              "source_url": "https://www.cdc.gov/pertussis/vaccines/index.html",
+              "cdc_last_reviewed": "2025-12-02",
+              "cdc_last_updated": "2025-12-02",
+              "retrieved": "2026-10-26",
+              "status_note": "Dose ages are from the 2025 schedule notes page; DTaP remained routine in the 5 Jan 2026 schedule revision."
+            },
+            {
+              "guidance_id": "PER-03",
+              "pathogen": "pertussis",
+              "audience": "visitor_newborn",
+              "advice": "Everyone around a new baby (parents, siblings, grandparents, babysitters) should be up to date on whooping cough vaccines; teens and adults who have never had Tdap should get one. Get it at least 2 weeks before meeting the baby, as antibodies take about 2 weeks to develop. Siblings and parents are the most common source of whooping cough in young babies.",
+              "source_title": "CDC: Vaccines for family and caregivers",
+              "source_url": "https://www.cdc.gov/pertussis/pregnant/mom/protection.html",
+              "cdc_last_reviewed": "2021-11-09",
+              "cdc_last_updated": "2024-06-05",
+              "retrieved": "2026-10-26",
+              "status_note": "Older page (last reviewed 2021); content consistent with current Tdap guidance."
+            },
+            {
+              "guidance_id": "RSV-02",
+              "pathogen": "rsv",
+              "audience": "infant",
+              "advice": "The other option is an RSV antibody for the baby (nirsevimab or clesrovimab), for babies under 8 months whose mother did not get the RSV vaccine. Babies born October to March get it within a week of birth; others shortly before RSV season. Most babies need one option, not both.",
+              "source_title": "CDC: Immunizations to protect infants from RSV",
+              "source_url": "https://www.cdc.gov/rsv/vaccines/protect-infants.html",
+              "cdc_last_reviewed": "2025-08-18",
+              "cdc_last_updated": "2025-08-18",
+              "retrieved": "2026-10-26",
+              "status_note": "CHECK: the 5 Jan 2026 childhood schedule revision moved infant RSV immunization out of the routine list (high-risk groups / shared decision with a clinician). This CDC page predates that change. Briefing should say: talk to the baby's healthcare provider."
+            },
+            {
+              "guidance_id": "FLU-01",
+              "pathogen": "influenza",
+              "audience": "visitor_newborn",
+              "advice": "Anyone who cares for a new baby should get a flu vaccine each flu season, at least 2 weeks before meeting the baby. A flu shot during pregnancy also helps protect the baby in its first months.",
+              "source_title": "CDC: Vaccines for family and caregivers",
+              "source_url": "https://www.cdc.gov/pertussis/pregnant/mom/protection.html",
+              "cdc_last_reviewed": "2021-11-09",
+              "cdc_last_updated": "2024-06-05",
+              "retrieved": "2026-10-26",
+              "status_note": "Older page (last reviewed 2021)."
+            },
+            {
+              "guidance_id": "GEN-01",
+              "pathogen": "respiratory",
+              "audience": "visitor_any",
+              "advice": "If you have respiratory symptoms (fever, cough, runny nose), stay home and away from others. Resume normal activities only after at least 24 hours of improving symptoms with no fever (without fever-reducing medicine), then take extra care for 5 days: cleaner air, hand hygiene, a well-fitted mask, distance and testing, especially around people at higher risk.",
+              "source_title": "CDC: Preventing spread of respiratory viruses when you're sick",
+              "source_url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html",
+              "cdc_last_reviewed": "2025-08-18",
+              "cdc_last_updated": "2025-08-18",
+              "retrieved": "2026-10-26",
+              "status_note": ""
+            },
+            {
+              "guidance_id": "GEN-02",
+              "pathogen": "respiratory",
+              "audience": "visitor_any",
+              "advice": "CDC's core prevention steps are staying up to date on vaccines, washing hands, and cleaner air where people gather. Masks, distance and testing add protection when illness is rising in the community or when you are with someone at higher risk.",
+              "source_title": "CDC: Preventing respiratory illnesses",
+              "source_url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html",
+              "cdc_last_reviewed": "2025-08-18",
+              "cdc_last_updated": "2025-08-18",
+              "retrieved": "2026-10-26",
+              "status_note": ""
+            }
+          ]
+        },
+        "priority": []
+      }
+    }
+  ],
+  "precautions": [
+    "Check the wastewater readings again a few days before you travel.",
+    "Wear a well-fitted mask on the journey and in crowded indoor places.",
+    "Anyone with a cough, fever or runny nose should postpone meeting the baby.",
+    "Keep the infant warm and dry with layered clothing including a hat and footies, and monitor for signs of overheating or chill.",
+    "Use a stroller or carrier with a rain cover or shade shield; avoid prolonged outdoor exposure during the slight rain chance Sunday–Monday and ensure the infant stays dry and warm.",
+    "Stay home if you have symptoms, and read the CDC guidance section below."
+  ],
+  "bestDays": [
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+    "Monday"
+  ],
+  "sources": [
+    {
+      "title": "Open-Meteo geocoding API, via Zetaris table geocoding.city_richmond",
+      "url": "https://open-meteo.com/en/docs/geocoding-api"
+    },
+    {
+      "title": "CDC National Wastewater Surveillance System (via Zetaris)",
+      "url": "https://www.cdc.gov/nwss/"
+    },
+    {
+      "title": "CDC NNDSS Weekly Data (provisional), pertussis",
+      "url": "https://data.cdc.gov/Public-Health-Surveillance/NNDSS-Weekly-Data/x9gk-5huc"
+    },
+    {
+      "title": "US Census Bureau, Vintage 2025 state population estimates",
+      "url": "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-total.html"
+    },
+    {
+      "title": "National Weather Service forecast and alerts (api.weather.gov)",
+      "url": "https://api.weather.gov"
+    },
+    {
+      "title": "CDC: Whooping cough vaccines; CDC child and adolescent schedule notes",
+      "url": "https://www.cdc.gov/pertussis/vaccines/index.html"
+    },
+    {
+      "title": "CDC: Vaccines for family and caregivers",
+      "url": "https://www.cdc.gov/pertussis/pregnant/mom/protection.html"
+    },
+    {
+      "title": "CDC: Immunizations to protect infants from RSV",
+      "url": "https://www.cdc.gov/rsv/vaccines/protect-infants.html"
+    },
+    {
+      "title": "CDC: Preventing spread of respiratory viruses when you're sick",
+      "url": "https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html"
+    },
+    {
+      "title": "CDC: Preventing respiratory illnesses",
+      "url": "https://www.cdc.gov/respiratory-viruses/prevention/index.html"
+    }
+  ],
+  "models": {
+    "composer": "template",
+    "evaluator": "nvidia/nemotron-3-ultra-550b-a55b",
+    "covid": "nvidia/nemotron-3-ultra-550b-a55b",
+    "flu": "nvidia/nemotron-3-ultra-550b-a55b",
+    "pertussis": "template",
+    "weather": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "guidance": null
+  },
+  "traces": {
+    "covid": "mem_57876b58ff0c",
+    "flu": "mem_cfc03086d6c5",
+    "pertussis": "template",
+    "weather": "run_20261027T064632Z-bff170.jsonl",
+    "guidance": null
+  },
+  "notes": [
+    "location: county set to Richmond City from geocoding.city_richmond (page had City of Richmond)",
+    "covid: asked again (state_level) at the evaluator's request; the new answer is used",
+    "flu: asked again (state_level) at the evaluator's request; the new answer is used",
+    "composer attempt 1: figures not in the fact sheet (95, 95)",
+    "composer attempt 2: figures not in the fact sheet (95, 95)",
+    "composer: template prose used",
+    "composer attempt 1: figures not in the fact sheet (95, 95)",
+    "composer attempt 2: figures not in the fact sheet (95, 95)",
+    "composer: template prose used",
+    "composer attempt 1: figures not in the fact sheet (95, 95)",
+    "composer attempt 2: figures not in the fact sheet (95, 95)",
+    "composer: template prose used",
+    "evaluator: no draft passed after 3 reviews; kept draft 3",
+    "Sample plan for demo mode, captured from a real run on 2026-10-27."
+  ],
+  "evaluation": {
+    "final": "revise",
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "revise",
+        "rule_issues": [],
+        "model_issues": [
+          "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+          "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+          "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+          "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+        ],
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "draft_model": "template",
+        "note": null,
+        "issues": [
+          "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+          "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+          "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+          "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+        ]
+      },
+      {
+        "round": 2,
+        "verdict": "revise",
+        "rule_issues": [],
+        "model_issues": [
+          "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+          "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+          "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+          "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+        ],
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "draft_model": "template",
+        "note": null,
+        "issues": [
+          "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+          "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+          "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+          "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+        ]
+      },
+      {
+        "round": 3,
+        "verdict": "revise",
+        "rule_issues": [],
+        "model_issues": [
+          "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+          "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+          "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+          "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+        ],
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "draft_model": "template",
+        "note": null,
+        "issues": [
+          "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+          "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+          "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+          "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+        ]
+      }
+    ],
+    "chosenRound": 3,
+    "unresolved": [
+      "State that COVID-19 wastewater data is from 13 Oct (state-wide, 100% of 2 samples positive) and lags the travel window.",
+      "State that flu wastewater data is from 20 Oct (state-wide, 7% of 30 samples positive) and lags the travel window.",
+      "Remove the weather-specific precautions (layered clothing, rain cover, Sunday–Monday rain) because the forecast only covers the next 7 days and the trip starts 2026-11-10.",
+      "Replace the generic CDC guidance reference with: talk to the baby's healthcare provider about RSV immunization, since the CDC page predates the 5 Jan 2026 schedule change."
+    ],
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "maxRevisions": 2,
+    "replans": [
+      {
+        "round": 1,
+        "requests": [
+          {
+            "source": "covid",
+            "action": "state_level",
+            "reason": "no recent COVID-19 samples for Richmond City; ask for the state-level reading",
+            "kept": "new",
+            "before": {
+              "status": "ok",
+              "level": "unknown",
+              "headline": "100% of 1 samples positive in Richmond City, Virginia"
+            },
+            "after": {
+              "status": "ok",
+              "level": "high",
+              "headline": "100% of 2 samples positive, rising in Virginia"
+            }
+          },
+          {
+            "source": "flu",
+            "action": "state_level",
+            "reason": "no recent Flu (influenza A) samples for Richmond City; ask for the state-level reading",
+            "kept": "new",
+            "before": {
+              "status": "ok",
+              "level": "unknown",
+              "headline": "0% of 1 samples positive in Richmond City, Virginia"
+            },
+            "after": {
+              "status": "ok",
+              "level": "moderate",
+              "headline": "7% of 30 samples positive, rising in Virginia"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
