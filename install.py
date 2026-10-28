@@ -52,11 +52,15 @@ JDBC_URL = "jdbc:zetaris:lightning@localhost:10000"
 NIGHTSHIFT_URL = "http://127.0.0.1:8088/v1"
 SHARED = "/home/zetaris/customer-data/shared"  # where Zetaris filestore tables read files, inside the driver container
 
-# The two CDC NWSS exports behind wastewater.sars_cov_2 and wastewater.influenza_a.
+# The two CDC NWSS exports behind wastewater.sars_cov_2 and wastewater.influenza_a: the
+# sample-level "CDC Wastewater Data for ..." datasets, not the concentration or metric summaries.
 WASTEWATER_TABLES = [
-    ("sars_cov_2", "SARS-CoV-2", "g653-rqe2", "01_wastewater_create.sql"),
+    ("sars_cov_2", "SARS-CoV-2", "j9g8-acpt", "01_wastewater_create.sql"),
     ("influenza_a", "Influenza_A", "ymmh-divb", "02_influenza_a_create.sql"),
 ]
+# The columns the wastewater agent's SQL templates read; a table or CSV without them is the wrong export.
+WASTEWATER_COLUMNS = ("site", "state_territory", "counties_served", "sample_collect_date",
+                      "pcr_target", "pcr_target_detect", "pcr_target_avg_conc", "pcr_target_units")
 PLACEHOLDERS = {"", "change-me", "your-zetaris-password"}
 
 
@@ -448,10 +452,11 @@ class Zetaris:
         except Exception:  # noqa: BLE001 - it was not there
             pass
 
-    def problem(self, table: str) -> str | None:
-        """None when the table answers a query, else Zetaris's reason in one line."""
+    def problem(self, table: str, columns: tuple[str, ...] = ()) -> str | None:
+        """None when the table answers a query (selecting `columns`, when given), else Zetaris's
+        reason in one line."""
         try:
-            self.execute(f"SELECT 1 FROM {table} LIMIT 1")
+            self.execute(f"SELECT {', '.join(columns) or '1'} FROM {table} LIMIT 1")
             return None
         except Exception as e:  # noqa: BLE001
             return short_error(e)
@@ -479,6 +484,8 @@ def hint(error: str) -> str:
         return f"the file is not readable by Zetaris; run: docker exec -u 0 <driver> chown -R zetaris:zetaris {SHARED}"
     if "TABLE_OR_VIEW_NOT_FOUND" in error:
         return "it was not created; run install.py again and look for the first error above"
+    if "UNRESOLVED_COLUMN" in error:
+        return "the table was built from a different CDC export than the agent reads; run install.py again to rebuild it"
     if "onnect" in error:
         return "Zetaris could not reach the source; check the container or the internet connection and run again"
     return "run install.py again; if it repeats, send the team this output"
@@ -495,6 +502,13 @@ def into_container(m: dict, files: list[Path], folder: str) -> None:
         run(["docker", "cp", str(f), f"{m['driver']}:{SHARED}/{folder}/"], quiet=True)
     # Without this Zetaris reads the copied files as root's and reports "Permission denied".
     run(["docker", "exec", "-u", "0", m["driver"], "chown", "-R", "zetaris:zetaris", SHARED], quiet=True)
+
+
+def has_columns(csv: Path, columns: tuple[str, ...]) -> bool:
+    """Whether the CSV's header names every one of `columns`; a download of the wrong export does not."""
+    with open(csv, encoding="utf-8", newline="") as f:
+        header = {c.strip().strip('"').lower() for c in f.readline().split(",")}
+    return set(columns) <= header
 
 
 def download(url: str, dest: Path) -> None:
@@ -514,7 +528,7 @@ def download(url: str, dest: Path) -> None:
 def wastewater_data(m: dict, z: Zetaris, check: bool) -> None:
     for table, label, dataset, sql_name in WASTEWATER_TABLES:
         name = f"wastewater.{table}"
-        problem = z.problem(name)
+        problem = z.problem(name, WASTEWATER_COLUMNS)
         if problem is None:
             ok(f"{name} answers")
             continue
@@ -525,7 +539,7 @@ def wastewater_data(m: dict, z: Zetaris, check: bool) -> None:
             z.drop_table(name)
         data = WASTEWATER / "data"
         data.mkdir(exist_ok=True)
-        have = sorted(data.glob(f"CDC_Wastewater_Data_for_{label}_*.csv"))
+        have = [f for f in sorted(data.glob(f"CDC_Wastewater_Data_for_{label}_*.csv")) if has_columns(f, WASTEWATER_COLUMNS)]
         if have:
             csv = have[-1]
         else:
@@ -536,7 +550,7 @@ def wastewater_data(m: dict, z: Zetaris, check: bool) -> None:
         for sql in statements(WASTEWATER / "sql" / sql_name):
             # The create scripts name the export they were written against; point them at this one.
             z.try_execute(re.sub(r"CDC_Wastewater_Data_for_\S+?_\d{8}\.csv", csv.name, sql))
-        problem = z.problem(name)
+        problem = z.problem(name, WASTEWATER_COLUMNS)
         if problem:
             raise SetupError(f"{name} was created from {csv.name} but does not answer:\n      {problem}\n"
                              f"      Likely cause: {hint(problem)}")
@@ -634,7 +648,7 @@ def verify(z: Zetaris, a) -> bool:
         checks.append(("weather_pg.forecast_periods", "NWS forecasts"))
     good = True
     for table, what in checks:
-        problem = z.problem(table)
+        problem = z.problem(table, WASTEWATER_COLUMNS if table.startswith("wastewater.") else ())
         if problem is None:
             ok(f"{what}: {table}")
         else:
